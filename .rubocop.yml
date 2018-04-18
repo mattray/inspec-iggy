@@ -1,0 +1,7 @@
+AllCops:
+  Includes:
+    - bin/**/*
+    - lib/**/*
+    - spec/**/*
+  Excludes:
+    - test/examples/**/*

@@ -1,0 +1,6 @@
+language: ruby
+rvm:
+  - 2.4.3
+script:
+  - bundle exec chefstyle
+  - bundle exec rspec

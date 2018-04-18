@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+#
+# Author:: Matt Ray (<matt@chef.io>)
+#
+# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
+#
+
+require "iggy"
+
+Iggy::CLI.new.run
