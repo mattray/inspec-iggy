@@ -4,8 +4,8 @@ This is the current, previous and future development milestones and contains the
 * Initial prototype supporting AWS and tagged profiles
 
 # BACKLOG #
-* Named profiles
 * More profile options to fill out the inspec.yml from the CLI
+* Investigate InSpec packaging options
 * Archived profiles
 * CloudFormation
 * ARM templates

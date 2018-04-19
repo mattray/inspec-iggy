@@ -1,4 +1,3 @@
-# encoding: UTF-8
 #
 # Author:: Matt Ray (<matt@chef.io>)
 #
@@ -6,4 +5,4 @@
 #
 
 require "iggy/version"
-require "iggy/cli"
+# require "iggy/log"
