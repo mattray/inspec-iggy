@@ -12,7 +12,7 @@ class Iggy::CLI < Thor
     true
   end
 
-  desc 'terraform [options]', 'convert a Terraform file into an INSPEC compliance profile'
+  desc 'terraform [options]', 'Convert a Terraform file into an InSpec compliance profile'
 
   class_option :debug,
     :desc    => 'Verbose debugging messages',
@@ -30,9 +30,17 @@ class Iggy::CLI < Thor
     :default => 'iggy'
 
   def terraform()
+    Iggy::Log.level = :debug if options[:debug]
+    Iggy::Log.debug "file = #{options[:file]}"
+    Iggy::Log.debug "profile = #{options[:profile]}"
+
     puts "LETS GET IT STARTED"
-    puts options[:file]
-    puts options[:profile]
+    # read in the terraform.tfstate
+    # look for tags
+    # map aws resources to inspec resources
+    # generate profile
+
+    exit 0
   end
 
   map %w(-v --version) => 'version'
@@ -41,29 +49,4 @@ class Iggy::CLI < Thor
   def version()
     say("Iggy v#{Iggy::VERSION}")
   end
-
-  # def initialize(_argv = [])
-  #   super()
-  #   ARGV << '-h' if ARGV.empty?
-  #   begin
-  #     parse_options
-  #   rescue OptionParser::InvalidOption => e
-  #     STDERR.puts e.message
-  #     puts opt_parser.to_s
-  #     exit(-1)
-  #   end
-  #   Config.merge!(@config)
-  #   Iggy::Log.level = :debug if Iggy::Config[:debug]
-  # end
-
-  # def run()
-  #   Iggy::Log.debug('inputfile: #{Iggy::Config[:inputfile]}')
-  #   Iggy::Log.debug('profile: #{Iggy::Config[:profile]}')
-
-  #   # read in the terraform.tfstate
-  #   # look for tags
-  #   # map aws resources to inspec resources
-  #   # generate profile
-
-  #   exit 0
 end

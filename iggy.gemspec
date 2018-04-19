@@ -17,13 +17,9 @@ Gem::Specification.new do |s|
   s.executables   = Dir.glob('bin/**/*').map{ |f| File.basename(f) }
   s.require_path  = "lib"
 
+  s.add_dependency('thor', '~> 0.20')
+  s.add_dependency('mixlib-log', '~> 2.0')
   s.add_dependency('inspec', '~> 2.0')
-  s.add_dependency('thor')
-  # s.add_dependency('mixlib-cli', '~> 1.7')
-  # s.add_dependency('mixlib-config', '~> 2.2')
-  # s.add_dependency('mixlib-log', '~> 2.0')
-  # s.add_development_dependency('rspec', '~> 3')
-  # s.add_development_dependency('rake', '~> 12')
   s.add_development_dependency('rb-readline')
   s.add_development_dependency('chefstyle')
 end

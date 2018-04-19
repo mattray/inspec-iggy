@@ -14,7 +14,17 @@ Written and tested with Ruby 2.4.3 (or whatever InSpec 2.0 supports).
 
 # Building #
 
-bundle gem build
+## Bundler ##
+
+    mkdir  .bundle
+    bundle install --path=.bundle
+    bundle exec bin/iggy
+
+## Gem install ##
+
+Once it's published to Rubygems
+
+    gem install iggy
 
 # Usage #
 

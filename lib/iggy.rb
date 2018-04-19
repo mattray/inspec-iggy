@@ -5,4 +5,4 @@
 #
 
 require "iggy/version"
-# require "iggy/log"
+require "iggy/log"
