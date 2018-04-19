@@ -28,7 +28,7 @@ Once it's published to Rubygems
 
 # Usage #
 
-iggy terraform.tfstate
+iggy terraform -f terraform.tfstate --profile testprofile
 
 ## Tagging Profiles ##
 
@@ -37,24 +37,6 @@ If you are using AWS
 ## InSpec AWS Resources ##
 
 Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to the Terraform resources. Newer versions of InSpec may provide additional coverage.
-
-# OPTIONS #
-
-## -p/--profile ##
-
-Name of the profile to generate. Defaults to `iggy` if none is given.
-
-## --debug ##
-
-This provides verbose debugging messages.
-
-## -h/--help ##
-
-Print the currently-supported usage options for iggy.
-
-## -v/--version ##
-
-Print the version of iggy currently installed.
 
 # Testing #
 
