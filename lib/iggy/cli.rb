@@ -12,7 +12,12 @@ class Iggy::CLI < Thor
     true
   end
 
-  desc "terraform [options]", "Convert a Terraform file into an InSpec compliance profile"
+  map %w{-v --version} => "version"
+
+  desc "version", "Display version information", hide: true
+  def version
+    say("Iggy v#{Iggy::VERSION}")
+  end
 
   class_option :debug,
     :desc    => "Verbose debugging messages",
@@ -29,6 +34,7 @@ class Iggy::CLI < Thor
     :desc    => "Name of profile to generate",
     :default => "iggy"
 
+  desc "terraform [options]", "Convert a Terraform file into an InSpec compliance profile"
   def terraform
     Iggy::Log.level = :debug if options[:debug]
     Iggy::Log.debug "file = #{options[:file]}"
@@ -43,10 +49,4 @@ class Iggy::CLI < Thor
     exit 0
   end
 
-  map %w{-v --version} => "version"
-
-  desc "version", "Display version information", hide: true
-  def version
-    say("Iggy v#{Iggy::VERSION}")
-  end
 end
