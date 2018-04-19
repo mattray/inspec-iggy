@@ -1,9 +1,11 @@
 This is the current, previous and future development milestones and contains the features backlog.
 
 # 0.1.0 #
-* Initial prototype supporting AWS and tagged profiles
+* Initial prototype supporting a terraform.tfstate from the AWS provider and tagged profiles
+* Only produces a dynamic set of AWS generated controls and a list of profiles
 
 # BACKLOG #
+* Generate a full profile that depends on the list of profiles
 * Tie tagged compliance profiles back to machines
 * Support multiple compliance tags
 * Test with something besides AWS
