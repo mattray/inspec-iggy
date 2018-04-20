@@ -5,6 +5,7 @@ This is the current, previous and future development milestones and contains the
 * Only produces a dynamic set of AWS generated controls and a list of profiles
 
 # BACKLOG #
+* InSpec properties can be tested by checking the original TF files for the expectations
 * Generate a full profile that depends on the list of profiles
 * Tie tagged compliance profiles back to machines
 * Support multiple compliance tags
