@@ -4,5 +4,6 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "iggy/version"
+require "iggy/inspec"
 require "iggy/log"
+require "iggy/version"
