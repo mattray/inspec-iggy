@@ -28,15 +28,6 @@ module Iggy
       basename = File.basename(file)
       absolutename = File.absolute_path(file)
 
-      # # union of methods to remove common methods, leaving only InSpec properties
-      # # this was a method, now it's a string
-      # # move properties() to inspec
-      # inspec_common_resources = Inspec::RESOURCES[0].instance_methods
-      # # ::Inspec::Resource.registry.keys
-      # Inspec::RESOURCES.each do |ir|
-      #   inspec_common_resources = inspec_common_resources & Inspec::RESOURCES[ir].instance_methods
-      # end
-
       # InSpec controls generated
       generated_controls = {}
 
@@ -61,21 +52,18 @@ module Iggy
           generated_controls[tf_res_id]["tests"] = []
           generated_controls[tf_res_id]["tests"][0] = "it { should exist }"
 
-          # get InSpec properties by method names
-          # inspec_properties = Inspec::RESOURCES[tf_res_type].instance_methods - inspec_common_resources
-          # inspec_properties.collect! {|x| x.to_s }
-
           # if there's a match, see if there are matching InSpec properties
-          # Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_properties = #{inspec_properties}"
-          # tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
-          #   if inspec_properties.member?(attr)
-          #     # not sure how to do this yet
-          #     Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} MATCH"
-          #     generated_controls[tf_res_id]["tests"].push("# WRITE A TEST FOR #{attr}")
-          #   else
-          #     Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} SKIP"
-          #   end
-          # end
+          inspec_properties = Iggy::Inspec::resource_properties(tf_res_type)
+          Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_properties = #{inspec_properties}"
+          tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
+            if inspec_properties.member?(attr)
+              # not sure how to do this yet
+              Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} MATCH"
+              generated_controls[tf_res_id]["tests"].push("# WRITE A TEST FOR #{attr}")
+            else
+              Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} SKIP"
+            end
+          end
         else
           Iggy::Log.debug "Terraform.parse tf_res_type = #{tf_res_type} SKIP"
         end

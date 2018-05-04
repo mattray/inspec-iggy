@@ -13,21 +13,25 @@ module Iggy
 
     # constants for the InSpec resources
     RESOURCES = ::Inspec::Resource.registry.keys
-    # @common_resources = []
-    # COMMON_RESOURCES = @common_resources
 
-    # def initialize
-    #   resources = ::Inspec::Resource.registry[RESOURCES[0]].instance_methods
-    #   RESOURCES.each do |ir|
-    #     @common_resources = resources & Inspec::Resource.registry[ir].instance_methods
-    #   end
-    # end
-    # # RESOURCES = resources_init()
-    # # PROPERTIES = properties_init()
+    # resource: aws_security_group
+    # properties: description, group_id, group_name, inbound_rules, outbound_rules, vpc_id
+    # there really should be some way to get this directly from InSpec's resources
+    def self.resource_properties(resource)
 
-    # def self.properties(resource)
-    #   Inspec::Resource.registry[resource].instance_methods - COMMON_RESOURCES
-    # end
+      # union of methods to find only the common methods
+      inspec_common_methods = ::Inspec::Resource.registry[resource].instance_methods
+      RESOURCES.each do |ir|
+        inspec_common_methods = inspec_common_methods & ::Inspec::Resource.registry[ir].instance_methods
+      end
+
+      # remove the common methods, in theory only leaving only unique InSpec properties
+      inspec_properties = ::Inspec::Resource.registry[resource].instance_methods - inspec_common_methods
+      # get InSpec properties by method names
+      inspec_properties.collect! {|x| x.to_s }
+
+      return inspec_properties
+    end
 
     def self.print_controls(file, generated_controls)
       puts "# encoding: utf-8\n#"
@@ -49,14 +53,5 @@ module Iggy
         puts "end"
       end
     end
-
-    # private
-    # def resources_init()
-    #   Inspec::Resource.registry.keys
-    # end
-
-    # def properties_init()
-    # end
-
   end
 end
