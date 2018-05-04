@@ -12,9 +12,17 @@ module Iggy
   class Inspec
 
     # constants for the InSpec resources
-    #   Inspec::Resource.registry.keys
+    RESOURCES = ::Inspec::Resource.registry.keys
+    # @common_resources = []
+    # COMMON_RESOURCES = @common_resources
+
+    # def initialize
+    #   resources = ::Inspec::Resource.registry[RESOURCES[0]].instance_methods
+    #   RESOURCES.each do |ir|
+    #     @common_resources = resources & Inspec::Resource.registry[ir].instance_methods
+    #   end
+    # end
     # # RESOURCES = resources_init()
-    # # COMMON_RESOURCES = common_resources_init()
     # # PROPERTIES = properties_init()
 
     # def self.properties(resource)
@@ -45,15 +53,6 @@ module Iggy
     # private
     # def resources_init()
     #   Inspec::Resource.registry.keys
-    # end
-
-    # def common_resources_init()
-    #   # union of methods to remove common methods, leaving only InSpec properties
-    #   inspec_common_resources = Inspec::Resource.registry[RESOURCES[0]].instance_methods
-    #   RESOURCES.each do |ir|
-    #     inspec_common_resources = inspec_common_resources & Inspec::Resource.registry[ir].instance_methods
-    #   end
-    #   inspec_common_resources
     # end
 
     # def properties_init()

@@ -6,4 +6,5 @@
 
 require "iggy/inspec"
 require "iggy/log"
+require "iggy/terraform"
 require "iggy/version"
