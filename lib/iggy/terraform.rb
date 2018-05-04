@@ -33,14 +33,14 @@ module Iggy
 
       # iterate over the resources
       # this is hard-coded, I expect tfstate files are not homogeneous as the example
-      tf_resources = tfstate['modules'][0]['resources']
+      tf_resources = tfstate["modules"][0]["resources"]
       tf_resources.keys.each do |tf_res|
-        tf_res_type = tf_resources[tf_res]['type']
+        tf_res_type = tf_resources[tf_res]["type"]
 
         # does this match an InSpec resource?
         if Inspec::RESOURCES.include?(tf_res_type)
           Iggy::Log.debug "Terraform.parse tf_res_type = #{tf_res_type} MATCH"
-          tf_res_id = tf_resources[tf_res]['primary']['id']
+          tf_res_id = tf_resources[tf_res]["primary"]["id"]
           # insert new control based off the resource's ID
           generated_controls[tf_res_id] = {}
           generated_controls[tf_res_id]["name"] = "#{tf_res_type}::#{tf_res_id}"
@@ -53,9 +53,9 @@ module Iggy
           generated_controls[tf_res_id]["tests"][0] = "it { should exist }"
 
           # if there's a match, see if there are matching InSpec properties
-          inspec_properties = Iggy::Inspec::resource_properties(tf_res_type)
+          inspec_properties = Iggy::Inspec.resource_properties(tf_res_type)
           Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_properties = #{inspec_properties}"
-          tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
+          tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
             if inspec_properties.member?(attr)
               # not sure how to do this yet
               Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} MATCH"
