@@ -5,10 +5,8 @@ This is the current, previous and future development milestones and contains the
 * Only produces a dynamic set of AWS generated controls and a list of profiles
 
 # BACKLOG #
-* refactor into multiple Iggy:: subcommands
 * use the to_ruby for controls https://github.com/chef/inspec/blob/master/lib/inspec/objects/control.rb#L24-L34
 * constants in Iggy::Inspec:: for resources and properties
-* Iggy::Terraform which uses Iggy::Inspec constants
 * InSpec properties can be tested by checking the original TF files for the expectations
 * Generate a full profile that depends on the list of profiles
 * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)

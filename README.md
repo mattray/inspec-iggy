@@ -44,6 +44,10 @@ Iggy uses [RSpec](http://rspec.info/) for testing. You should run the following 
 
     $ rspec test
 
+For style
+
+    $ chefstyle .
+
 # License and Author #
 
 |                      |                                                    |

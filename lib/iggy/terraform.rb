@@ -54,7 +54,6 @@ module Iggy
 
           # if there's a match, see if there are matching InSpec properties
           inspec_properties = Iggy::Inspec.resource_properties(tf_res_type)
-          Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_properties = #{inspec_properties}"
           tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
             if inspec_properties.member?(attr)
               # not sure how to do this yet
