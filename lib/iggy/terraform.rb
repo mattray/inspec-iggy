@@ -7,15 +7,57 @@
 require "iggy"
 
 require "json"
+require "thor"
 
 module Iggy
-  class Terraform
+  class Terraform < Thor
+    class_option :tfstate,
+      :aliases => "-t",
+      :desc    => "Specify path to the input terraform.tfstate",
+      :default => "terraform.tfstate"
 
-    def self.parse(file)
-      Iggy::Log.debug "Terraform.parse file = #{file}"
+    class_option :debug,
+      :desc    => "Verbose debugging messages",
+      :type    => :boolean,
+      :default => false
+
+    desc "extract [options]", "Extract tagged InSpec profiles from terraform.tfstate"
+    def extract(file)
+      Iggy::Log.level = :debug if options[:debug]
+      Iggy::Log.debug "Terraform.extract file = #{options[:tfstate]}"
+      # hash of tagged compliance profiles
+      # @compliance_profiles = {}
+      # Iggy::Log.debug "terraform @compliance_profiles = #{@compliance_profiles}"
+      exit 0
+    end
+
+    desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
+    def generate()
+      Iggy::Log.level = :debug if options[:debug]
+      Iggy::Log.debug "Terraform.generate file = #{options[:tfstate]}"
+      # hash of generated controls
+      generated_controls = parse_generate(options[:tfstate])
+      Iggy::Log.debug "Terraform.generate generated_controls = #{generated_controls}"
+      # let's just generate a control file with a set of controls for now
+      Iggy::Inspec.print_controls(options[:tfstate], generated_controls)
+      exit 0
+    end
+
+    private
+    def parse_extract(file)
+      Iggy::Log.debug "Terraform.parse_extract file = #{file}"
+        # is there a tagged profile attached?
+        # if resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
+        #   # this is probably drastically lacking. What machines are we checking?
+        #   @compliance_profiles[tf_res_id] = resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
+        # end
+    end
+
+    def parse_generate(file)
+      Iggy::Log.debug "Terraform.parse_generate file = #{file}"
       begin
         unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid terraform.tfstate file, please check your path."
+          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
           exit(-1)
         end
         tfstate = JSON.parse(File.read(file))
@@ -37,7 +79,7 @@ module Iggy
 
         # does this match an InSpec resource?
         if Inspec::RESOURCES.include?(tf_res_type)
-          Iggy::Log.debug "Terraform.parse tf_res_type = #{tf_res_type} MATCH"
+          Iggy::Log.debug "Terraform.parse_generate tf_res_type = #{tf_res_type} MATCH"
           tf_res_id = tf_resources[tf_res]["primary"]["id"]
           # insert new control based off the resource's ID
           generated_controls[tf_res_id] = {}
@@ -54,24 +96,19 @@ module Iggy
           inspec_properties = Iggy::Inspec.resource_properties(tf_res_type)
           tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
             if inspec_properties.member?(attr)
-              Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} MATCH"
+              Iggy::Log.debug "Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
               value = tf_resources[tf_res]["primary"]["attributes"][attr]
               generated_controls[tf_res_id]["tests"].push("its('#{attr}') { should cmp '#{value}' }")
             else
-              Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} SKIP"
+              Iggy::Log.debug "Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
             end
           end
         else
-          Iggy::Log.debug "Terraform.parse tf_res_type = #{tf_res_type} SKIP"
+          Iggy::Log.debug "Terraform.parse_generate tf_res_type = #{tf_res_type} SKIP"
         end
-
-        # is there a tagged profile attached?
-        # if resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
-        #   # this is probably drastically lacking. What machines are we checking?
-        #   @compliance_profiles[tf_res_id] = resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
-        # end
       end
       generated_controls
     end
+
   end
 end

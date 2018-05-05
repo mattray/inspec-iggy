@@ -10,7 +10,7 @@ module Iggy
   class Log
     extend Mixlib::Log
 
-    # # not quite ready for timestamps
-    # Mixlib::Log::Formatter.show_time = false
+    # not quite ready for timestamps
+    Mixlib::Log::Formatter.show_time = false
   end
 end
