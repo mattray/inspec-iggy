@@ -14,8 +14,6 @@ module Iggy
     # constants for the InSpec resources
     RESOURCES = ::Inspec::Resource.registry.keys
 
-    # resource: aws_security_group
-    # properties: description, group_id, group_name, inbound_rules, outbound_rules, vpc_id
     # there really should be some way to get this directly from InSpec's resources
     def self.resource_properties(resource)
       # remove the common methods, in theory only leaving only unique InSpec properties

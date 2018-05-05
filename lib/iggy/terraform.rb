@@ -15,7 +15,7 @@ module Iggy
       Iggy::Log.debug "Terraform.parse file = #{file}"
       begin
         unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
+          STDERR.puts "ERROR: #{file} is an invalid terraform.tfstate file, please check your path."
           exit(-1)
         end
         tfstate = JSON.parse(File.read(file))
@@ -24,7 +24,6 @@ module Iggy
         STDERR.puts "ERROR: Parsing error in #{file}."
         exit(-1)
       end
-
       basename = File.basename(file)
       absolutename = File.absolute_path(file)
 
@@ -32,7 +31,6 @@ module Iggy
       generated_controls = {}
 
       # iterate over the resources
-      # this is hard-coded, I expect tfstate files are not homogeneous as the example
       tf_resources = tfstate["modules"][0]["resources"]
       tf_resources.keys.each do |tf_res|
         tf_res_type = tf_resources[tf_res]["type"]
@@ -56,9 +54,9 @@ module Iggy
           inspec_properties = Iggy::Inspec.resource_properties(tf_res_type)
           tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
             if inspec_properties.member?(attr)
-              # not sure how to do this yet
               Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} MATCH"
-              generated_controls[tf_res_id]["tests"].push("# WRITE A TEST FOR #{attr}")
+              value = tf_resources[tf_res]["primary"]["attributes"][attr]
+              generated_controls[tf_res_id]["tests"].push("its('#{attr}') { should cmp '#{value}' }")
             else
               Iggy::Log.debug "Terraform.parse #{tf_res_type} inspec_property = #{attr} SKIP"
             end
