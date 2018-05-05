@@ -27,22 +27,22 @@ class Iggy::CLI < Thor
     :type    => :boolean,
     :default => false
 
-  class_option :file,
-    :aliases => "-f",
-    :desc    => "Specify path to the input file",
-    :default => "terraform.tfstat"
+  option :tfstate,
+    :aliases => "-t",
+    :desc    => "Specify path to the input terraform.tfstate",
+    :default => "terraform.tfstate"
 
-  desc "terraform [options]", "Convert a Terraform file into an InSpec compliance profile"
+  desc "terraform [options]", "Convert terraform.tfstate into an InSpec compliance profile"
   def terraform
     Iggy::Log.level = :debug if options[:debug]
-    Iggy::Log.debug "terraform file = #{options[:file]}"
+    Iggy::Log.debug "terraform file = #{options[:tfstate]}"
 
     # hash of generated controls
-    generated_controls = Iggy::Terraform.parse(options[:file])
+    generated_controls = Iggy::Terraform.parse(options[:tfstate])
     Iggy::Log.debug "terraform generated_controls = #{generated_controls}"
 
     # let's just generate a control file with a set of controls for now
-    Iggy::Inspec.print_controls(options[:file], generated_controls)
+    Iggy::Inspec.print_controls(options[:tfstate], generated_controls)
     exit 0
   end
 
