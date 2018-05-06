@@ -32,7 +32,7 @@ module Iggy
     end
 
     desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
-    def generate()
+    def generate
       Iggy::Log.level = :debug if options[:debug]
       Iggy::Log.debug "Terraform.generate file = #{options[:tfstate]}"
       # hash of generated controls
@@ -44,6 +44,7 @@ module Iggy
     end
 
     private
+
     def parse_extract(file)
       Iggy::Log.debug "Terraform.parse_extract file = #{file}"
         # is there a tagged profile attached?

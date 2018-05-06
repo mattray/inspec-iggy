@@ -8,7 +8,7 @@
 require "mixlib/shellout"
 
 describe "bin/iggy" do
-  iggy_binary = File.join(File.dirname(__FILE__), *%w{.. bin iggy})
+  iggy_binary = File.join(File.dirname(__FILE__), "..", "bin", "iggy")
 
   it "no options" do
     expected_output = <<-OUTPUT
@@ -69,7 +69,7 @@ Extract tagged InSpec profiles from terraform.tfstate
     expect(iggy.stdout).to eq expected_output
   end
 
-    it "terraform help generate" do
+  it "terraform help generate" do
     expected_output = <<-OUTPUT
 Usage:
   iggy terraform generate [options]
