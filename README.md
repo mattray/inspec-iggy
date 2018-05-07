@@ -1,6 +1,8 @@
 # Description #
 
-Iggy is a command-line tool for generating [InSpec](https://inspec.io) compliance profiles from [Terraform](https://terraform.io) scripts. You may use tags to annotate your Terraform scripts to specify which compliance profiles will be used and iggy will create a profile including those dependencies. Iggy will also attempt to generate InSpec AWS audits by mappping Terraform resources to InSpec resources.
+Iggy is a command-line tool for generating [InSpec](https://inspec.io) compliance validation from [Terraform](https://terraform.io) ```tfstate``` files. You may use tags to annotate your Terraform scripts to specify which compliance profiles will be used and iggy will create a profile including those dependencies. Iggy will also attempt to generate InSpec AWS audits by mappping Terraform resources to InSpec resources.
+
+***CloudFormation support has been started, but it is incomplete while focusing on Terraform.***
 
 The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
 
@@ -10,7 +12,7 @@ Iggy was inspired by Christoph Hartmann's [inspec-verify-provision](https://gith
 
 Iggy generates compliance profiles for InSpec 2, which includes the AWS resources. Because AWS resources are continuing to be added to InSpec, you may need the latest version to support as many resources as possible.
 
-Written and tested with Ruby 2.4.3 (or whatever InSpec 2.0 supports).
+Written and tested with Ruby 2.4.4 (or whatever InSpec 2.0 supports).
 
 # Building #
 
@@ -28,7 +30,12 @@ Once it's published to Rubygems
 
 # Usage #
 
-iggy terraform -f terraform.tfstate --profile testprofile
+    Commands:
+        iggy cfn SUBCOMMAND [options]        # Generate InSpec from CloudFormation
+        iggy help [COMMAND]                  # Describe available commands or one specific command
+        iggy terraform SUBCOMMAND [options]  # Extract or generate InSpec from Terraform
+
+    iggy terraform generate --tfstate terraform.tfstate
 
 ## Tagging Profiles ##
 
