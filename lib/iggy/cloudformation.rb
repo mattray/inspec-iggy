@@ -61,7 +61,7 @@ Reads in a CloudFormation JSON file and generates matching InSpec compliance con
       # iterate over the Resources, use these as IDs?
       cfn_resources.keys.each do |cfn_res|
         # split out the last ::, these are all AWS
-        cfn_res_type = "aws_" + cfn_resources[cfn_res]['Type'].split("::").last.downcase
+        cfn_res_type = "aws_" + cfn_resources[cfn_res]["Type"].split("::").last.downcase
 
         # does this match an InSpec resource?
         if Inspec::RESOURCES.include?(cfn_res_type)
