@@ -8,6 +8,11 @@ provider "aws" {
 # Create a VPC to launch our instances into
 resource "aws_vpc" "default" {
   cidr_block = "10.0.0.0/16"
+
+  tags {
+    iggy_name_hong_kong = "hong-kong",
+    iggy_url_hong_kong = "https://github.com/mattray/hong-kong-compliance"
+  }
 }
 
 # Create an internet gateway to give our subnet access to the outside world
@@ -141,7 +146,11 @@ resource "aws_instance" "web" {
       "sudo apt-get -y install apache2",
     ]
   }
+
   tags {
-    compliance_profile = "https://github.com/dev-sec/apache-baseline"
+      iggy_name_apache_baseline = "apache-baseline",
+      iggy_url_apache_baseline = "https://github.com/dev-sec/apache-baseline",
+      iggy_name_linux_baseline = "linux-baseline",
+      iggy_url_linux_baseline = "https://github.com/dev-sec/linux-baseline"
   }
 }

@@ -11,6 +11,10 @@ require "thor"
 
 module Iggy
   class Terraform < Thor
+    # makes it easier to change out later
+    TAG_NAME = "iggy_name_"
+    TAG_URL = "iggy_url_"
+
     class_option :tfstate,
       :aliases => "-t",
       :desc    => "Specify path to the input terraform.tfstate",
@@ -22,12 +26,12 @@ module Iggy
       :default => false
 
     desc "extract [options]", "Extract tagged InSpec profiles from terraform.tfstate"
-    def extract(file)
+    def extract
       Iggy::Log.level = :debug if options[:debug]
       Iggy::Log.debug "Terraform.extract file = #{options[:tfstate]}"
       # hash of tagged compliance profiles
-      # @compliance_profiles = {}
-      # Iggy::Log.debug "terraform @compliance_profiles = #{@compliance_profiles}"
+      extracted_profiles = parse_extract(options[:tfstate])
+      Iggy::Log.debug "Terraform.extract extracted_profiles = #{extracted_profiles}"
       exit 0
     end
 
@@ -45,17 +49,9 @@ module Iggy
 
     private
 
-    def parse_extract(file)
-      Iggy::Log.debug "Terraform.parse_extract file = #{file}"
-        # is there a tagged profile attached?
-        # if resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
-        #   # this is probably drastically lacking. What machines are we checking?
-        #   @compliance_profiles[tf_res_id] = resources[tf_res]["primary"]["attributes"]["tags.compliance_profile"]
-        # end
-    end
-
-    def parse_generate(file)
-      Iggy::Log.debug "Terraform.parse_generate file = #{file}"
+    # boilerplate tfstate parsing
+    def parse_tfstate(file)
+      Iggy::Log.debug "Terraform.parse_tfstate file = #{file}"
       begin
         unless File.file?(file)
           STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
@@ -67,6 +63,53 @@ module Iggy
         STDERR.puts "ERROR: Parsing error in #{file}."
         exit(-1)
       end
+    end
+
+    def parse_extract(file)
+      Iggy::Log.debug "Terraform.parse_extract file = #{file}"
+      tfstate = parse_tfstate(file)
+      # InSpec controls generated
+      extracted_profiles = {}
+      tf_resources = tfstate["modules"][0]["resources"]
+      tf_resources.keys.each do |tf_res|
+        tf_res_id = tf_resources[tf_res]["primary"]["id"]
+        # get the attributes, see if any of them have a tagged profile attached
+        tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
+          next unless attr.start_with?("tags."+TAG_NAME)
+          Iggy::Log.debug "Terraform.parse_extract tf_res = #{tf_res} attr = #{attr} MATCHED TAG"
+          # get the URL and the name of the profiles
+          name = attr.split(TAG_NAME)[1]
+          url = tf_resources[tf_res]['primary']['attributes']["tags.#{TAG_URL}#{name}"]
+          if tf_res.start_with?("aws_vpc") # should this be VPC or subnet?
+            # if it's a VPC, store it as the VPC id + name
+            key = tf_res_id + ":" + name
+            Iggy::Log.debug "Terraform.parse_extract aws_vpc tagged with InSpec #{key}"
+            extracted_profiles[key] = {
+              "type" => "aws_vpc",
+              "az" => "us-west-2",
+              "url" => url
+            }
+          elsif tf_res.start_with?("aws_instance")
+            # if it's a node, get information about the IP and SSH/WinRM
+            key = tf_res_id + ":" + name
+            Iggy::Log.debug "Terraform.parse_extract aws_instance tagged with InSpec #{key}"
+            extracted_profiles[key] = {
+              "type" => "aws_instance",
+              "public_ip" => "192.168.0.1",
+              "url" => url
+            }
+          else
+            # should generic AWS just be the default except for instances?
+            STDERR.puts "ERROR: #{file} #{tf_res_id} has an InSpec-tagged resource but #{tf_res} is currently unsupported."
+            exit(-1)
+          end
+        end
+      end
+      extracted_profiles
+    end
+
+    def parse_generate(file)
+      tfstate = parse_tfstate(file)
       basename = File.basename(file)
       absolutename = File.absolute_path(file)
 
