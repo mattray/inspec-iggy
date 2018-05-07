@@ -28,17 +28,16 @@ module Iggy
     desc "extract [options]", "Extract tagged InSpec profiles from terraform.tfstate"
     def extract
       Iggy::Log.level = :debug if options[:debug]
-      Iggy::Log.debug "Terraform.extract file = #{options[:tfstate]}"
       # hash of tagged compliance profiles
       extracted_profiles = parse_extract(options[:tfstate])
       Iggy::Log.debug "Terraform.extract extracted_profiles = #{extracted_profiles}"
+      Iggy::Inspec.print_commands(extracted_profiles)
       exit 0
     end
 
     desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
     def generate
       Iggy::Log.level = :debug if options[:debug]
-      Iggy::Log.debug "Terraform.generate file = #{options[:tfstate]}"
       # hash of generated controls
       generated_controls = parse_generate(options[:tfstate])
       Iggy::Log.debug "Terraform.generate generated_controls = #{generated_controls}"
@@ -65,14 +64,18 @@ module Iggy
       end
     end
 
+    # parse through the JSON for the tagged Resources
     def parse_extract(file)
-      Iggy::Log.debug "Terraform.parse_extract file = #{file}"
       tfstate = parse_tfstate(file)
-      # InSpec controls generated
+
+      # InSpec profiles extracted
       extracted_profiles = {}
+
+      # iterate over the resources
       tf_resources = tfstate["modules"][0]["resources"]
       tf_resources.keys.each do |tf_res|
         tf_res_id = tf_resources[tf_res]["primary"]["id"]
+
         # get the attributes, see if any of them have a tagged profile attached
         tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
           next unless attr.start_with?("tags."+TAG_NAME)
@@ -108,6 +111,7 @@ module Iggy
       extracted_profiles
     end
 
+    # parse through the JSON and generate InSpec controls
     def parse_generate(file)
       tfstate = parse_tfstate(file)
       basename = File.basename(file)

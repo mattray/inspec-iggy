@@ -25,6 +25,19 @@ module Iggy
       inspec_properties
     end
 
+    def self.print_commands(extracted_profiles)
+      extracted_profiles.keys.each do |cmd|
+        type = extracted_profiles[cmd]["type"]
+        url = extracted_profiles[cmd]["url"]
+        if type == "aws_instance"
+          ip = extracted_profiles[cmd]["public_ip"]
+          puts "inspec exec #{url} -t ssh://#{ip}"
+        else
+          puts "inspec exec #{url} -t aws://us-west-2"
+        end
+      end
+    end
+
     def self.print_controls(file, generated_controls)
       puts "# encoding: utf-8\n#"
 

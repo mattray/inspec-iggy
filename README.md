@@ -2,8 +2,6 @@
 
 Iggy is a command-line tool for generating [InSpec](https://inspec.io) compliance validation from [Terraform](https://terraform.io) ```tfstate``` files. You may use tags to annotate your Terraform scripts to specify which compliance profiles will be used and iggy will create a profile including those dependencies. Iggy will also attempt to generate InSpec AWS audits by mappping Terraform resources to InSpec resources.
 
-**CloudFormation support has been started, but it is incomplete while focusing on Terraform.**
-
 The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
 
 Iggy was inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/)
@@ -64,6 +62,11 @@ inspec exec https://github.com/dev-sec/linux-baseline -t ssh://clckwrk@52.33.203
      iggy terraform generate --tfstate terraform.tfstate
 
 Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to the Terraform resources. Newer versions of InSpec may provide additional coverage.
+
+# CloudFormation Support #
+
+**CloudFormation support has been started, but it is incomplete while focusing on Terraform.** Here is an example of the current output, note that it's not tied to an actual deployed CloudFormation Stack, so that will need to be provided for the entry point of testing.
+https://gist.github.com/c4d6eda82dfb25502ef381cc631a1edd
 
 # Testing #
 
