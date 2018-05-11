@@ -127,6 +127,12 @@ module Iggy
         tf_res_type = tf_resources[tf_res]["type"]
 
         # does this match an InSpec resource?
+        # add translation layer
+        if Inspec::TERRAFORM_RESOURCES.keys.include?(tf_res_type)
+          Iggy::Log.debug "Terraform.parse_generate tf_res_type = #{tf_res_type} #{Inspec::TERRAFORM_RESOURCES[tf_res_type]} TRANSLATED"
+          tf_res_type = Inspec::TERRAFORM_RESOURCES[tf_res_type]
+        end
+
         if Inspec::RESOURCES.include?(tf_res_type)
           Iggy::Log.debug "Terraform.parse_generate tf_res_type = #{tf_res_type} MATCH"
           tf_res_id = tf_resources[tf_res]["primary"]["id"]

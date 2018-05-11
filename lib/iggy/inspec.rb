@@ -14,6 +14,12 @@ module Iggy
     # constants for the InSpec resources
     RESOURCES = ::Inspec::Resource.registry.keys
 
+    # translate Terraform resource name to InSpec
+    TERRAFORM_RESOURCES = {
+      'aws_instance' => 'aws_ec2_instance',
+      # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
+    }
+
     # there really should be some way to get this directly from InSpec's resources
     def self.resource_properties(resource)
       # remove the common methods, in theory only leaving only unique InSpec properties
