@@ -98,7 +98,8 @@ module Iggy
             Iggy::Log.debug "Terraform.parse_extract aws_instance tagged with InSpec #{key}"
             extracted_profiles[key] = {
               "type" => "aws_instance",
-              "public_ip" => "192.168.0.1",
+              "public_ip" => tf_resources[tf_res]['primary']['attributes']['public_ip'],
+              "key_name" => tf_resources[tf_res]['primary']['attributes']['key_name'],
               "url" => url
             }
           else

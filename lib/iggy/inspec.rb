@@ -29,9 +29,10 @@ module Iggy
       extracted_profiles.keys.each do |cmd|
         type = extracted_profiles[cmd]["type"]
         url = extracted_profiles[cmd]["url"]
+        key_name = extracted_profiles[cmd]["key_name"]
         if type == "aws_instance"
           ip = extracted_profiles[cmd]["public_ip"]
-          puts "inspec exec #{url} -t ssh://#{ip}"
+          puts "inspec exec #{url} -t ssh://#{ip} -i #{key_name}"
         else
           puts "inspec exec #{url} -t aws://us-west-2"
         end
