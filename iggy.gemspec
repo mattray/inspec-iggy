@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/mattray/iggy"
   s.summary     = %q{Generate InSpec compliance profiles from Terraform.}
   s.description = %q{Generate InSpec compliance profiles from Terraform by tagging instances and mapping Terraform to InSpec.}
-  s.required_ruby_version = ">= 2.4"
+  s.required_ruby_version = '>= 2.3'
 
   s.files         = Dir["LICENSE", "README.md", "bin/*", "lib/**/*"]
   s.test_files    = Dir.glob("test/**/*")
