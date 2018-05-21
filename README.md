@@ -1,6 +1,6 @@
 # Description #
 
-InSpec-Iggy ("Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files. Iggy generates InSpec AWS controls by mapping Terraform resources to InSpec resources. You may also use tags to annotate your Terraform scripts to specify which compliance profiles to be used and Iggy will create a profile including those dependencies.
+InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files. Iggy generates InSpec AWS controls by mapping Terraform resources to InSpec resources. You may also use tags to annotate your Terraform scripts to specify which compliance profiles to be used and Iggy will create a profile including those dependencies.
 
 Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/).
 
@@ -8,23 +8,38 @@ The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) cov
 
 # Requirements #
 
-Iggy generates compliance profiles for InSpec 2, which includes the AWS resources. Because AWS resources are continuing to be added to InSpec, you may want the latest version to support as many resources as possible.
+Iggy generates compliance profiles for InSpec 2, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible.
 
 Written and tested with Ruby 2.4.4 (or whatever InSpec 2.0 supports).
 
-# Building #
+# Installation #
 
-## Bundler ##
+`inspec-iggy` is a plugin for InSpec and may be installed as follows
 
-    mkdir  .bundle
-    bundle install --path=.bundle
-    bundle exec bin/iggy
+```bash
+# install InSpec
+gem install inspec
+gem install inspec-iggy
+inspec terraform version
+```
 
-## Gem install ##
+## * for development: ##
 
-Once it's published to Rubygems
+```bash
+# Install `inspec-iggy` via a symlink:
+git clone git@github.com:inspec/inspec-iggy ~/inspec-iggy
+mkdir -p ~/.inspec/plugins
+ln -s ~/inspec-iggy/ ~/.inspec/plugins/inspec-iggy
+inspec terraform version
+```
 
-    gem install iggy
+## * or build a gem: ##
+
+```bash
+# Build the `inspec-iggy` then install:
+git clone https://github.com/inspec/inspec-iggy && cd inspec-iggy && gem build *gemspec && gem install *gem
+inspec terraform version
+```
 
 # InSpec Terraform Generate #
 

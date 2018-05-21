@@ -6,10 +6,11 @@ This is the current, previous and future development milestones and contains the
 
 # 0.2.0 #
 * switched to Apache v2 license
-* switched to to_ruby
+* switched to to_ruby (Christoph Hartmann)
 * rename to inspec-iggy
-* switch to InSpec plugin
+* switched to InSpec plugin
 * moved to https://github.com/inspec/inspec-iggy
+* published to Rubygems
 
 # BACKLOG #
 * CloudFormation find VPC entrypoint
