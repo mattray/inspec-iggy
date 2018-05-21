@@ -10,11 +10,11 @@ module Iggy
   class InspecHelper
 
     # constants for the InSpec resources
-    RESOURCES = ::Inspec::Resource.registry.keys
+    RESOURCES = Inspec::Resource.registry.keys
 
     # translate Terraform resource name to InSpec
     TERRAFORM_RESOURCES = {
-      'aws_instance' => 'aws_ec2_instance',
+      "aws_instance" => "aws_ec2_instance",
       # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
     }
 
@@ -24,7 +24,7 @@ module Iggy
       inspec_properties = Inspec::Resource.registry[resource].instance_methods - COMMON_PROPERTIES
       # get InSpec properties by method names
       inspec_properties.collect! { |x| x.to_s }
-      Inspec::Log.debug "Iggy::Inspec.resource_properties #{resource} properties = #{inspec_properties}"
+      Inspec::Log.debug "Iggy::InspecHelper.resource_properties #{resource} properties = #{inspec_properties}"
 
       inspec_properties
     end
@@ -52,10 +52,8 @@ module Iggy
       puts generated_controls.flatten.map(&:to_ruby).join("\n\n")
     end
 
-    private
-
     # a hack for sure, finds common methods as proxy for InSpec properties
-    COMMON_PROPERTIES = ::Inspec::Resource.registry["aws_subnet"].instance_methods &
-      ::Inspec::Resource.registry["directory"].instance_methods
+    COMMON_PROPERTIES = Inspec::Resource.registry["aws_subnet"].instance_methods &
+      Inspec::Resource.registry["directory"].instance_methods
   end
 end

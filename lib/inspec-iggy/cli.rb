@@ -33,18 +33,13 @@ module Iggy
 
     desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
     def generate
-      ::Inspec::Log.level = :debug if options[:debug]
+      Inspec::Log.level = :debug if options[:debug]
       generated_controls = Iggy::Terraform.parse_generate(options[:tfstate])
-      ::Inspec::Log.debug "Iggy.generate generated_controls = #{generated_controls}"
+      Inspec::Log.debug "Iggy.generate generated_controls = #{generated_controls}"
       # let's just generate a control file with a set of controls for now
       Iggy::InspecHelper.print_controls(options[:tfstate], generated_controls)
       exit 0
     end
-
-  end
-
-  Inspec::Plugins::CLI.add_subcommand(CLI, "terraform", "terraform SUBCOMMAND ...", "Extract or generate InSpec from Terraform", {})
-end
 
 # desc "extract [options]", "Extract tagged InSpec profiles from terraform.tfstate"
 # def extract
@@ -55,3 +50,8 @@ end
 #   Iggy::Inspec.print_commands(extracted_profiles)
 #   exit 0
 # end
+
+  end
+
+  Inspec::Plugins::CLI.add_subcommand(CLI, "terraform", "terraform SUBCOMMAND ...", "Extract or generate InSpec from Terraform", {})
+end
