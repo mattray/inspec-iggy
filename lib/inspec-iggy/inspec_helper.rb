@@ -4,12 +4,11 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "iggy"
-
 require "inspec"
 
 module Iggy
-  class Inspec
+  class InspecHelper
+
     # constants for the InSpec resources
     RESOURCES = ::Inspec::Resource.registry.keys
 
@@ -19,13 +18,13 @@ module Iggy
       # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
     }
 
-    # there really should be some way to get this directly from InSpec's resources
+    # # there really should be some way to get this directly from InSpec's resources
     def self.resource_properties(resource)
       # remove the common methods, in theory only leaving only unique InSpec properties
-      inspec_properties = ::Inspec::Resource.registry[resource].instance_methods - COMMON_PROPERTIES
+      inspec_properties = Inspec::Resource.registry[resource].instance_methods - COMMON_PROPERTIES
       # get InSpec properties by method names
       inspec_properties.collect! { |x| x.to_s }
-      Iggy::Log.debug "Inspec.resource_properties #{resource} properties = #{inspec_properties}"
+      Inspec::Log.debug "Iggy::Inspec.resource_properties #{resource} properties = #{inspec_properties}"
 
       inspec_properties
     end

@@ -1,11 +1,7 @@
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# encoding: utf-8
 
-require "iggy/cloudformation"
-require "iggy/inspec"
-require "iggy/log"
-require "iggy/terraform"
-require "iggy/version"
+libdir = File.dirname(__FILE__)
+$LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+
+require "inspec-iggy/cli"
+require "inspec-iggy/version"
