@@ -1,34 +1,55 @@
 # Description #
 
-Iggy is a command-line tool for generating [InSpec](https://inspec.io) compliance validation from [Terraform](https://terraform.io) ```tfstate``` files. You may use tags to annotate your Terraform scripts to specify which compliance profiles will be used and iggy will create a profile including those dependencies. Iggy will also attempt to generate InSpec AWS audits by mappping Terraform resources to InSpec resources.
+InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files. Iggy generates InSpec AWS controls by mapping Terraform resources to InSpec resources. You may also use tags to annotate your Terraform scripts to specify which compliance profiles to be used and Iggy will create a profile including those dependencies.
+
+Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/).
 
 The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
 
-Iggy was inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/)
-
 # Requirements #
 
-Iggy generates compliance profiles for InSpec 2, which includes the AWS resources. Because AWS resources are continuing to be added to InSpec, you may need the latest version to support as many resources as possible.
+Iggy generates compliance profiles for InSpec 2, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible.
 
 Written and tested with Ruby 2.4.4 (or whatever InSpec 2.0 supports).
 
-# Building #
+# Installation #
 
-## Bundler ##
+`inspec-iggy` is a plugin for InSpec and may be installed as follows
 
-    mkdir  .bundle
-    bundle install --path=.bundle
-    bundle exec bin/iggy
+```bash
+# install InSpec
+gem install inspec
+gem install inspec-iggy
+inspec terraform version
+```
 
-## Gem install ##
+## * for development: ##
 
-Once it's published to Rubygems
+```bash
+# Install `inspec-iggy` via a symlink:
+git clone git@github.com:inspec/inspec-iggy ~/inspec-iggy
+mkdir -p ~/.inspec/plugins
+ln -s ~/inspec-iggy/ ~/.inspec/plugins/inspec-iggy
+inspec terraform version
+```
 
-    gem install iggy
+## * or build a gem: ##
 
-# Terraform Extract Usage #
+```bash
+# Build the `inspec-iggy` then install:
+git clone https://github.com/inspec/inspec-iggy && cd inspec-iggy && gem build *gemspec && gem install *gem
+inspec terraform version
+```
 
-    iggy terraform extract --tfstate terraform.tfstate
+# InSpec Terraform Generate #
+
+     inspec terraform generate --tfstate terraform.tfstate
+
+Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to the Terraform resources. Newer versions of InSpec may provide additional coverage.
+
+# InSpec Terraform Extract (EXPERIMENTAL)#
+
+    inspec terraform extract --tfstate terraform.tfstate
 
 ## Tagging Profiles for Extract ##
 
@@ -57,12 +78,6 @@ Currently it only supports URL-based compliance profiles. InSpec supports other 
 
 inspec exec https://github.com/dev-sec/linux-baseline -t ssh://clckwrk@52.33.203.34 -i ~/.ssh/mattray-apac
 
-# Terraform Generate Usage #
-
-     iggy terraform generate --tfstate terraform.tfstate
-
-Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to the Terraform resources. Newer versions of InSpec may provide additional coverage.
-
 # CloudFormation Support #
 
 **CloudFormation support has been started, but it is incomplete while focusing on Terraform.** Here is an example of the current output, note that it's not tied to an actual deployed CloudFormation Stack, so that will need to be provided for the entry point of testing.
@@ -80,10 +95,20 @@ For style
 
 # License and Author #
 
-|                      |                                                    |
-|:---------------------|:---------------------------------------------------|
-| **Author**           |  Matt Ray (<matt@chef.io>)                         |
-|                      |                                                    |
-| **Copyright**        |  Copyright (c) 2018, Chef Software, Inc.           |
+|                |                                           |
+|:---------------|:------------------------------------------|
+| **Author**     | Matt Ray (<matt@chef.io>)                 |
+| **Copyright:** | Copyright (c) 2017 Chef Software Inc.     |
+| **License:**   | Apache License, Version 2.0               |
 
-All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
