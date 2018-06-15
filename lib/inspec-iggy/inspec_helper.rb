@@ -24,7 +24,7 @@ module Iggy
       inspec_properties = Inspec::Resource.registry[resource].instance_methods - COMMON_PROPERTIES
       # get InSpec properties by method names
       inspec_properties.collect! { |x| x.to_s }
-      Inspec::Log.debug "Iggy::InspecHelper.resource_properties #{resource} properties = #{inspec_properties}"
+      Inspec::Log.debug "InspecHelper.resource_properties #{resource} properties = #{inspec_properties}"
 
       inspec_properties
     end
