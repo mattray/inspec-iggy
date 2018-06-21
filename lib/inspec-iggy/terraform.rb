@@ -25,7 +25,7 @@ module Iggy
           STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
           exit(-1)
         end
-        tfstate = JSON.parse(File.read(file))
+        JSON.parse(File.read(file))
       rescue JSON::ParserError => e
         STDERR.puts e.message
         STDERR.puts "ERROR: Parsing error in #{file}."
