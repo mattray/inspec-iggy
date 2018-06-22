@@ -35,9 +35,15 @@ module Iggy
       cfn_resources = template["Resources"]
       cfn_resources.keys.each do |cfn_res|
         # split out the last ::, these are all AWS
-        cfn_res_type = "aws_" + cfn_resources[cfn_res]["Type"].split("::").last.downcase
+        cfn_resource = cfn_resources[cfn_res]["Type"].split("::").last
+        # split camelcase and join with underscores
+        cfn_res_type = "aws_" + cfn_resource.split(/(?=[A-Z])/).join("_").downcase
 
-        # any translation required?
+        # add translation layer
+        if InspecHelper::TRANSLATED_RESOURCES.keys.include?(cfn_res_type)
+          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} #{InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]} TRANSLATED"
+          cfn_res_type = InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]
+        end
 
         # does this match an InSpec resource?
         if InspecHelper::RESOURCES.include?(cfn_res_type)
@@ -57,21 +63,33 @@ module Iggy
           # ensure the resource exists
           describe.add_test(nil, "exist", nil)
 
+          # EC2 instances should be running
+          describe.add_test(nil, "be_running", nil) if cfn_res_type.eql?("aws_ec2_instance")
+
           # if there's a match, see if there are matching InSpec properties
           inspec_properties = Iggy::InspecHelper.resource_properties(cfn_res_type)
           cfn_resources[cfn_res]["Properties"].keys.each do |attr|
             # insert '_' on the CamelCase to get camel_case
-            attr_split = attr.split /(?=[A-Z])/
+            attr_split = attr.split(/(?=[A-Z])/)
             property = attr_split.join("_").downcase
             if inspec_properties.member?(property)
               Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCH"
               value = cfn_resources[cfn_res]["Properties"][attr]
-              # skip the {"Ref"=>"VPC"} for now
-              describe.add_test(attr, "cmp", value) unless value.is_a? Hash
+              # skip the {"Ref"=>"VPC"} and tags for now
+              describe.add_test(property, "cmp", value) unless (value.is_a? Hash)||(value.is_a? Array)
             else
               Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIP"
             end
           end
+
+          # How do we fill these in with 'live' data?
+          # aws_ec2_instance inspec_property = availability_zone SKIP
+          # aws_ec2_instance inspec_property = block_device_mappings SKIP
+          # aws_ec2_instance inspec_property = network_interfaces SKIP
+          # aws_ec2_instance inspec_property = key_name MATCH
+          # aws_ec2_instance inspec_property = user_data SKIP
+          # aws_ec2_instance inspec_property = image_id MATCH
+          # aws_ec2_instance inspec_property = tags MATCH
 
           ctrl.add_test(describe)
           generated_controls.push(ctrl)
