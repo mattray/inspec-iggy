@@ -13,7 +13,7 @@ module Iggy
     RESOURCES = Inspec::Resource.registry.keys
 
     # translate Terraform resource name to InSpec
-    TERRAFORM_RESOURCES = {
+    TRANSLATED_RESOURCES = {
       "aws_instance" => "aws_ec2_instance",
       # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
     }
