@@ -5,29 +5,24 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "iggy"
+require "inspec-iggy/inspec_helper"
 
-describe Iggy::Inspec::RESOURCES do
+describe Iggy::InspecHelper::RESOURCES do
   it "resources" do
-    expect(Iggy::Inspec::RESOURCES).to include("aws_vpc")
-    expect(Iggy::Inspec::RESOURCES).to include("directory")
-    expect(Iggy::Inspec::RESOURCES).to include("package")
+    expect(Iggy::InspecHelper::RESOURCES).to include("aws_vpc")
+    expect(Iggy::InspecHelper::RESOURCES).to include("directory")
+    expect(Iggy::InspecHelper::RESOURCES).to include("package")
   end
 end
 
-describe Iggy::Inspec.resource_properties("aws_vpc") do
+describe Iggy::InspecHelper.resource_properties("aws_vpc") do
   it { is_expected.to include("cidr_block") }
 end
 
-describe Iggy::Inspec.resource_properties("directory") do
+describe Iggy::InspecHelper.resource_properties("directory") do
   it { is_expected.to include("owner") }
 end
 
-describe Iggy::Inspec.resource_properties("package") do
+describe Iggy::InspecHelper.resource_properties("package") do
   it { is_expected.to include("version") }
 end
-
-# describe Iggy::Inspec.print_controls do
-#   it "output" do
-#   end
-# end
