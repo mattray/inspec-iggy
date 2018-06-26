@@ -57,8 +57,8 @@ module Iggy
           ctrl.impact = "1.0"
 
           describe = Inspec::Describe.new
-          # describes the resource with the id as argument
-          describe.qualifier.push([cfn_res_type, cfn_res])
+          # describes the resource with the logical_resource_id as argument, replaced at inspec exec
+          describe.qualifier.push([cfn_res_type, "resources[#{cfn_res}]"])
 
           # ensure the resource exists
           describe.add_test(nil, "exist", nil)
@@ -75,22 +75,23 @@ module Iggy
             if inspec_properties.member?(property)
               Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCH"
               value = cfn_resources[cfn_res]["Properties"][attr]
-              # skip the {"Ref"=>"VPC"} and tags for now
-              describe.add_test(property, "cmp", value) unless (value.is_a? Hash)||(value.is_a? Array)
+              if (value.is_a? Hash) || (value.is_a? Array)
+                if property.eql?("vpc_id") # these get replaced at inspec exec
+                  vpc = cfn_resources[cfn_res]["Properties"][attr].values.first
+                  # https://github.com/inspec/inspec/issues/3173
+                  describe.add_test(property, "eq", "resources[#{vpc}]") unless cfn_res_type.eql?("aws_route_table")
+                elsif property.eql?("image_id") # AMI is a Ref into Parameters
+                  amiref = cfn_resources[cfn_res]["Properties"][attr].values.first
+                  ami = template["Parameters"][amiref]["Default"]
+                  describe.add_test(property, "eq", ami)
+                end
+              else
+                describe.add_test(property, "eq", value)
+              end
             else
               Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIP"
             end
           end
-
-          # How do we fill these in with 'live' data?
-          # aws_ec2_instance inspec_property = availability_zone SKIP
-          # aws_ec2_instance inspec_property = block_device_mappings SKIP
-          # aws_ec2_instance inspec_property = network_interfaces SKIP
-          # aws_ec2_instance inspec_property = key_name MATCH
-          # aws_ec2_instance inspec_property = user_data SKIP
-          # aws_ec2_instance inspec_property = image_id MATCH
-          # aws_ec2_instance inspec_property = tags MATCH
-
           ctrl.add_test(describe)
           generated_controls.push(ctrl)
         else

@@ -65,13 +65,19 @@ module CloudFormation
     end
 
     class_option :template,
-      :aliases => "-t",
-      :desc    => "Specify path to the input CloudFormation template"
+      :aliases  => "-t",
+      :required => true,
+      :desc     => "Specify path to the input CloudFormation template"
+
+    class_option :stack,
+      :aliases  => "-s",
+      :required => true,
+      :desc     => "Specify stack name or unique stack ID associated with the CloudFormation template"
 
     class_option :debug,
-      :desc    => "Verbose debugging messages",
-      :type    => :boolean,
-      :default => false
+      :desc     => "Verbose debugging messages",
+      :type     => :boolean,
+      :default  => false
 
     desc "generate [options]", "Generate InSpec compliance controls from CloudFormation template"
     def generate
@@ -79,7 +85,7 @@ module CloudFormation
       # hash of generated controls
       generated_controls = Iggy::CloudFormation.parse_generate(options[:template])
       # let's just generate a control file with a set of controls for now
-      Iggy::InspecHelper.print_controls(options[:template], generated_controls)
+      Iggy::InspecHelper.cfn_print_controls(options[:template], generated_controls, options[:stack])
       exit 0
     end
   end

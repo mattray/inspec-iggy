@@ -126,7 +126,7 @@ module Iggy
             if inspec_properties.member?(attr)
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
               value = tf_resources[tf_res]["primary"]["attributes"][attr]
-              describe.add_test(attr, "cmp", value)
+              describe.add_test(attr, "eq", value)
             else
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
             end
