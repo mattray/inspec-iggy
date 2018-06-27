@@ -5,7 +5,7 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "iggy"
+require "inspec-iggy"
 
 describe Iggy do
   it "should have a version constant defined" do

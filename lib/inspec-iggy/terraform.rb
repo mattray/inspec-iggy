@@ -25,7 +25,7 @@ module Iggy
           STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
           exit(-1)
         end
-        tfstate = JSON.parse(File.read(file))
+        JSON.parse(File.read(file))
       rescue JSON::ParserError => e
         STDERR.puts e.message
         STDERR.puts "ERROR: Parsing error in #{file}."
@@ -96,9 +96,9 @@ module Iggy
         tf_res_type = tf_resources[tf_res]["type"]
 
         # add translation layer
-        if InspecHelper::TERRAFORM_RESOURCES.keys.include?(tf_res_type)
-          Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} #{InspecHelper::TERRAFORM_RESOURCES[tf_res_type]} TRANSLATED"
-          tf_res_type = InspecHelper::TERRAFORM_RESOURCES[tf_res_type]
+        if InspecHelper::TRANSLATED_RESOURCES.keys.include?(tf_res_type)
+          Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} #{InspecHelper::TRANSLATED_RESOURCES[tf_res_type]} TRANSLATED"
+          tf_res_type = InspecHelper::TRANSLATED_RESOURCES[tf_res_type]
         end
 
         # does this match an InSpec resource?
@@ -126,7 +126,7 @@ module Iggy
             if inspec_properties.member?(attr)
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
               value = tf_resources[tf_res]["primary"]["attributes"][attr]
-              describe.add_test(attr, "cmp", value)
+              describe.add_test(attr, "eq", value)
             else
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
             end

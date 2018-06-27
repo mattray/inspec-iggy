@@ -12,16 +12,18 @@ This is the current, previous and future development milestones and contains the
 * moved to https://github.com/inspec/inspec-iggy
 * published to Rubygems
 
-# BACKLOG #
-* CloudFormation find VPC entrypoint
-* ARM templates
+# 0.3.0 #
+* CloudFormation support through the stack-name entry
 * wrap control in a full profile for upload https://github.com/chef/inspec/tree/master/lib/bundles/inspec-init
+* More profile options to fill out the inspec.yml from the CLI
+* Investigate InSpec packaging options
+* Archived profiles
+
+# BACKLOG #
+* ARM templates
 * create a Terraform Provisioner for attaching InSpec profiles to a resource
 * Generate a full profile that depends on the list of profiles from tags
 * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)
 * Test with something besides AWS
 * Test with more complicated tfstate files, the parsing is probably brittle
-* More profile options to fill out the inspec.yml from the CLI
-* Investigate InSpec packaging options
-* Archived profiles
 * negative testing

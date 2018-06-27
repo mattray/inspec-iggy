@@ -9,8 +9,9 @@ require "inspec/plugins"
 require "thor"
 
 require "inspec-iggy/terraform"
+require "inspec-iggy/cloudformation"
 
-module Iggy
+module Terraform
   class CLI < Thor
     namespace "terraform"
 
@@ -50,4 +51,44 @@ module Iggy
   end
 
   Inspec::Plugins::CLI.add_subcommand(CLI, "terraform", "terraform SUBCOMMAND ...", "Extract or generate InSpec from Terraform", {})
+end
+
+module CloudFormation
+  class CLI < Thor
+    namespace "cloudformation"
+
+    map %w{-v --version} => "version"
+
+    desc "version", "Display version information", hide: true
+    def version
+      say("Iggy v#{Iggy::VERSION}")
+    end
+
+    class_option :template,
+      :aliases  => "-t",
+      :required => true,
+      :desc     => "Specify path to the input CloudFormation template"
+
+    class_option :stack,
+      :aliases  => "-s",
+      :required => true,
+      :desc     => "Specify stack name or unique stack ID associated with the CloudFormation template"
+
+    class_option :debug,
+      :desc     => "Verbose debugging messages",
+      :type     => :boolean,
+      :default  => false
+
+    desc "generate [options]", "Generate InSpec compliance controls from CloudFormation template"
+    def generate
+      Inspec::Log.level = :debug if options[:debug]
+      # hash of generated controls
+      generated_controls = Iggy::CloudFormation.parse_generate(options[:template])
+      # let's just generate a control file with a set of controls for now
+      Iggy::InspecHelper.cfn_print_controls(options[:template], generated_controls, options[:stack])
+      exit 0
+    end
+  end
+
+  Inspec::Plugins::CLI.add_subcommand(CLI, "cloudformation", "cloudformation SUBCOMMAND ...", "Generate InSpec from CloudFormation", {})
 end
