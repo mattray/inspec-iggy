@@ -5,7 +5,7 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "inspec/plugins"
+require "inspec/plugin/v1"
 require "thor"
 
 require "inspec-iggy/terraform"
