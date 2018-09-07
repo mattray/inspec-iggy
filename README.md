@@ -91,16 +91,16 @@ Iggy uses [RSpec](http://rspec.info/) for testing. You should run the following 
 
     $ rspec
 
-For style
+For style Iggy uses [InSpec's .rubocop.yml](https://github.com/inspec/inspec/blob/master/.rubocop.yml)
 
-    $ chefstyle .
+    $ rubocop .
 
 # License and Author #
 
 |                |                                           |
 |:---------------|:------------------------------------------|
 | **Author**     | Matt Ray (<matt@chef.io>)                 |
-| **Copyright:** | Copyright (c) 2017 Chef Software Inc.     |
+| **Copyright:** | Copyright (c) 2017-2018 Chef Software Inc.|
 | **License:**   | Apache License, Version 2.0               |
 
 Licensed under the Apache License, Version 2.0 (the "License");

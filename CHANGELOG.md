@@ -18,6 +18,7 @@ This is the current, previous and future development milestones and contains the
 * More profile options to fill out the inspec.yml from the CLI
 * Investigate InSpec packaging options
 * Archived profiles
+* .rubocop.yml synced to InSpec v2.2.79 and Rubocop 0.55
 
 # BACKLOG #
 * ARM templates

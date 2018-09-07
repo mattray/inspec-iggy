@@ -4,18 +4,17 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "inspec/objects/control"
-require "inspec/objects/ruby_helper"
-require "inspec/objects/describe"
+require 'inspec/objects/control'
+require 'inspec/objects/ruby_helper'
+require 'inspec/objects/describe'
 
-require "inspec-iggy/inspec_helper"
+require 'inspec-iggy/inspec_helper'
 
 module Iggy
   class Terraform
-
     # makes it easier to change out later
-    TAG_NAME = "iggy_name_"
-    TAG_URL = "iggy_url_"
+    TAG_NAME = 'iggy_name_'.freeze
+    TAG_URL = 'iggy_url_'.freeze
 
     # boilerplate tfstate parsing
     def self.parse_tfstate(file)
@@ -34,41 +33,41 @@ module Iggy
     end
 
     # parse through the JSON for the tagged Resources
-    def self.parse_extract(file)
+    def self.parse_extract(file) # rubocop:disable Metrics/AbcSize
       tfstate = parse_tfstate(file)
       # InSpec profiles extracted
       extracted_profiles = {}
 
       # iterate over the resources
-      tf_resources = tfstate["modules"][0]["resources"]
+      tf_resources = tfstate['modules'][0]['resources']
       tf_resources.keys.each do |tf_res|
-        tf_res_id = tf_resources[tf_res]["primary"]["id"]
+        tf_res_id = tf_resources[tf_res]['primary']['id']
 
         # get the attributes, see if any of them have a tagged profile attached
-        tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
-          next unless attr.start_with?("tags." + TAG_NAME)
+        tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
+          next unless attr.start_with?('tags.' + TAG_NAME)
           Inspec::Log.debug "Iggy::Terraform.parse_extract tf_res = #{tf_res} attr = #{attr} MATCHED TAG"
           # get the URL and the name of the profiles
           name = attr.split(TAG_NAME)[1]
-          url = tf_resources[tf_res]["primary"]["attributes"]["tags.#{TAG_URL}#{name}"]
-          if tf_res.start_with?("aws_vpc") # should this be VPC or subnet?
+          url = tf_resources[tf_res]['primary']['attributes']["tags.#{TAG_URL}#{name}"]
+          if tf_res.start_with?('aws_vpc') # should this be VPC or subnet?
             # if it's a VPC, store it as the VPC id + name
-            key = tf_res_id + ":" + name
+            key = tf_res_id + ':' + name
             Inspec::Log.debug "Iggy::Terraform.parse_extract aws_vpc tagged with InSpec #{key}"
             extracted_profiles[key] = {
-              "type" => "aws_vpc",
-              "az" => "us-west-2",
-              "url" => url,
+              'type' => 'aws_vpc',
+              'az' => 'us-west-2',
+              'url' => url,
             }
-          elsif tf_res.start_with?("aws_instance")
+          elsif tf_res.start_with?('aws_instance')
             # if it's a node, get information about the IP and SSH/WinRM
-            key = tf_res_id + ":" + name
+            key = tf_res_id + ':' + name
             Inspec::Log.debug "Iggy::Terraform.parse_extract aws_instance tagged with InSpec #{key}"
             extracted_profiles[key] = {
-              "type" => "aws_instance",
-              "public_ip" => tf_resources[tf_res]["primary"]["attributes"]["public_ip"],
-              "key_name" => tf_resources[tf_res]["primary"]["attributes"]["key_name"],
-              "url" => url,
+              'type' => 'aws_instance',
+              'public_ip' => tf_resources[tf_res]['primary']['attributes']['public_ip'],
+              'key_name' => tf_resources[tf_res]['primary']['attributes']['key_name'],
+              'url' => url,
             }
           else
             # should generic AWS just be the default except for instances?
@@ -82,7 +81,7 @@ module Iggy
     end
 
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(file)
+    def self.parse_generate(file) # rubocop:disable Metrics/AbcSize
       tfstate = parse_tfstate(file)
       basename = File.basename(file)
       absolutename = File.absolute_path(file)
@@ -91,9 +90,9 @@ module Iggy
       generated_controls = []
 
       # iterate over the resources
-      tf_resources = tfstate["modules"][0]["resources"]
+      tf_resources = tfstate['modules'][0]['resources']
       tf_resources.keys.each do |tf_res|
-        tf_res_type = tf_resources[tf_res]["type"]
+        tf_res_type = tf_resources[tf_res]['type']
 
         # add translation layer
         if InspecHelper::TRANSLATED_RESOURCES.keys.include?(tf_res_type)
@@ -104,29 +103,29 @@ module Iggy
         # does this match an InSpec resource?
         if InspecHelper::RESOURCES.include?(tf_res_type)
           Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCH"
-          tf_res_id = tf_resources[tf_res]["primary"]["id"]
+          tf_res_id = tf_resources[tf_res]['primary']['id']
 
           # insert new control based off the resource's ID
           ctrl = Inspec::Control.new
           ctrl.id = "#{tf_res_type}::#{tf_res_id}"
           ctrl.title = "Iggy #{basename} #{tf_res_type}::#{tf_res_id}"
           ctrl.desc = "#{tf_res_type}::#{tf_res_id} from the source file #{absolutename}\nGenerated by Iggy v#{Iggy::VERSION}"
-          ctrl.impact = "1.0"
+          ctrl.impact = '1.0'
 
           describe = Inspec::Describe.new
           # describes the resourde with the id as argument
           describe.qualifier.push([tf_res_type, tf_res_id])
 
           # ensure the resource exists
-          describe.add_test(nil, "exist", nil)
+          describe.add_test(nil, 'exist', nil)
 
           # if there's a match, see if there are matching InSpec properties
           inspec_properties = Iggy::InspecHelper.resource_properties(tf_res_type)
-          tf_resources[tf_res]["primary"]["attributes"].keys.each do |attr|
+          tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
             if inspec_properties.member?(attr)
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
-              value = tf_resources[tf_res]["primary"]["attributes"][attr]
-              describe.add_test(attr, "eq", value)
+              value = tf_resources[tf_res]['primary']['attributes'][attr]
+              describe.add_test(attr, 'eq', value)
             else
               Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
             end
@@ -141,6 +140,5 @@ module Iggy
       Inspec::Log.debug "Iggy::Terraform.parse_generate generated_controls = #{generated_controls}"
       generated_controls
     end
-
   end
 end
