@@ -5,34 +5,34 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require "inspec/plugin/v1"
-require "thor"
+require 'inspec/plugin/v1'
+require 'thor'
 
-require "inspec-iggy/terraform"
-require "inspec-iggy/cloudformation"
+require 'inspec-iggy/terraform'
+require 'inspec-iggy/cloudformation'
 
 module Terraform
   class CLI < Thor
-    namespace "terraform"
+    namespace 'terraform'
 
-    map %w{-v --version} => "version"
+    map %w{-v --version} => 'version'
 
-    desc "version", "Display version information", hide: true
+    desc 'version', 'Display version information', hide: true
     def version
       say("Iggy v#{Iggy::VERSION}")
     end
 
     class_option :tfstate,
-      :aliases => "-t",
-      :desc    => "Specify path to the input terraform.tfstate",
-      :default => "terraform.tfstate"
+                 aliases: '-t',
+                 desc: 'Specify path to the input terraform.tfstate',
+                 default: 'terraform.tfstate'
 
     class_option :debug,
-      :desc    => "Verbose debugging messages",
-      :type    => :boolean,
-      :default => false
+                 desc: 'Verbose debugging messages',
+                 type: :boolean,
+                 default: false
 
-    desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
+    desc 'generate [options]', 'Generate InSpec compliance controls from terraform.tfstate'
     def generate
       Inspec::Log.level = :debug if options[:debug]
       generated_controls = Iggy::Terraform.parse_generate(options[:tfstate])
@@ -41,7 +41,7 @@ module Terraform
       exit 0
     end
 
-    desc "extract [options]", "Extract tagged InSpec profiles from terraform.tfstate"
+    desc 'extract [options]', 'Extract tagged InSpec profiles from terraform.tfstate'
     def extract
       Inspec::Log.level = :debug if options[:debug]
       extracted_profiles = Iggy::Terraform.parse_extract(options[:tfstate])
@@ -50,36 +50,36 @@ module Terraform
     end
   end
 
-  Inspec::Plugins::CLI.add_subcommand(CLI, "terraform", "terraform SUBCOMMAND ...", "Extract or generate InSpec from Terraform", {})
+  Inspec::Plugins::CLI.add_subcommand(CLI, 'terraform', 'terraform SUBCOMMAND ...', 'Extract or generate InSpec from Terraform', {})
 end
 
 module CloudFormation
   class CLI < Thor
-    namespace "cloudformation"
+    namespace 'cloudformation'
 
-    map %w{-v --version} => "version"
+    map %w{-v --version} => 'version'
 
-    desc "version", "Display version information", hide: true
+    desc 'version', 'Display version information', hide: true
     def version
       say("Iggy v#{Iggy::VERSION}")
     end
 
     class_option :template,
-      :aliases  => "-t",
-      :required => true,
-      :desc     => "Specify path to the input CloudFormation template"
+                 aliases: '-t',
+                 required: true,
+                 desc: 'Specify path to the input CloudFormation template'
 
     class_option :stack,
-      :aliases  => "-s",
-      :required => true,
-      :desc     => "Specify stack name or unique stack ID associated with the CloudFormation template"
+                 aliases: '-s',
+                 required: true,
+                 desc: 'Specify stack name or unique stack ID associated with the CloudFormation template'
 
     class_option :debug,
-      :desc     => "Verbose debugging messages",
-      :type     => :boolean,
-      :default  => false
+                 desc: 'Verbose debugging messages',
+                 type: :boolean,
+                 default: false
 
-    desc "generate [options]", "Generate InSpec compliance controls from CloudFormation template"
+    desc 'generate [options]', 'Generate InSpec compliance controls from CloudFormation template'
     def generate
       Inspec::Log.level = :debug if options[:debug]
       # hash of generated controls
@@ -90,5 +90,5 @@ module CloudFormation
     end
   end
 
-  Inspec::Plugins::CLI.add_subcommand(CLI, "cloudformation", "cloudformation SUBCOMMAND ...", "Generate InSpec from CloudFormation", {})
+  Inspec::Plugins::CLI.add_subcommand(CLI, 'cloudformation', 'cloudformation SUBCOMMAND ...', 'Generate InSpec from CloudFormation', {})
 end
