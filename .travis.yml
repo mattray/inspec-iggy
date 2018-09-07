@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 2.4.3
+  - 2.5.1
 script:
-  - bundle exec chefstyle
+  - bundle exec rubocop
   - bundle exec rspec

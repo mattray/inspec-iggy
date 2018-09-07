@@ -1,5 +1,7 @@
 # Description #
 
+[![Build Status Master](https://travis-ci.org/inspec/inspec-iggy.svg?branch=master)](https://travis-ci.org/inspec/inspec-iggy)
+
 InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files. Iggy generates InSpec AWS controls by mapping Terraform resources to InSpec resources. You may also use tags to annotate your Terraform scripts to specify which compliance profiles to be used and Iggy will create a profile including those dependencies.
 
 Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/).
