@@ -14,11 +14,11 @@ This is the current, previous and future development milestones and contains the
 
 # 0.3.0 #
 * CloudFormation support through the stack-name entry
-* wrap control in a full profile for upload https://github.com/chef/inspec/tree/master/lib/bundles/inspec-init
+* Wrap control in a full profile for upload https://github.com/chef/inspec/tree/master/lib/bundles/inspec-init
 * More profile options to fill out the inspec.yml from the CLI
-* Investigate InSpec packaging options
-* Archived profiles
 * .rubocop.yml synced to InSpec v2.2.79 and Rubocop 0.55
+* use new plugin include path (for old v1 plugins) @chris-rock
+* allowing for multiple modules to be included in generate output @devoptimist
 
 # BACKLOG #
 * ARM templates

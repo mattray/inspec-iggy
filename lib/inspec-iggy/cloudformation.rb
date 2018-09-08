@@ -39,7 +39,7 @@ module Iggy
         cfn_res_type = 'aws_' + cfn_resource.split(/(?=[A-Z])/).join('_').downcase
 
         # add translation layer
-        if InspecHelper::TRANSLATED_RESOURCES.keys.include?(cfn_res_type)
+        if InspecHelper::TRANSLATED_RESOURCES.key?(cfn_res_type)
           Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} #{InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]} TRANSLATED"
           cfn_res_type = InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]
         end
