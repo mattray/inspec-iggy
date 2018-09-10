@@ -62,7 +62,7 @@ module Iggy
 
     #  * Create file controls/example.rb
     def self.render_controls_rb(cli_ui, name, controls)
-      render_file = "#{name}/controls/controls.rb.yml"
+      render_file = "#{name}/controls/controls.rb"
       cli_ui.li "Create file #{cli_ui.mark_text(render_file)}"
       f = File.new(render_file, 'w')
       f.write(controls)
