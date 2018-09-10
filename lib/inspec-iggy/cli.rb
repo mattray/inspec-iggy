@@ -5,15 +5,15 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
+require 'inspec/base_cli'
 require 'inspec/plugin/v1'
-require 'thor'
 
 require 'inspec-iggy/terraform'
 require 'inspec-iggy/cloudformation'
 require 'inspec-iggy/profile'
 
 module Terraform
-  class CLI < Thor
+  class CLI < Inspec::BaseCLI
     namespace 'terraform'
 
     map %w{-v --version} => 'version'
@@ -76,7 +76,7 @@ module Terraform
       Inspec::Log.level = :debug if options[:debug]
       generated_controls = Iggy::Terraform.parse_generate(options[:tfstate])
       printable_controls = Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
-      Iggy::Profile.render_profile(options, options[:tfstate], printable_controls)
+      Iggy::Profile.render_profile(self, options, options[:tfstate], printable_controls)
       exit 0
     end
 
@@ -93,7 +93,7 @@ module Terraform
 end
 
 module CloudFormation
-  class CLI < Thor
+  class CLI < Inspec::BaseCLI
     namespace 'cloudformation'
 
     map %w{-v --version} => 'version'
@@ -103,20 +103,58 @@ module CloudFormation
       say("Iggy v#{Iggy::VERSION}")
     end
 
-    class_option :debug,
-                 desc: 'Verbose debugging messages',
-                 type: :boolean,
-                 default: false
+    option :debug,
+           desc: 'Verbose debugging messages',
+           type: :boolean,
+           default: false
 
-    class_option :stack,
-                 aliases: '-s',
-                 required: true,
-                 desc: 'Specify stack name or unique stack ID associated with the CloudFormation template'
+    option :copyright,
+           desc: 'Name of the copyright holder',
+           default: 'The Authors'
 
-    class_option :template,
-                 aliases: '-t',
-                 required: true,
-                 desc: 'Specify path to the input CloudFormation template'
+    option :email,
+           desc: 'Email address of the author',
+           default: 'you@example.com'
+
+    option :license,
+           desc: 'License for the profile',
+           default: 'Apache-2.0'
+
+    option :maintainer,
+           desc: 'Name of the copyright holder',
+           default: 'The Authors'
+
+    option :summary,
+           desc: 'One line summary for the profile',
+           default: 'An InSpec Compliance Profile'
+
+    option :title,
+           desc: 'Human-readable name for the profile',
+           default: 'InSpec Profile'
+
+    option :version,
+           desc: 'Specify the profile version',
+           default: '0.1.0'
+
+    option :overwrite,
+           desc: 'Overwrites existing profile directory',
+           type: :boolean,
+           default: false
+
+    option :name,
+           aliases: '-n',
+           required: true,
+           desc: 'Name of profile to be generated'
+
+    option :stack,
+           aliases: '-s',
+           required: true,
+           desc: 'Specify stack name or unique stack ID associated with the CloudFormation template'
+
+    option :template,
+           aliases: '-t',
+           required: true,
+           desc: 'Specify path to the input CloudFormation template'
 
     desc 'generate [options]', 'Generate InSpec compliance controls from CloudFormation template'
     def generate
@@ -124,7 +162,7 @@ module CloudFormation
       # hash of generated controls
       generated_controls = Iggy::CloudFormation.parse_generate(options[:template])
       printable_controls = Iggy::InspecHelper.cfn_controls(options[:title], generated_controls, options[:stack])
-      Iggy::Profile.render_profile(options, options[:template], printable_controls)
+      Iggy::Profile.render_profile(self, options, options[:template], printable_controls)
       exit 0
     end
   end
