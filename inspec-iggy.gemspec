@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.files = %w{
     README.md inspec-iggy.gemspec Gemfile
   } + Dir.glob(
-    '{bin,docs,examples,lib,tasks,test}/**/*', File::FNM_DOTMATCH
+    '{bin,docs,examples,lib,tasks}/**/*', File::FNM_DOTMATCH
   ).reject { |f| File.directory?(f) }
 
   spec.require_paths = ['lib']

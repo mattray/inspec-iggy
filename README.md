@@ -2,21 +2,74 @@
 
 [![Build Status Master](https://travis-ci.org/inspec/inspec-iggy.svg?branch=master)](https://travis-ci.org/inspec/inspec-iggy)
 
-InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files. Iggy generates InSpec AWS controls by mapping Terraform resources to InSpec resources. You may also use tags to annotate your Terraform scripts to specify which compliance profiles to be used and Iggy will create a profile including those dependencies.
+InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files and [AWS CloudFormation](https://aws.amazon.com/cloudformation/) templates. Iggy generates InSpec controls by mapping Terraform and CloudFormation resources to InSpec resources and exports a profile that may be used from the ```inspec``` CLI or uploaded to [Chef Automate](https://automate.chef.io/).
 
-Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [Terraform with InSpec](http://lollyrock.com/articles/inspec-terraform/).
+    inspec terraform generate -n myprofile
+    inspec exec myprofile -t aws://us-west-2
+    inspec compliance upload myprofile
 
-The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
+Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [InSpec for provisioning testing: Verify Terraform setups with InSpec](http://lollyrock.com/articles/inspec-terraform/).
 
-# Requirements #
+The [CHANGELOG.md](https://github.com/inspec/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
 
-Iggy generates compliance profiles for InSpec 2, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible.
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [InSpec Terraform Generate](#itg)
+4. [InSpec Terraform Extract](#ite)
+5. [InSpec Cloudformation Generate](#icg)
+6. [Testing](#testing)
 
-Written and tested with Ruby 2.4.4 (or whatever InSpec 2.0 supports).
+# Requirements <a name="requirements"></a>
 
-# Installation #
+Iggy generates compliance profiles for InSpec 2.2.64 and later, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible. It has currently been tested primarily with AWS but other InSpec-supported platforms should work as well.
+
+Written and tested with Ruby 2.5.1.
+
+# Installation <a name="installation"></a>
 
 `inspec-iggy` is a plugin for InSpec and may be installed as follows
+
+## ChefDK 3 Omnibus installer
+
+Download your [ChefDK](https://downloads.chef.io/chefdk/) installer package from [Chef Downloads](https://downloads.chef.io/).
+
+### Linux
+
+```bash
+# /opt/chefdk/embedded/bin/gem install /gems/inspec-iggy-0.3.0.gem
+# mkdir -p /root/.inspec/plugins
+# ln -s /root/.chefdk/gem/ruby/2.5.0/gems/inspec-iggy-0.3.0 /root/.inspec/plugins/
+# inspec terraform version
+```
+
+### Windows
+THIS IS CURRENTLY BROKEN
+```shell
+> gem install .\inspec-iggy-0.3.0.gem
+> mkdir ~\.inspec\plugins
+> ln -s \Users\chef\AppData\Local\chefdk\gem\ruby\2.5.0\gems\inspec-iggy-0.3.0\ \Users\chef\.inspec\plugins\
+```
+## InSpec 2 Omnibus installer
+
+Download your [InSpec](https://downloads.chef.io/inspec/) installer package from [Chef Downloads](https://downloads.chef.io/).
+
+### Linux
+
+```bash
+# /opt/inspec/embedded/bin/gem install inspec-iggy-0.3.0.gem
+# mkdir -p /root/.inspec/plugins
+# ln -s /opt/inspec/embedded/lib/ruby/gems/2.5.0/gems/inspec-iggy-0.3.0 /root/.inspec/plugins/
+# inspec terraform version
+```
+
+### Windows
+THIS IS CURRENTLY BROKEN
+```shell
+> gem install .\inspec-iggy-0.3.0.gem
+> mkdir ~\.inspec\plugins
+> ln -s \Users\chef\AppData\Local\chefdk\gem\ruby\2.5.0\gems\inspec-iggy-0.3.0\ \Users\chef\.inspec\plugins\
+```
+## Ruby as gems
 
 ```bash
 # install InSpec
@@ -25,7 +78,7 @@ gem install inspec-iggy
 inspec terraform version
 ```
 
-## * for development: ##
+## Development
 
 ```bash
 # Install `inspec-iggy` via a symlink:
@@ -35,21 +88,29 @@ ln -s ~/inspec-iggy/ ~/.inspec/plugins/inspec-iggy
 inspec terraform version
 ```
 
-## * or build a gem: ##
+# InSpec Terraform Generate<a name="itg"></a>
 
-```bash
-# Build the `inspec-iggy` then install:
-git clone https://github.com/inspec/inspec-iggy && cd inspec-iggy && gem build *gemspec && gem install *gem
-inspec terraform version
-```
+     inspec terraform generate --tfstate terraform.tfstate --name myprofile
 
-# InSpec Terraform Generate #
+Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to Terraform resources, producing an InSpec profile. ```inspec terraform generate --help``` will show all available options.
 
-     inspec terraform generate --tfstate terraform.tfstate
+## Usage
 
-Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to the Terraform resources. Newer versions of InSpec may provide additional coverage.
+    inspec terraform generate [options] -n, --name=NAME
 
-# InSpec Terraform Extract (EXPERIMENTAL)#
+     -n, --name=NAME                  Name of profile to be generated (required)
+     -t, [--tfstate=TFSTATE]          Specify path to the input terraform.tfstate (default: .)
+     [--debug], [--no-debug]          Verbose debugging messages
+     [--copyright=COPYRIGHT]          Name of the copyright holder (default: The Authors)
+     [--email=EMAIL]                  Email address of the author (default: you@example.com)
+     [--license=LICENSE]              License for the profile (default: Apache-2.0)
+     [--maintainer=MAINTAINER]        Name of the copyright holder (default: The Authors)
+     [--summary=SUMMARY]              One line summary for the profile (default: An InSpec Compliance Profile)
+     [--title=TITLE]                  Human-readable name for the profile (default: InSpec Profile)
+     [--version=VERSION]              Specify the profile version (default: 0.1.0)
+     [--overwrite], [--no-overwrite]  Overwrites existing profile directory
+
+# InSpec Terraform Extract (EXPERIMENTAL)<a name="ite"></a>
 
     inspec terraform extract --tfstate terraform.tfstate
 
@@ -80,12 +141,30 @@ Currently it only supports URL-based compliance profiles. InSpec supports other 
 
 inspec exec https://github.com/dev-sec/linux-baseline -t ssh://clckwrk@52.33.203.34 -i ~/.ssh/mattray-apac
 
-# CloudFormation Support #
+# InSpec CloudFormation Generate<a name="icg"></a>
 
-**CloudFormation support has been started, but it is incomplete while focusing on Terraform.** Here is an example of the current output, note that it's not tied to an actual deployed CloudFormation Stack, so that will need to be provided for the entry point of testing.
-https://gist.github.com/c4d6eda82dfb25502ef381cc631a1edd
+    inspec cloudformation generate --template mytemplate.json --stack mystack-20180909T052147Z --profile myprofile
 
-# Testing #
+Iggy supports AWS CloudFormation templates by mapping the AWS resources to InSpec resources and using the stack name or unique stack ID associated with the CloudFormation template as an entry point to check those resources in the generated profile. ```inspec cloudformation generate --help``` will show all available options.
+
+## Usage
+
+     inspec cloudformation generate [options] -n, --name=NAME -s, --stack=STACK -t, --template=TEMPLATE
+
+     -n, --name=NAME                  Name of profile to be generated (required)
+     -s, --stack=STACK                Specify stack name or unique stack ID associated with the CloudFormation template
+     -t, --template=TEMPLATE          Specify path to the input CloudFormation template
+     [--debug], [--no-debug]          Verbose debugging messages
+     [--copyright=COPYRIGHT]          Name of the copyright holder (default: The Authors)
+     [--email=EMAIL]                  Email address of the author (default: you@example.com)
+     [--license=LICENSE]              License for the profile (default: Apache-2.0)
+     [--maintainer=MAINTAINER]        Name of the copyright holder (default: The Authors)
+     [--summary=SUMMARY]              One line summary for the profile (default: An InSpec Compliance Profile)
+     [--title=TITLE]                  Human-readable name for the profile (default: InSpec Profile)
+     [--version=VERSION]              Specify the profile version (default: 0.1.0)
+     [--overwrite], [--no-overwrite]  Overwrites existing profile directory
+
+# Testing<a name="testing"></a>
 
 Iggy uses [RSpec](http://rspec.info/) for testing. You should run the following before committing.
 
