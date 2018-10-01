@@ -7,9 +7,8 @@ require_relative '../helper'
 # Load the class under test, the Plugin definition.
 require 'inspec-iggy/plugin'
 
-# Because InSpec is a Spec-style test suite, we're going to use MiniTest::Spec
-# here, for familiar look and feel. However, this isn't InSpec (or RSpec) code.
-
+# Because InSpec is a Spec-style test suite, we're going to use RSpec
+# here, for familiar look and feel. However, this isn't InSpec code.
 describe InspecPlugins::Iggy::Plugin do
 
   # When writing tests, you can use `let` to create variables that you

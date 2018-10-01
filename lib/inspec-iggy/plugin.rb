@@ -20,6 +20,19 @@ module InspecPlugins
     class Plugin < ::Inspec.plugin(2)
       # Internal machine name of the plugin. InSpec will use this in errors, etc.
       plugin_name :'inspec-iggy'
+
+      cli_command :terraform do
+        # Calling this hook doesn't mean iggy is being executed - just
+        # that we should be ready to do so. So, load the file that defines the
+        # functionality.
+        # For example, InSpec will activate this hook when `inspec help` is
+        # executed, so that this plugin's usage message will be included in the help.
+        require 'inspec-iggy/terraform_cli'
+
+        # Having loaded our functionality, return a class that will let the
+        # CLI engine tap into it.
+        InspecPlugins::Iggy::TerraformCliCommand
+      end
     end
   end
 end
