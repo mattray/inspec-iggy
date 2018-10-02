@@ -14,7 +14,6 @@ require 'inspec-iggy/cloudformation/parser'
 module InspecPlugins::Iggy
   module CloudFormation
     class CliCommand < Inspec.plugin(2, :cli_command)
-
       subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate InSpec from CloudFormation'
 
       # Thor.map(Hash) allows you to make aliases for commands.

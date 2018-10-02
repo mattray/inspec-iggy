@@ -9,6 +9,17 @@ rescue LoadError
 end
 
 #------------------------------------------------------------------#
+#                    Linter Tasks
+#------------------------------------------------------------------#
+
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new(:lint)
+rescue LoadError
+  puts 'rubocop is not available. Install the rubocop gem to run the lint tests.'
+end
+
+#------------------------------------------------------------------#
 #                    Test Runner Tasks
 #------------------------------------------------------------------#
 

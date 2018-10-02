@@ -14,7 +14,6 @@ require 'inspec-iggy/terraform/parser'
 module InspecPlugins::Iggy
   module Terraform
     class CliCommand < Inspec.plugin(2, :cli_command)
-
       subcommand_desc 'terraform SUBCOMMAND ...', 'Extract or generate InSpec from Terraform'
 
       # Thor.map(Hash) allows you to make aliases for commands.
