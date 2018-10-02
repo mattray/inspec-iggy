@@ -5,19 +5,18 @@
 require_relative '../helper'
 
 # Load the class under test, the CliCommand definition.
-require 'inspec-iggy/terraform/cli_command'
+require 'inspec-iggy/cloudformation/cli_command'
 
 # Because InSpec is a Spec-style test suite, we're going to use RSpec
 # here, for familiar look and feel. However, this isn't InSpec code.
-describe 'inspec terraform CLI options' do
+describe 'inspec cloudformation CLI options' do
 
   # This is the CLI Command implementation class.
   # It is a subclass of Thor, which is a CLI framework.
   # This unit test file is mostly about verifying the Thor settings.
-  cli_class = InspecPlugins::Iggy::Terraform::CliCommand
+  cli_class = InspecPlugins::Iggy::CloudFormation::CliCommand
 
   commands = [
-    'extract',
     'generate',
     'help',
     'version',
@@ -46,19 +45,23 @@ describe 'inspec terraform CLI options' do
       :maintainer,
       :name,
       :overwrite,
+      :stack,
       :summary,
-      :tfstate,
+      :template,
       :title,
       :version,
     ]
 
     no_default_options = [
-      :name
+      :name,
+      :stack,
+      :template,
     ]
 
     short_options = {
       :name => ['-n'],
-      :tfstate => ['-t'],
+      :stack => ['-s'],
+      :template => ['-t'],
     }
 
     boolean_options = [
@@ -110,28 +113,5 @@ describe 'inspec terraform CLI options' do
     it "should take no arguments" do
       expect(cli_class.instance_method(:generate).arity).to eq(0)
     end
-
-  end
-
-
-  # To group tests together, you can nest 'describe' in rspec
-  # (that is discouraged in InSpec control code.)
-  describe 'the extract command' do
-
-    all_options = [
-    ]
-
-    extract_options = cli_class.all_commands['extract'].options
-
-    it 'should have the correct option count' do
-      expect(extract_options.count).to eq all_options.count
-    end
-
-    # Argument count
-    # The 'generate' command does not accept arguments.
-    it "should take no arguments" do
-      expect(cli_class.instance_method(:generate).arity).to eq(0)
-    end
-
   end
 end

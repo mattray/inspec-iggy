@@ -4,8 +4,8 @@
 #
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
-
-# Iggy version
-module Iggy
-  VERSION = '0.3.0'.freeze
+module InspecPlugins
+  module Iggy
+    VERSION = '0.3.0'.freeze
+  end
 end

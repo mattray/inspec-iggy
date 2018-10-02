@@ -6,7 +6,7 @@ require 'inspec-iggy/version'
 
 Gem::Specification.new do |spec|
   spec.name        = 'inspec-iggy'
-  spec.version     = Iggy::VERSION
+  spec.version     = InspecPlugins::Iggy::VERSION
   spec.authors     = ['Matt Ray']
   spec.email       = ['matt@chef.io']
   spec.summary     = 'InSpec plugin to generate InSpec compliance profiles from Terraform.'

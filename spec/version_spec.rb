@@ -7,8 +7,8 @@
 
 require 'inspec-iggy'
 
-describe Iggy do
+describe InspecPlugins::Iggy do
   it 'should have a version constant defined' do
-    expect(Iggy::VERSION).to be_a_kind_of(String)
+    expect(InspecPlugins::Iggy::VERSION).to be_a_kind_of(String)
   end
 end
