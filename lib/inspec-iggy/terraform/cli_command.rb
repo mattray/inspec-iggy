@@ -77,17 +77,17 @@ module InspecPlugins::Iggy
       desc 'generate [options]', 'Generate InSpec compliance controls from terraform.tfstate'
       def generate
         Inspec::Log.level = :debug if options[:debug]
-        generated_controls = Iggy::Terraform.parse_generate(options[:tfstate])
-        printable_controls = Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
-        Iggy::Profile.render_profile(self, options, options[:tfstate], printable_controls)
+        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate])
+        printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
+        InspecPlugins::Iggy::Profile.render_profile(self, options, options[:tfstate], printable_controls)
         exit 0
       end
 
       desc 'extract [options]', 'Extract tagged InSpec profiles from terraform.tfstate'
       def extract
         Inspec::Log.level = :debug if options[:debug]
-        extracted_profiles = Iggy::Terraform.parse_extract(options[:tfstate])
-        puts Iggy::InspecHelper.print_commands(extracted_profiles)
+        extracted_profiles = InspecPlugins::Iggy::Terraform::Parser.parse_extract(options[:tfstate])
+        puts InspecPlugins::Iggy::InspecHelper.print_commands(extracted_profiles)
         exit 0
       end
     end

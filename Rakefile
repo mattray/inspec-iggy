@@ -29,8 +29,8 @@ namespace(:test) do
       task.pattern = 'test/functional/*_spec.rb'
     end
 
-    desc 'Run legacy tests'
-    RSpec::Core::RakeTask.new(:legacy) do |task|
+    desc 'Run integration tests for check for interface changes'
+    RSpec::Core::RakeTask.new(:integration) do |task|
       task.pattern = 'spec/*_spec.rb'
     end
 
@@ -38,7 +38,7 @@ namespace(:test) do
       task.pattern = [
         'test/unit/*_spec.rb',
         'test/functional/*_spec.rb',
-        'spec/*_spec.rb',
+        'test/integration/*_spec.rb',
       ]
     end
 
@@ -49,6 +49,6 @@ end
 
 # Define a 'run all the tests' task.
 # You might think you'd want to depend on test:unit and test:functional,
-# but if you do that and either has a failure, th latter won't execute.
+# but if you do that and either has a failure, the latter won't execute.
 desc 'Run all tests.'
 task :test => [:'test:all']

@@ -4,14 +4,15 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
+require 'json'
 require 'inspec/objects/control'
 require 'inspec/objects/ruby_helper'
 require 'inspec/objects/describe'
 
 require 'inspec-iggy/inspec_helper'
 
-module Iggy
-  class CloudFormation
+module InspecPlugins::Iggy::CloudFormation
+  class Parser
     def self.parse_generate(file) # rubocop:disable all
       Inspec::Log.debug "CloudFormation.parse_generate file = #{file}"
       begin
@@ -38,13 +39,13 @@ module Iggy
         cfn_res_type = 'aws_' + cfn_resource.split(/(?=[A-Z])/).join('_').downcase
 
         # add translation layer
-        if InspecHelper::TRANSLATED_RESOURCES.key?(cfn_res_type)
+        if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(cfn_res_type)
           Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} #{InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]} TRANSLATED"
-          cfn_res_type = InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]
+          cfn_res_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]
         end
 
         # does this match an InSpec resource?
-        if InspecHelper::RESOURCES.include?(cfn_res_type)
+        if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(cfn_res_type)
           Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCH"
 
           # insert new control based off the resource's ID
@@ -65,7 +66,7 @@ module Iggy
           describe.add_test(nil, 'be_running', nil) if cfn_res_type.eql?('aws_ec2_instance')
 
           # if there's a match, see if there are matching InSpec properties
-          inspec_properties = Iggy::InspecHelper.resource_properties(cfn_res_type)
+          inspec_properties = InspecPlugins::Iggy::Iggy::InspecHelper.resource_properties(cfn_res_type)
           cfn_resources[cfn_res]['Properties'].keys.each do |attr|
             # insert '_' on the CamelCase to get camel_case
             attr_split = attr.split(/(?=[A-Z])/)
