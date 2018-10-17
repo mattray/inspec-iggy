@@ -27,11 +27,16 @@ module InspecPlugins
         # functionality.
         # For example, InSpec will activate this hook when `inspec help` is
         # executed, so that this plugin's usage message will be included in the help.
-        require 'inspec-iggy/terraform_cli'
+        require 'inspec-iggy/terraform/cli_command'
 
         # Having loaded our functionality, return a class that will let the
         # CLI engine tap into it.
-        InspecPlugins::Iggy::TerraformCliCommand
+        InspecPlugins::Iggy::Terraform::CliCommand
+      end
+
+      cli_command :cloudformation do
+        require 'inspec-iggy/cloudformation/cli_command'
+        InspecPlugins::Iggy::CloudFormation::CliCommand
       end
     end
   end
