@@ -75,7 +75,7 @@ module InspecPlugins
 
       # a hack for sure, finds common methods as proxy for InSpec properties
       COMMON_PROPERTIES = Inspec::Resource.registry['aws_subnet'].instance_methods &
-      Inspec::Resource.registry['directory'].instance_methods
+                          Inspec::Resource.registry['directory'].instance_methods
     end
   end
 end
