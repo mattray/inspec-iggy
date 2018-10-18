@@ -14,3 +14,49 @@ require 'inspec/plugin/v2'
 
 # You might want to put some debugging tools here.  We run tests to find bugs, after all.
 require 'byebug'
+
+module IggyFunctionalHelper
+
+  def iggy_project_root_path
+    File.expand_path(File.join(__FILE__, '..', '..'))
+  end
+
+  def iggy_fixtures_path
+    File.join(iggy_project_root_path, 'test', 'fixtures')
+  end
+
+  def run_check_and_json
+    Proc.new do |iggy_run_result, tmp_dir|
+
+      # After running Iggy, run inspec check against
+      # the generated profile
+      check_cmd  = 'check '
+      check_cmd += ' --format json '
+      # check_cmd += File.join(tmp_dir, 'iggy-test-profile')
+      check_cmd += ' iggy-test-profile'
+
+      check_result = run_inspec_process(check_cmd)
+      begin
+        iggy_run_result.payload.check_json = JSON.parse(check_result.stdout)
+      rescue JSON::ParserError => e
+        iggy_run_result.payload.check_json_error = e
+      end
+      iggy_run_result.payload.check_result = check_result
+
+      # Now run inspec json, which translates a profile into JSON
+      export_cmd  = 'json '
+      # export_cmd += File.join(tmp_dir, 'iggy-test-profile')
+      export_cmd += 'iggy-test-profile'
+
+      export_result = run_inspec_process(export_cmd)
+      begin
+        iggy_run_result.payload.export_json = JSON.parse(export_result.stdout)
+      rescue JSON::ParserError => e
+        iggy_run_result.payload.export_json_error = e
+      end
+      iggy_run_result.payload.export_result = export_result
+    end
+  end
+
+
+end

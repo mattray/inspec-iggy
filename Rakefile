@@ -47,7 +47,7 @@ namespace(:test) do
   desc 'Run integration tests for check for interface changes'
   Rake::TestTask.new(:integration) do |task|
     task.libs << 'test'
-    task.pattern = 'spec/*_spec.rb'
+    task.pattern = 'test/integration/*_spec.rb'
     task.warning = false
   end
 
