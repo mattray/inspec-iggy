@@ -2,7 +2,7 @@
 
 [![Build Status Master](https://travis-ci.org/inspec/inspec-iggy.svg?branch=master)](https://travis-ci.org/inspec/inspec-iggy)
 
-InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) ```tfstate``` files and [AWS CloudFormation](https://aws.amazon.com/cloudformation/) templates. Iggy generates InSpec controls by mapping Terraform and CloudFormation resources to InSpec resources and exports a profile that may be used from the ```inspec``` CLI or uploaded to [Chef Automate](https://automate.chef.io/).
+InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) `tfstate` files and [AWS CloudFormation](https://aws.amazon.com/cloudformation/) templates. Iggy generates InSpec controls by mapping Terraform and CloudFormation resources to InSpec resources and exports a profile that may be used from the `inspec` CLI or uploaded to [Chef Automate](https://automate.chef.io/).
 
     inspec terraform generate -n myprofile
     inspec exec myprofile -t aws://us-west-2
@@ -21,71 +21,16 @@ The [CHANGELOG.md](https://github.com/inspec/iggy/blob/master/CHANGELOG.md) cove
 
 # Requirements <a name="requirements"></a>
 
-Iggy generates compliance profiles for InSpec 2.2.64 and later, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible. It has currently been tested primarily with AWS but other InSpec-supported platforms should work as well.
+Iggy generates compliance profiles for InSpec 2.3 and later, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible. It has currently been tested primarily with AWS but other InSpec-supported platforms should work as well.
 
 Written and tested with Ruby 2.5.1.
 
 # Installation <a name="installation"></a>
 
-`inspec-iggy` is a plugin for InSpec and may be installed as follows
+`inspec-iggy` is a plugin for InSpec.  InSpec 2.3 or later is required.  To install, use:
 
-## ChefDK 3 Omnibus installer
-
-Download your [ChefDK](https://downloads.chef.io/chefdk/) installer package from [Chef Downloads](https://downloads.chef.io/).
-
-### Linux
-
-```bash
-# /opt/chefdk/embedded/bin/gem install /gems/inspec-iggy-0.3.0.gem
-# mkdir -p /root/.inspec/plugins
-# ln -s /root/.chefdk/gem/ruby/2.5.0/gems/inspec-iggy-0.3.0 /root/.inspec/plugins/
-# inspec terraform version
 ```
-
-### Windows
-THIS IS CURRENTLY BROKEN
-```shell
-> gem install .\inspec-iggy-0.3.0.gem
-> mkdir ~\.inspec\plugins
-> ln -s \Users\chef\AppData\Local\chefdk\gem\ruby\2.5.0\gems\inspec-iggy-0.3.0\ \Users\chef\.inspec\plugins\
-```
-## InSpec 2 Omnibus installer
-
-Download your [InSpec](https://downloads.chef.io/inspec/) installer package from [Chef Downloads](https://downloads.chef.io/).
-
-### Linux
-
-```bash
-# /opt/inspec/embedded/bin/gem install inspec-iggy-0.3.0.gem
-# mkdir -p /root/.inspec/plugins
-# ln -s /opt/inspec/embedded/lib/ruby/gems/2.5.0/gems/inspec-iggy-0.3.0 /root/.inspec/plugins/
-# inspec terraform version
-```
-
-### Windows
-THIS IS CURRENTLY BROKEN
-```shell
-> gem install .\inspec-iggy-0.3.0.gem
-> mkdir ~\.inspec\plugins
-> ln -s \Users\chef\AppData\Local\chefdk\gem\ruby\2.5.0\gems\inspec-iggy-0.3.0\ \Users\chef\.inspec\plugins\
-```
-## Ruby as gems
-
-```bash
-# install InSpec
-gem install inspec
-gem install inspec-iggy
-inspec terraform version
-```
-
-## Development
-
-```bash
-# Install `inspec-iggy` via a symlink:
-git clone git@github.com:inspec/inspec-iggy ~/inspec-iggy
-mkdir -p ~/.inspec/plugins
-ln -s ~/inspec-iggy/ ~/.inspec/plugins/inspec-iggy
-inspec terraform version
+$ inspec plugin install inspec-iggy
 ```
 
 # InSpec Terraform Generate<a name="itg"></a>
@@ -164,15 +109,40 @@ Iggy supports AWS CloudFormation templates by mapping the AWS resources to InSpe
      [--version=VERSION]              Specify the profile version (default: 0.1.0)
      [--overwrite], [--no-overwrite]  Overwrites existing profile directory
 
-# Testing<a name="testing"></a>
+# Development
 
-Iggy uses [RSpec](http://rspec.info/) for testing. You should run the following before committing.
+## Installation
 
-    $ rspec
+To point `inspec` at a local copy of `inspec-iggy` for development, use:
 
-For style Iggy uses [InSpec's .rubocop.yml](https://github.com/inspec/inspec/blob/master/.rubocop.yml)
+```
+$ inspec plugin install path/to/your/inspec-iggy/lib/inspec-iggy.rb
+```
 
-    $ rubocop .
+# Testing Iggy<a name="testing"></a>
+
+
+Unit, Functional, and Integration tests are provided, though more are welcome. Iggy uses the Minitest library for testing, using the classic `def test...` syntax. Because Iggy loads InSpec into memory, and InSpec uses RSpec internally, Spec-style testing breaks.
+
+To run all tests, run
+
+```
+$ bundle exec rake test
+```
+
+Linting is also provided via Rubocop.
+
+To check for code style issues, run:
+
+```
+$ bundle exec rake lint
+```
+
+You can auto-correct many issues:
+
+```
+$ bundle exec rubocop -a
+```
 
 # License and Author #
 
