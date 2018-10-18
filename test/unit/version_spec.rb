@@ -5,10 +5,13 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require 'inspec-iggy'
+require 'helper'
+require 'inspec-iggy/version'
 
-describe InspecPlugins::Iggy do
-  it 'should have a version constant defined' do
-    expect(InspecPlugins::Iggy::VERSION).to be_a_kind_of(String)
+module IggyUnitTests
+  class Version < Minitest::Test
+    def test_should_have_a_version_constant_defined
+      assert_kind_of(String, InspecPlugins::Iggy::VERSION)
+    end
   end
 end

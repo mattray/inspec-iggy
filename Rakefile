@@ -22,44 +22,50 @@ end
 #------------------------------------------------------------------#
 #                    Test Runner Tasks
 #------------------------------------------------------------------#
+require 'rake/testtask'
 
 namespace(:test) do
-  begin
-    # This task template will make a task named 'test', and run
-    # the tests that it finds.
-    # Here, we split up the tests a bit, for the convenience
-    # of the developer.
-    require 'rspec/core/rake_task'
-    desc 'Run unit tests, to probe internal correctness'
-    RSpec::Core::RakeTask.new(:unit) do |task|
-      task.pattern = 'test/unit/*_spec.rb'
-    end
+  # This task template will make a task named 'test', and run
+  # the tests that it finds.
+  # Here, we split up the tests a bit, for the convenience
+  # of the developer.
+  desc 'Run unit tests, to probe internal correctness'
+  Rake::TestTask.new(:unit) do |task|
+    task.libs << 'test'
+    task.pattern = 'test/unit/*_spec.rb'
+    task.warning = false
+  end
 
-    desc 'Run functional tests, to verify user experience'
-    RSpec::Core::RakeTask.new(:functional) do |task|
-      task.pattern = 'test/functional/*_spec.rb'
-    end
+  desc 'Run functional tests, to verify user experience'
+  Rake::TestTask.new(:functional) do |task|
+    task.libs << 'test'
 
-    desc 'Run integration tests for check for interface changes'
-    RSpec::Core::RakeTask.new(:integration) do |task|
-      task.pattern = 'spec/*_spec.rb'
-    end
+    task.pattern = 'test/functional/*_spec.rb'
+    task.warning = false
+  end
 
-    RSpec::Core::RakeTask.new(:all) do |task|
-      task.pattern = [
-        'test/unit/*_spec.rb',
-        'test/functional/*_spec.rb',
-        'test/integration/*_spec.rb',
-      ]
-    end
+  desc 'Run integration tests for check for interface changes'
+  Rake::TestTask.new(:integration) do |task|
+    task.libs << 'test'
+    task.pattern = 'spec/*_spec.rb'
+    task.warning = false
+  end
 
-  rescue LoadError
-    # no rspec available
+  desc 'Run all tests, and keep going if one set fails.'
+  Rake::TestTask.new(:keep_going) do |task|
+    task.libs << 'test'
+    task.pattern = [
+      'test/unit/*_spec.rb',
+      'test/functional/*_spec.rb',
+      'test/integration/*_spec.rb',
+    ]
+    task.warning = false
+    #task.verbose = true
   end
 end
 
 # Define a 'run all the tests' task.
 # You might think you'd want to depend on test:unit and test:functional,
 # but if you do that and either has a failure, the latter won't execute.
-desc 'Run all tests.'
-task :test => [:'test:all']
+desc 'Run all tests'
+task :test => [:'test:unit', :'test:functional', :'test:integration']

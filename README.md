@@ -122,7 +122,7 @@ $ inspec plugin install path/to/your/inspec-iggy/lib/inspec-iggy.rb
 # Testing Iggy<a name="testing"></a>
 
 
-Unit, Functional, and Integration tests are provided, though more are welcome. Iggy uses the RSpec library for testing, using the `expect('subject').to matcher` syntax.
+Unit, Functional, and Integration tests are provided, though more are welcome. Iggy uses the Minitest library for testing, using the classic `def test...` syntax. Because Iggy loads InSpec into memory, and InSpec uses RSpec internally, Spec-style testing breaks.
 
 To run all tests, run
 

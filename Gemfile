@@ -8,7 +8,7 @@ group :test do
   gem 'chefstyle'
   gem 'byebug'            # A debugger REPL
   gem 'rubocop'           # Needed for style linting
-  gem 'rspec', '~> 3.8'
+  gem 'm'
 end
 
 group :tools do

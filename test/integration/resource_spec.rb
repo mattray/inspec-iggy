@@ -4,25 +4,33 @@
 #
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
+require 'helper'
 
 require 'inspec-iggy/inspec_helper'
 
-describe Iggy::InspecHelper::RESOURCES do
-  it 'resources' do
-    expect(Iggy::InspecHelper::RESOURCES).to include('aws_vpc')
-    expect(Iggy::InspecHelper::RESOURCES).to include('directory')
-    expect(Iggy::InspecHelper::RESOURCES).to include('package')
+module IggyUnitTests
+  class InSpecResources < Minitest::Test
+
+    def known_resources
+      {
+        # List some resources we expect to heve
+        # name => an expected property
+        'aws_vpc' => 'cidr_block',
+        'directory' => 'owner',
+        'package' => 'version',
+      }
+    end
+
+    def test_it_should_list_resources
+      known_resources.each_key do |resource_name|
+        assert_includes(Iggy::InspecHelper::RESOURCES, resource_name)
+      end
+    end
+
+    def test_it_should_know_resource_properties
+      known_resources.each do |resource_name, property|
+        assert_includes(Iggy::InspecHelper.resource_properties(resource_name), property)
+      end
+    end
   end
-end
-
-describe Iggy::InspecHelper.resource_properties('aws_vpc') do
-  it { is_expected.to include('cidr_block') }
-end
-
-describe Iggy::InspecHelper.resource_properties('directory') do
-  it { is_expected.to include('owner') }
-end
-
-describe Iggy::InspecHelper.resource_properties('package') do
-  it { is_expected.to include('version') }
 end
