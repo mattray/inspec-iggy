@@ -53,6 +53,7 @@ module IggyFunctionalTests
 
     end
 
+    # TODO: DRY this up, obviously
     def test_generate_on_azure_tfstate
 
       # Iggy can't write a profile anywhere than the current directory;
@@ -92,4 +93,6 @@ module IggyFunctionalTests
 
     end
   end
+
+  # TODO: add tests that demo iggy's error handling
 end
