@@ -22,6 +22,15 @@ This is the current, previous and future development milestones and contains the
 * use new plugin include path (for old v1 plugins) @chris-rock
 * allowing for multiple modules to be included in generate output @devoptimist
 
+# 0.4.0 #
+* Primarily @clintoncwolfe, refactoring and modifying for Plugin API
+* Overhaul to match InSpec Plugin API2/InSpec v3.0
+* Place code under InspecPlugins::Iggy namespace
+* Re-Organize tests
+* Add tests for testing plugin interface
+* Add tests for testing user functionality
+* Expand Rakefile
+
 # BACKLOG #
 * document Windows Omnibus installer usage
 * Habitat packaging
