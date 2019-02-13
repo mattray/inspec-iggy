@@ -1,6 +1,6 @@
 # Description #
 
-[![Build Status Master](https://travis-ci.org/inspec/inspec-iggy.svg?branch=master)](https://travis-ci.org/inspec/inspec-iggy)
+[![Build Status Master](https://travis-ci.org/mattray/inspec-iggy.svg?branch=master)](https://travis-ci.org/mattray/inspec-iggy)
 
 InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io) plugin for generating compliance controls and profiles from [Terraform](https://terraform.io) `tfstate` files and [AWS CloudFormation](https://aws.amazon.com/cloudformation/) templates. Iggy generates InSpec controls by mapping Terraform and CloudFormation resources to InSpec resources and exports a profile that may be used from the `inspec` CLI or uploaded to [Chef Automate](https://automate.chef.io/).
 
@@ -10,20 +10,25 @@ InSpec-Iggy (InSpec Generate -> "IG" -> "Iggy") is an [InSpec](https://inspec.io
 
 Iggy was originally a stand-alone CLI inspired by Christoph Hartmann's [inspec-verify-provision](https://github.com/chris-rock/inspec-verify-provision) and the blog post on testing [InSpec for provisioning testing: Verify Terraform setups with InSpec](http://lollyrock.com/articles/inspec-terraform/).
 
-The [CHANGELOG.md](https://github.com/inspec/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
+The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) covers current, previous and future development milestones and contains the features backlog.
 
 1. [Requirements](#requirements)
-2. [Installation](#installation)
-3. [InSpec Terraform Generate](#itg)
-4. [InSpec Terraform Extract](#ite)
-5. [InSpec Cloudformation Generate](#icg)
-6. [Testing](#testing)
+2. [Development and Support](#support)
+3. [Installation](#installation)
+4. [InSpec Terraform Generate](#itg)
+5. [InSpec Terraform Extract](#ite)
+6. [InSpec Cloudformation Generate](#icg)
+7. [Testing](#testing)
+
+# Development and Support<a name="support"></a>
+
+Iggy is a community-driven plugin that is not officially supported by Chef. We welcome patches, suggestions, and issues.
 
 # Requirements <a name="requirements"></a>
 
 Iggy generates compliance profiles for InSpec 2.3 and later, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as many resource coverage as possible. It has currently been tested primarily with AWS but other InSpec-supported platforms should work as well.
 
-Written and tested with Ruby 2.5.1.
+Written and tested with Ruby 2.6.0.
 
 # Installation <a name="installation"></a>
 
@@ -121,7 +126,6 @@ $ inspec plugin install path/to/your/inspec-iggy/lib/inspec-iggy.rb
 
 # Testing Iggy<a name="testing"></a>
 
-
 Unit, Functional, and Integration tests are provided, though more are welcome. Iggy uses the Minitest library for testing, using the classic `def test...` syntax. Because Iggy loads InSpec into memory, and InSpec uses RSpec internally, Spec-style testing breaks.
 
 To run all tests, run
@@ -149,7 +153,7 @@ $ bundle exec rubocop -a
 |                |                                           |
 |:---------------|:------------------------------------------|
 | **Author**     | Matt Ray (<matt@chef.io>)                 |
-| **Copyright:** | Copyright (c) 2017-2018 Chef Software Inc.|
+| **Copyright:** | Copyright (c) 2017-2019 Chef Software Inc.|
 | **License:**   | Apache License, Version 2.0               |
 
 Licensed under the Apache License, Version 2.0 (the "License");
