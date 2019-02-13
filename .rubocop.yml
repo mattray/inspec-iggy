@@ -5,7 +5,14 @@ AllCops:
   - Gemfile
   - Rakefile
   - 'test/**/*'
-  - 'examples/**/*'
+  - 'lib/plugins/*/test/**/*'
+  # This is delicate; we want to include examples/plugins/*/lib
+  # but not anything else.
+  - 'examples/*profile*/**/*'
+  - 'examples/kitchen*/**/*'
+  - 'examples/inheritance/**/*'
+  - 'examples/custom-resource/**/*'
+  - 'examples/plugins/*/test/**/*'
   - 'vendor/**/*'
   - 'lib/bundles/inspec-init/templates/**/*'
   - 'www/demo/**/*'
@@ -44,10 +51,6 @@ Metrics/CyclomaticComplexity:
   Max: 10
 Metrics/PerceivedComplexity:
   Max: 11
-Naming/FileName:
-  Enabled: false
-Naming/PredicateName:
-  Enabled: false
 NumericLiterals:
   MinDigits: 10
 Security/YAMLLoad:
@@ -63,6 +66,8 @@ Style/ConditionalAssignment:
 Style/EmptyMethod:
   Enabled: false
 Style/Encoding:
+  Enabled: false
+Style/FileName:
   Enabled: false
 Style/GuardClause:
   Enabled: false
@@ -91,13 +96,13 @@ Style/PercentLiteralDelimiters:
     '%w': '{}'
     '%W': ()
     '%x': ()
+Style/PredicateName:
+  Enabled: false
 Style/SymbolArray:
   Enabled: false
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
-Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: comma
-Style/TrailingCommaInHashLiteral:
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 Style/UnlessElse:
   Enabled: false
