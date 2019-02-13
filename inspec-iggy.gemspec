@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.version     = InspecPlugins::Iggy::VERSION
   spec.authors     = ['Matt Ray']
   spec.email       = ['matt@chef.io']
-  spec.summary     = 'InSpec plugin to generate InSpec compliance profiles from Terraform.'
-  spec.description = 'Generate InSpec compliance profiles from Terraform by tagging instances and mapping Terraform to InSpec.'
-  spec.homepage    = 'https://github.com/inspec/inspec-iggy'
+  spec.summary     = 'InSpec plugin to generate InSpec compliance profiles from Terraform and CloudFormation.'
+  spec.description = 'InSpec plugin to generate InSpec compliance profiles from Terraform and CloudFormation.'
+  spec.homepage    = 'https://github.com/mattray/inspec-iggy'
   spec.license     = 'Apache-2.0'
 
   spec.files = %w{
