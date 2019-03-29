@@ -31,8 +31,19 @@ This is the current, previous and future development milestones and contains the
 * Add tests for testing user functionality
 * Expand Rakefile
 
-# BACKLOG #
+# 0.5.0
+* provide DESIGN.md explaining the organization of the code
+* disabled the `inspec terraform extract` subcommand until a more sustainable solution is determined
+* moved back to https://github.com/mattray/inspec-iggy as a community plugin
+* Sync and upgrade InSpec's .rubocop.yml and associated code cleanups
+
+* refactor out JSON parsing into helper with support for remote .tfstate and .cfn files
+* rename lib/inspec-iggy/parser.rb to parser_helper.rb
+https://github.com/mattray/inspec-iggy/issues/3
 * document Windows Omnibus installer usage
+* Test with something besides AWS AZURE
+
+# BACKLOG #
 * Habitat packaging
 * functional tests
 * Rubocop the generated profiles
@@ -40,6 +51,8 @@ This is the current, previous and future development milestones and contains the
 * create a Terraform Provisioner for attaching InSpec profiles to a resource
 * Generate a full profile that depends on the list of profiles from tags
 * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)
-* Test with something besides AWS
 * Test with more complicated tfstate files, the parsing is probably brittle
 * negative testing
+* do we want to generate inspec coverage for the tfplan?
+* restore extract functionality
+* terraform 0.12 support

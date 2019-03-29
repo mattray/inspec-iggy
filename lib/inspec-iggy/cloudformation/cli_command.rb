@@ -1,9 +1,4 @@
-# encoding: utf-8
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# CloudFormation CLI command and options
 
 require 'inspec/plugin/v2'
 
@@ -14,7 +9,7 @@ require 'inspec-iggy/cloudformation/parser'
 module InspecPlugins::Iggy
   module CloudFormation
     class CliCommand < Inspec.plugin(2, :cli_command)
-      subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate InSpec from CloudFormation'
+      subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate an InSpec profile from CloudFormation'
 
       # Thor.map(Hash) allows you to make aliases for commands.
       map('-v' => 'version')         # Treat `inspec terraform -v`` as `inspec terraform version`

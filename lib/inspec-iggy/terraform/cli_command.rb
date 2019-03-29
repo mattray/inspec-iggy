@@ -1,9 +1,4 @@
-# encoding: utf-8
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# Terraform CLI command and options
 
 require 'inspec/plugin/v2'
 
@@ -14,7 +9,7 @@ require 'inspec-iggy/terraform/parser'
 module InspecPlugins::Iggy
   module Terraform
     class CliCommand < Inspec.plugin(2, :cli_command)
-      subcommand_desc 'terraform SUBCOMMAND ...', 'Extract or generate InSpec from Terraform'
+      subcommand_desc 'terraform SUBCOMMAND ...', 'Generate an InSpec profile from Terraform'
 
       # Thor.map(Hash) allows you to make aliases for commands.
       map('-v' => 'version')         # Treat `inspec terraform -v`` as `inspec terraform version`
@@ -82,13 +77,14 @@ module InspecPlugins::Iggy
         exit 0
       end
 
-      desc 'extract [options]', 'Extract tagged InSpec profiles from terraform.tfstate'
-      def extract
-        Inspec::Log.level = :debug if options[:debug]
-        extracted_profiles = InspecPlugins::Iggy::Terraform::Parser.parse_extract(options[:tfstate])
-        puts InspecPlugins::Iggy::InspecHelper.print_commands(extracted_profiles)
-        exit 0
-      end
+      # disabled extract functionality
+      # desc 'extract [options]', 'Extract tagged InSpec profiles from terraform.tfstate'
+      # def extract
+      #   Inspec::Log.level = :debug if options[:debug]
+      #   extracted_profiles = InspecPlugins::Iggy::Terraform::Parser.parse_extract(options[:tfstate])
+      #   puts InspecPlugins::Iggy::InspecHelper.print_commands(extracted_profiles)
+      #   exit 0
+      # end
     end
   end
 end

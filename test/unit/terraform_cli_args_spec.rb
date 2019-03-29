@@ -18,7 +18,6 @@ module IggyUnitTests
 
     def commands
       [
-        'extract',
         'generate',
         'help',
         'version',
@@ -135,25 +134,25 @@ module IggyUnitTests
     end
   end
 
-  class ExtractCommand < Minitest::Test
-    include TfLets
+  # class ExtractCommand < Minitest::Test
+  #   include TfLets
 
-    def all_options
-      []
-    end
+  #   def all_options
+  #     []
+  #   end
 
-    def extract_options
-      cli_class.all_commands['extract'].options
-    end
+  #   def extract_options
+  #     cli_class.all_commands['extract'].options
+  #   end
 
-    def test_it_should_have_the_correct_option_count
-      assert_equal(all_options.count, extract_options.count)
-    end
+  #   def test_it_should_have_the_correct_option_count
+  #     assert_equal(all_options.count, extract_options.count)
+  #   end
 
-    # Argument count
-    # The 'generate' command does not accept arguments.
-    def test_it_should_take_no_arguments
-      assert_equal(0, cli_class.instance_method(:generate).arity)
-    end
-  end
+  #   # Argument count
+  #   # The 'generate' command does not accept arguments.
+  #   def test_it_should_take_no_arguments
+  #     assert_equal(0, cli_class.instance_method(:generate).arity)
+  #   end
+  # end
 end

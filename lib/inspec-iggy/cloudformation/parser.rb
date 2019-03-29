@@ -1,10 +1,7 @@
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# parses CloudFormation JSON files
 
 require 'json'
+
 require 'inspec/objects/control'
 require 'inspec/objects/ruby_helper'
 require 'inspec/objects/describe'
@@ -13,23 +10,14 @@ require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::CloudFormation
   class Parser
+    # parse through the JSON and generate InSpec controls
     def self.parse_generate(file) # rubocop:disable all
-      Inspec::Log.debug "CloudFormation.parse_generate file = #{file}"
-      begin
-        unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
-          exit(-1)
-        end
-        template = JSON.parse(File.read(file))
-      rescue JSON::ParserError => e
-        STDERR.puts e.message
-        STDERR.puts "ERROR: Parsing error in #{file}."
-        exit(-1)
-      end
+      template = parse_cfn(file)
       absolutename = File.absolute_path(file)
 
       # InSpec controls generated
       generated_controls = []
+
       # iterate over the resources
       cfn_resources = template['Resources']
       cfn_resources.keys.each do |cfn_res|
@@ -101,6 +89,22 @@ module InspecPlugins::Iggy::CloudFormation
       end
       Inspec::Log.debug "CloudFormation.parse_generate generated_controls = #{generated_controls}"
       generated_controls
+    end
+
+    # boilerplate JSON parsing
+    def self.parse_cfn(file)
+      Inspec::Log.debug "CloudFormation.parse_cfn file = #{file}"
+      begin
+        unless File.file?(file)
+          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
+          exit(-1)
+        end
+        JSON.parse(File.read(file))
+      rescue JSON::ParserError => e
+        STDERR.puts e.message
+        STDERR.puts "ERROR: Parsing error in #{file}."
+        exit(-1)
+      end
     end
   end
 end
