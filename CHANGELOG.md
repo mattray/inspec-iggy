@@ -32,13 +32,13 @@ This is the current, previous and future development milestones and contains the
 * Expand Rakefile
 
 # 0.5.0
-* provide DESIGN.md explaining the organization of the code
+* provide DESIGN.md explaining the organization of the codeo
 * disabled the `inspec terraform extract` subcommand until a more sustainable solution is determined
 * moved back to https://github.com/mattray/inspec-iggy as a community plugin
 * Sync and upgrade InSpec's .rubocop.yml and associated code cleanups
+* rename lib/inspec-iggy/profile.rb to profile_helper.rb
 
 * refactor out JSON parsing into helper with support for remote .tfstate and .cfn files
-* rename lib/inspec-iggy/parser.rb to parser_helper.rb
 https://github.com/mattray/inspec-iggy/issues/3
 * document Windows Omnibus installer usage
 * Test with something besides AWS AZURE

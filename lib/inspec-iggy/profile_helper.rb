@@ -4,7 +4,7 @@ require 'yaml'
 
 module InspecPlugins
   module Iggy
-    class Profile
+    class ProfileHelper
       # match the output of 'inspec init profile'
       def self.render_profile(cli_ui, options, source_file, controls)
         name = options[:name]

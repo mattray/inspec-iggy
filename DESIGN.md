@@ -11,7 +11,7 @@ This document attempts to explain the organization of the InSpec-Iggy code and h
 * [lib/inspec-iggy/cloudformation/cli_command.rb](#cfn_cli)
 * [lib/inspec-iggy/cloudformation/parser.rb](#cfn_parse)
 * [lib/inspec-iggy/inspec_helper.rb](#inspec_helper)
-* [lib/inspec-iggy/profile.rb](#profile_helper)
+* [lib/inspec-iggy/profile_helper.rb](#profile_helper)
 * [lib/inspec-iggy/version.rb](#version)
 
 # Base Files
@@ -84,7 +84,7 @@ The method `tf_controls` provides the content for the controls file for Terrafor
 
 The `cfn_controls` method provides the AWS API calls to dynamically check the passed CloudFormation stack and provide the content for the controls file.
 
-## [lib/inspec-iggy/profile.rb](lib/inspec-iggy/profile.rb)<a name="profile_helper"/>
+## [lib/inspec-iggy/profile_helper.rb](lib/inspec-iggy/profile_helper.rb)<a name="profile_helper"/>
 
 Helper class to render a full InSpec profile with a `README.md`, `inspec.yml`, and the generated `controls/controls.rb` populated from the parsed input file and the CLI options provided.
 

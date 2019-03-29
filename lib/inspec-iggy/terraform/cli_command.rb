@@ -3,7 +3,7 @@
 require 'inspec/plugin/v2'
 
 require 'inspec-iggy/version'
-require 'inspec-iggy/profile'
+require 'inspec-iggy/profile_helper'
 require 'inspec-iggy/terraform/parser'
 
 module InspecPlugins::Iggy
@@ -73,7 +73,7 @@ module InspecPlugins::Iggy
         Inspec::Log.level = :debug if options[:debug]
         generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate])
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
-        InspecPlugins::Iggy::Profile.render_profile(self, options, options[:tfstate], printable_controls)
+        InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:tfstate], printable_controls)
         exit 0
       end
 
