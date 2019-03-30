@@ -10,7 +10,8 @@ require 'inspec-iggy/inspec_helper'
 module InspecPlugins::Iggy::CloudFormation
   class Parser
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(file) # rubocop:disable all
+    def self.parse_generate(cfn_template)
+      file = InspecPlugins::Iggy::FileHelper.fetch(cfn_template)
       template = InspecPlugins::Iggy::FileHelper.parse_json(file)
       absolutename = File.absolute_path(file)
 
@@ -66,15 +67,15 @@ module InspecPlugins::Iggy::CloudFormation
                 if property.eql?('vpc_id') # rubocop:disable Metrics/BlockNesting
                   vpc = cfn_resources[cfn_res]['Properties'][attr].values.first
                   # https://github.com/inspec/inspec/issues/3173
-                  describe.add_test(property, 'eq', "resources[#{vpc}]") unless cfn_res_type.eql?('aws_route_table') # rubocop:disable Metrics/BlockNesting
+                  describe.add_test(property, 'cmp', "resources[#{vpc}]") unless cfn_res_type.eql?('aws_route_table') # rubocop:disable Metrics/BlockNesting
                   # AMI is a Ref into Parameters
                 elsif property.eql?('image_id') # rubocop:disable Metrics/BlockNesting
                   amiref = cfn_resources[cfn_res]['Properties'][attr].values.first
                   ami = template['Parameters'][amiref]['Default']
-                  describe.add_test(property, 'eq', ami)
+                  describe.add_test(property, 'cmp', ami)
                 end
               else
-                describe.add_test(property, 'eq', value)
+                describe.add_test(property, 'cmp', value)
               end
             else
               Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIP"

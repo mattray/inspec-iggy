@@ -15,7 +15,8 @@ module InspecPlugins::Iggy::Terraform
     # TAG_URL = 'iggy_url_'.freeze
 
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(file) # rubocop:disable all
+    def self.parse_generate(tf_file) # rubocop:disable all
+      file = InspecPlugins::Iggy::FileHelper.fetch(tf_file)
       tfstate = InspecPlugins::Iggy::FileHelper.parse_json(file)
       absolutename = File.absolute_path(file)
 
@@ -59,7 +60,7 @@ module InspecPlugins::Iggy::Terraform
               if inspec_properties.member?(attr)
                 Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
                 value = tf_resources[tf_res]['primary']['attributes'][attr]
-                describe.add_test(attr, 'eq', value)
+                describe.add_test(attr, 'cmp', value)
               else
                 Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
               end

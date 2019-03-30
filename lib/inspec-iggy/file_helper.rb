@@ -20,6 +20,17 @@ module InspecPlugins
           exit(-1)
         end
       end
+
+      def self.fetch(url)
+        temp_file = url
+        # if this is a file, just return it
+        # retrieve the file into a temp_file
+        # do all urls start with http:// https://
+        # is s3:// a thing?
+        # how else do CFN and Terraform store this?
+        return temp_file
+      end
+
     end
   end
 end
