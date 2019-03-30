@@ -34,7 +34,7 @@ module InspecPlugins::Iggy::CloudFormation
 
         # does this match an InSpec resource?
         if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(cfn_res_type)
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCH"
+          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCHED"
 
           # insert new control based off the resource's ID
           ctrl = Inspec::Control.new
@@ -60,7 +60,7 @@ module InspecPlugins::Iggy::CloudFormation
             attr_split = attr.split(/(?=[A-Z])/)
             property = attr_split.join('_').downcase
             if inspec_properties.member?(property)
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCH"
+              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCHED"
               value = cfn_resources[cfn_res]['Properties'][attr]
               if (value.is_a? Hash) || (value.is_a? Array)
                 #  these get replaced at inspec exec
@@ -78,13 +78,13 @@ module InspecPlugins::Iggy::CloudFormation
                 describe.add_test(property, 'cmp', value)
               end
             else
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIP"
+              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIPPED"
             end
           end
           ctrl.add_test(describe)
           generated_controls.push(ctrl)
         else
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} SKIP"
+          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} SKIPPED"
         end
       end
       Inspec::Log.debug "CloudFormation.parse_generate generated_controls = #{generated_controls}"

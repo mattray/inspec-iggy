@@ -2,6 +2,8 @@
 
 This document attempts to explain the organization of the InSpec-Iggy code and how to extend it as necessary. Because Iggy is an InSpec plugin, it tries to follow InSpec closely with regards to versions, style, and tooling. Links to the source code are given because there may be additional documentation within the files.
 
+# Files
+
 * [inspec-iggy.gemspec](#gemspec)
 * [.rubocop.yml](#rubocop)
 * [lib/inspec-iggy.rb](#iggy)
@@ -13,8 +15,6 @@ This document attempts to explain the organization of the InSpec-Iggy code and h
 * [lib/inspec-iggy/inspec_helper.rb](#inspec_helper)
 * [lib/inspec-iggy/profile_helper.rb](#profile_helper)
 * [lib/inspec-iggy/version.rb](#version)
-
-# Base Files
 
 ## [inspec-iggy.gemspec](inspec-iggy.gemspec)<a name="gemspec"/>
 
@@ -95,3 +95,23 @@ Helper class to render a full InSpec profile with a `README.md`, `inspec.yml`, a
 ## [lib/inspec-iggy/version.rb](lib/inspec-iggy/version.rb)<a name="version"/>
 
 Tracks the version of InSpec-Iggy.
+
+# Platform Support
+
+## Terraform
+
+For InSpec-Iggy to work, you must have both Terraform and InSpec support for your platform. This is because it maps Terraform resources to InSpec resources. If there's not an InSpec plugin for the platform, there won't be any resources generated.
+
+If you have working InSpec and Terraform support, you will want to run with
+
+    inspec terraform generate -t terraform.tfstate --name DEBUG --debug
+
+and look for messages with `Iggy::Terraform.parse_generate` to see what is being `SKIPPED`, `TRANSLATED` or `MATCHED`. You may want to drop a `pry` debugging breakpoint within the [Terraform parser](#tf_parse) `parse_generate` method to see what is in the JSON versus what InSpec resources.
+
+If you are not getting `MATCHED` `tf_res_type` resources and all `SKIPPED`, they are most likely not in the `InspecPlugins::Iggy::InspecHelper::RESOURCES`. The `TRANSLATED_RESOURCES` within the [inspec_helper.rb](#inspec_helper) may need to be updated to map `tf_res_type`s to what is in InSpec.
+
+At this point there are not mappings for InSpec properties to Terraform attributes. If this is an issue an additional hash of resources and the attribute mapping could be added to the [inspec_helper.rb](#inspec_helper)) in the future.
+
+## Alternate Formats
+
+If you want to add support for another format (ie. ARM templates or something similar), follow the examples of the [Terraform](#tf) and [CloudFormation](#cfn) support. You will start by adding a new `cli_command` to the [lib/inspec-iggy/plugin.rb](#plugin). You will need a `cli_command.rb` and `parser.rb` implementing the appropriate classes and methods.

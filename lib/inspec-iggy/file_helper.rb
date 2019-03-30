@@ -28,6 +28,7 @@ module InspecPlugins
         # do all urls start with http:// https://
         # is s3:// a thing?
         # how else do CFN and Terraform store this?
+        #  absolutename = File.absolute_path(file) will be broken for remote files
         return temp_file
       end
 

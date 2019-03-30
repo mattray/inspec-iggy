@@ -37,7 +37,7 @@ module InspecPlugins::Iggy::Terraform
 
           # does this match an InSpec resource?
           if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(tf_res_type)
-            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCH"
+            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCHED"
             tf_res_id = tf_resources[tf_res]['primary']['id']
 
             # insert new control based off the resource's ID
@@ -58,18 +58,18 @@ module InspecPlugins::Iggy::Terraform
             inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(tf_res_type)
             tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
               if inspec_properties.member?(attr)
-                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
+                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCHED"
                 value = tf_resources[tf_res]['primary']['attributes'][attr]
                 describe.add_test(attr, 'cmp', value)
               else
-                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
+                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIPPED"
               end
             end
 
             ctrl.add_test(describe)
             generated_controls.push(ctrl)
           else
-            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} SKIP"
+            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} SKIPPED"
           end
         end
       end
