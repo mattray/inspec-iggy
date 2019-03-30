@@ -1,11 +1,10 @@
 # parses Terraform d.tfstate files
 
-require 'json'
-
 require 'inspec/objects/control'
 require 'inspec/objects/ruby_helper'
 require 'inspec/objects/describe'
 
+require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::Terraform
@@ -17,7 +16,7 @@ module InspecPlugins::Iggy::Terraform
 
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(file) # rubocop:disable all
-      tfstate = parse_tfstate(file)
+      tfstate = InspecPlugins::Iggy::FileHelper.parse_json(file)
       absolutename = File.absolute_path(file)
 
       # InSpec controls generated
@@ -75,22 +74,6 @@ module InspecPlugins::Iggy::Terraform
       end
       Inspec::Log.debug "Iggy::Terraform.parse_generate generated_controls = #{generated_controls}"
       generated_controls
-    end
-
-    # boilerplate JSON parsing
-    def self.parse_tfstate(file)
-      Inspec::Log.debug "Iggy::Terraform.parse_tfstate file = #{file}"
-      begin
-        unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
-          exit(-1)
-        end
-        JSON.parse(File.read(file))
-      rescue JSON::ParserError => e
-        STDERR.puts e.message
-        STDERR.puts "ERROR: Parsing error in #{file}."
-        exit(-1)
-      end
     end
 
     # disabled extract functionality

@@ -74,6 +74,10 @@ The CFN parser is very similar to the [terraform/parser.rb](#tf_parse), parsing 
 
 # Helpers
 
+## [lib/inspec-iggy/file_helper.rb](lib/inspec-iggy/file_helper.rb)<a name="file_helper"/>
+
+Helper class that parses JSON input files and handles errors.
+
 ## [lib/inspec-iggy/inspec_helper.rb](lib/inspec-iggy/inspec_helper.rb)<a name="inspec_helper"/>
 
 Constants and helpers for working with InSpec. The full list of available InSpec Resources are provided by the `RESOURCES` array. Resources that do not map cleanly are provided by the `TRANSLATED_RESOURCES` hash. There are very few mismatches because both tools use the SDKs provided by the same vendors.

@@ -37,8 +37,9 @@ This is the current, previous and future development milestones and contains the
 * moved back to https://github.com/mattray/inspec-iggy as a community plugin
 * Sync and upgrade InSpec's .rubocop.yml and associated code cleanups
 * rename lib/inspec-iggy/profile.rb to profile_helper.rb
+* refactor out JSON parsing into file_helper.rb
 
-* refactor out JSON parsing into helper with support for remote .tfstate and .cfn files
+* add support for remote .tfstate and .cfn files
 https://github.com/mattray/inspec-iggy/issues/3
 * document Windows Omnibus installer usage
 * Test with something besides AWS AZURE
