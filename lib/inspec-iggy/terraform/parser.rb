@@ -48,14 +48,34 @@ module InspecPlugins::Iggy::Terraform
             ctrl.impact = '1.0'
 
             describe = Inspec::Describe.new
-            # describes the resourde with the id as argument
-            describe.qualifier.push([tf_res_type, tf_res_id])
+            # describes the resource with the name as argument
+            # this is a hack for azure, we need a better longterm solution
+            if tf_res_type.start_with?("azure_")
+              name = tf_res_id.split("/").last
+            else
+              name = tf_res_id
+            end
 
-            # ensure the resource exists
-            describe.add_test(nil, 'exist', nil)
+            # describes the resource with the id as argument
+            # going to need to move the special Azure code out, and add helpers for each provider
+            if tf_res_type.start_with?("azure_")
+              if tf_res_type.eql?("azure_resource_group")
+                describe.qualifier.push([tf_res_type, name: name])
+              else
+                resource_group = tf_res_id.split('resourceGroups/').last.split('/').first
+                describe.qualifier.push([tf_res_type, name: name, group_name: resource_group])
+              end
+            else
+              describe.qualifier.push([tf_res_type, tf_res_id])
+            end
+
+            # ensure the resource exists unless Azure, which currently doesn't support it as of InSpec 2.2
+            describe.add_test(nil, "exist", nil) unless tf_res_type.start_with?("azure_")
 
             # if there's a match, see if there are matching InSpec properties
             inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(tf_res_type)
+            # push stuff back into inspec_properties?
+            inspec_properties.push('name') if tf_res_type.start_with?("azure_")
             tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
               if inspec_properties.member?(attr)
                 Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCHED"

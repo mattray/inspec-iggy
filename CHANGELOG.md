@@ -39,20 +39,29 @@ This is the current, previous and future development milestones and contains the
 * rename lib/inspec-iggy/profile.rb to profile_helper.rb
 * refactor out JSON parsing into file_helper.rb
 * switch from 'eq' to 'cmp' comparators https://github.com/mattray/inspec-iggy/issues/23
+* enable minimal Azure support. This needs to be refactored.
 * add support for remote .tfstate and .cfn files via Iggy::FileHelper.fetch https://github.com/mattray/inspec-iggy/issues/3
+  http://
+  https://
+  s3://MyAstmazonS3BucketName/MyFileName.json
 
 * document Windows Omnibus installer usage
-* Test with something besides AWS AZURE GCP
 
 # BACKLOG #
+* how are we going to preemptively know what's in the various resource packs?
+  Perhaps load all Resources individually to map out their properties?
+  Big translation helper hash?
+* enable GCP support
 * Habitat packaging
 * Rubocop the generated profiles
 * enable negative testing to look for things not covered by Terraform
 * ARM templates
+* translate properties from cfn/tf->inspec
 * Terraform
-  * Test with more complicated tfstate files, the parsing is probably brittle
+  * More Terraform back-ends https://www.terraform.io/docs/backends/types/index.html
   * do we want to generate inspec coverage for the tfplan?
   * Terraform 0.12 support
 * restore extract functionality
   * create a Terraform Provisioner for attaching InSpec profiles to a resource
   * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)
+* InSpec 4.0 will likely break stuff
