@@ -37,7 +37,7 @@ module IggyFunctionalTests
       assert(check_json['summary']['valid'])
       assert_empty(check_json['errors'])
       assert_empty(check_json['warnings'])
-      assert_equal(15, check_json['summary']['controls'])
+      assert_equal(16, check_json['summary']['controls'])
 
       # TODO: many many tests could be done here
       export_json = iggy_run_result.payload.export_json

@@ -1,35 +1,22 @@
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# parses CloudFormation JSON files
 
-require 'json'
 require 'inspec/objects/control'
 require 'inspec/objects/ruby_helper'
 require 'inspec/objects/describe'
 
+require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::CloudFormation
   class Parser
-    def self.parse_generate(file) # rubocop:disable all
-      Inspec::Log.debug "CloudFormation.parse_generate file = #{file}"
-      begin
-        unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
-          exit(-1)
-        end
-        template = JSON.parse(File.read(file))
-      rescue JSON::ParserError => e
-        STDERR.puts e.message
-        STDERR.puts "ERROR: Parsing error in #{file}."
-        exit(-1)
-      end
-      absolutename = File.absolute_path(file)
+    # parse through the JSON and generate InSpec controls
+    def self.parse_generate(cfn_template) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+      template = InspecPlugins::Iggy::FileHelper.parse_json(cfn_template)
+      absolutename = File.absolute_path(cfn_template)
 
       # InSpec controls generated
       generated_controls = []
+
       # iterate over the resources
       cfn_resources = template['Resources']
       cfn_resources.keys.each do |cfn_res|
@@ -46,7 +33,7 @@ module InspecPlugins::Iggy::CloudFormation
 
         # does this match an InSpec resource?
         if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(cfn_res_type)
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCH"
+          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCHED"
 
           # insert new control based off the resource's ID
           ctrl = Inspec::Control.new
@@ -72,31 +59,31 @@ module InspecPlugins::Iggy::CloudFormation
             attr_split = attr.split(/(?=[A-Z])/)
             property = attr_split.join('_').downcase
             if inspec_properties.member?(property)
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCH"
+              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCHED"
               value = cfn_resources[cfn_res]['Properties'][attr]
               if (value.is_a? Hash) || (value.is_a? Array)
                 #  these get replaced at inspec exec
                 if property.eql?('vpc_id') # rubocop:disable Metrics/BlockNesting
                   vpc = cfn_resources[cfn_res]['Properties'][attr].values.first
                   # https://github.com/inspec/inspec/issues/3173
-                  describe.add_test(property, 'eq', "resources[#{vpc}]") unless cfn_res_type.eql?('aws_route_table') # rubocop:disable Metrics/BlockNesting
+                  describe.add_test(property, 'cmp', "resources[#{vpc}]") unless cfn_res_type.eql?('aws_route_table') # rubocop:disable Metrics/BlockNesting
                   # AMI is a Ref into Parameters
                 elsif property.eql?('image_id') # rubocop:disable Metrics/BlockNesting
                   amiref = cfn_resources[cfn_res]['Properties'][attr].values.first
                   ami = template['Parameters'][amiref]['Default']
-                  describe.add_test(property, 'eq', ami)
+                  describe.add_test(property, 'cmp', ami)
                 end
               else
-                describe.add_test(property, 'eq', value)
+                describe.add_test(property, 'cmp', value)
               end
             else
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIP"
+              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIPPED"
             end
           end
           ctrl.add_test(describe)
           generated_controls.push(ctrl)
         else
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} SKIP"
+          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} SKIPPED"
         end
       end
       Inspec::Log.debug "CloudFormation.parse_generate generated_controls = #{generated_controls}"

@@ -1,15 +1,10 @@
-# -*- coding: utf-8 -*-
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# renders the profile from the parsed files
 
 require 'yaml'
 
 module InspecPlugins
   module Iggy
-    class Profile
+    class ProfileHelper
       # match the output of 'inspec init profile'
       def self.render_profile(cli_ui, options, source_file, controls)
         name = options[:name]
@@ -61,7 +56,7 @@ module InspecPlugins
         f.close
       end
 
-      #  * Create file controls/example.rb
+      #  * Create file controls/controls.rb
       def self.render_controls_rb(cli_ui, name, controls)
         render_file = "#{name}/controls/controls.rb"
         cli_ui.li "Create file #{cli_ui.mark_text(render_file)}"

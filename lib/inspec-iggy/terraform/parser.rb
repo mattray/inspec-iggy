@@ -1,91 +1,23 @@
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
-
-require 'json'
+# parses Terraform d.tfstate files
 
 require 'inspec/objects/control'
 require 'inspec/objects/ruby_helper'
 require 'inspec/objects/describe'
 
+require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::Terraform
   class Parser
+    # disabled extract functionality
     # makes it easier to change out later
-    TAG_NAME = 'iggy_name_'.freeze
-    TAG_URL = 'iggy_url_'.freeze
-
-    # boilerplate tfstate parsing
-    def self.parse_tfstate(file)
-      Inspec::Log.debug "Iggy::Terraform.parse_tfstate file = #{file}"
-      begin
-        unless File.file?(file)
-          STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
-          exit(-1)
-        end
-        JSON.parse(File.read(file))
-      rescue JSON::ParserError => e
-        STDERR.puts e.message
-        STDERR.puts "ERROR: Parsing error in #{file}."
-        exit(-1)
-      end
-    end
-
-    # parse through the JSON for the tagged Resources
-    def self.parse_extract(file) # rubocop:disable Metrics/AbcSize
-      tfstate = parse_tfstate(file)
-      # InSpec profiles extracted
-      extracted_profiles = {}
-
-      # iterate over the resources
-      tf_resources = tfstate['modules'][0]['resources']
-      tf_resources.keys.each do |tf_res|
-        tf_res_id = tf_resources[tf_res]['primary']['id']
-
-        # get the attributes, see if any of them have a tagged profile attached
-        tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
-          next unless attr.start_with?('tags.' + TAG_NAME)
-          Inspec::Log.debug "Iggy::Terraform.parse_extract tf_res = #{tf_res} attr = #{attr} MATCHED TAG"
-          # get the URL and the name of the profiles
-          name = attr.split(TAG_NAME)[1]
-          url = tf_resources[tf_res]['primary']['attributes']["tags.#{TAG_URL}#{name}"]
-          if tf_res.start_with?('aws_vpc') # should this be VPC or subnet?
-            # if it's a VPC, store it as the VPC id + name
-            key = tf_res_id + ':' + name
-            Inspec::Log.debug "Iggy::Terraform.parse_extract aws_vpc tagged with InSpec #{key}"
-            extracted_profiles[key] = {
-              'type' => 'aws_vpc',
-              'az' => 'us-west-2',
-              'url' => url,
-            }
-          elsif tf_res.start_with?('aws_instance')
-            # if it's a node, get information about the IP and SSH/WinRM
-            key = tf_res_id + ':' + name
-            Inspec::Log.debug "Iggy::Terraform.parse_extract aws_instance tagged with InSpec #{key}"
-            extracted_profiles[key] = {
-              'type' => 'aws_instance',
-              'public_ip' => tf_resources[tf_res]['primary']['attributes']['public_ip'],
-              'key_name' => tf_resources[tf_res]['primary']['attributes']['key_name'],
-              'url' => url,
-            }
-          else
-            # should generic AWS just be the default except for instances?
-            STDERR.puts "ERROR: #{file} #{tf_res_id} has an InSpec-tagged resource but #{tf_res} is currently unsupported."
-            exit(-1)
-          end
-        end
-      end
-      Inspec::Log.debug "Iggy::Terraform.parse_extract extracted_profiles = #{extracted_profiles}"
-      extracted_profiles
-    end
+    # TAG_NAME = 'iggy_name_'.freeze
+    # TAG_URL = 'iggy_url_'.freeze
 
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(file) # rubocop:disable all
-      tfstate = parse_tfstate(file)
-      absolutename = File.absolute_path(file)
+    def self.parse_generate(tf_file) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+      tfstate = InspecPlugins::Iggy::FileHelper.parse_json(tf_file)
+      absolutename = File.absolute_path(tf_file)
 
       # InSpec controls generated
       generated_controls = []
@@ -104,7 +36,7 @@ module InspecPlugins::Iggy::Terraform
 
           # does this match an InSpec resource?
           if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(tf_res_type)
-            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCH"
+            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCHED"
             tf_res_id = tf_resources[tf_res]['primary']['id']
 
             # insert new control based off the resource's ID
@@ -115,33 +47,102 @@ module InspecPlugins::Iggy::Terraform
             ctrl.impact = '1.0'
 
             describe = Inspec::Describe.new
-            # describes the resourde with the id as argument
-            describe.qualifier.push([tf_res_type, tf_res_id])
+            # describes the resource with the name as argument
+            # this is a hack for azure, we need a better longterm solution
+            if tf_res_type.start_with?('azure_')
+              name = tf_res_id.split('/').last
+            else
+              name = tf_res_id
+            end
 
-            # ensure the resource exists
-            describe.add_test(nil, 'exist', nil)
+            # describes the resource with the id as argument
+            # going to need to move the special Azure code out, and add helpers for each provider
+            if tf_res_type.start_with?('azure_')
+              if tf_res_type.eql?('azure_resource_group')
+                describe.qualifier.push([tf_res_type, name: name])
+              else
+                resource_group = tf_res_id.split('resourceGroups/').last.split('/').first
+                describe.qualifier.push([tf_res_type, name: name, group_name: resource_group])
+              end
+            else
+              describe.qualifier.push([tf_res_type, tf_res_id])
+            end
+
+            # ensure the resource exists unless Azure, which currently doesn't support it as of InSpec 2.2
+            describe.add_test(nil, 'exist', nil) unless tf_res_type.start_with?('azure_')
 
             # if there's a match, see if there are matching InSpec properties
             inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(tf_res_type)
+            # push stuff back into inspec_properties?
+            inspec_properties.push('name') if tf_res_type.start_with?('azure_')
             tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
               if inspec_properties.member?(attr)
-                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCH"
+                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} MATCHED"
                 value = tf_resources[tf_res]['primary']['attributes'][attr]
-                describe.add_test(attr, 'eq', value)
+                describe.add_test(attr, 'cmp', value)
               else
-                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIP"
+                Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type} inspec_property = #{attr} SKIPPED"
               end
             end
 
             ctrl.add_test(describe)
             generated_controls.push(ctrl)
           else
-            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} SKIP"
+            Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} SKIPPED"
           end
         end
       end
       Inspec::Log.debug "Iggy::Terraform.parse_generate generated_controls = #{generated_controls}"
       generated_controls
     end
+
+    # disabled extract functionality
+    # # parse through the JSON for the tagged Resources
+    # def self.parse_extract(file)
+    #   tfstate = parse_tfstate(file)
+    #   # InSpec profiles extracted
+    #   extracted_profiles = {}
+
+    #   # iterate over the resources
+    #   tf_resources = tfstate['modules'][0]['resources']
+    #   tf_resources.keys.each do |tf_res|
+    #     tf_res_id = tf_resources[tf_res]['primary']['id']
+
+    #     # get the attributes, see if any of them have a tagged profile attached
+    #     tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
+    #       next unless attr.start_with?('tags.' + TAG_NAME)
+    #       Inspec::Log.debug "Iggy::Terraform.parse_extract tf_res = #{tf_res} attr = #{attr} MATCHED TAG"
+    #       # get the URL and the name of the profiles
+    #       name = attr.split(TAG_NAME)[1]
+    #       url = tf_resources[tf_res]['primary']['attributes']["tags.#{TAG_URL}#{name}"]
+    #       if tf_res.start_with?('aws_vpc') # should this be VPC or subnet?
+    #         # if it's a VPC, store it as the VPC id + name
+    #         key = tf_res_id + ':' + name
+    #         Inspec::Log.debug "Iggy::Terraform.parse_extract aws_vpc tagged with InSpec #{key}"
+    #         extracted_profiles[key] = {
+    #           'type' => 'aws_vpc',
+    #           'az' => 'us-west-2',
+    #           'url' => url,
+    #         }
+    #       elsif tf_res.start_with?('aws_instance')
+    #         # if it's a node, get information about the IP and SSH/WinRM
+    #         key = tf_res_id + ':' + name
+    #         Inspec::Log.debug "Iggy::Terraform.parse_extract aws_instance tagged with InSpec #{key}"
+    #         extracted_profiles[key] = {
+    #           'type' => 'aws_instance',
+    #           'public_ip' => tf_resources[tf_res]['primary']['attributes']['public_ip'],
+    #           'key_name' => tf_resources[tf_res]['primary']['attributes']['key_name'],
+    #           'url' => url,
+    #         }
+    #       else
+    #         # should generic AWS just be the default except for instances?
+    #         STDERR.puts "ERROR: #{file} #{tf_res_id} has an InSpec-tagged resource but #{tf_res} is currently unsupported."
+    #         exit(-1)
+    #       end
+    #     end
+    #   end
+    #   Inspec::Log.debug "Iggy::Terraform.parse_extract extracted_profiles = #{extracted_profiles}"
+    #   extracted_profiles
+    # end
   end
 end

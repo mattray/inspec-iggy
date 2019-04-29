@@ -1,11 +1,7 @@
-# encoding: UTF-8
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# provide the version for the plugin
+
 module InspecPlugins
   module Iggy
-    VERSION = '0.4.0'.freeze
+    VERSION = '0.5.0'.freeze
   end
 end

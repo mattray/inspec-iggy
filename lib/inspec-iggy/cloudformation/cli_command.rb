@@ -1,20 +1,15 @@
-# encoding: utf-8
-#
-# Author:: Matt Ray (<matt@chef.io>)
-#
-# Copyright:: 2018, Chef Software, Inc <legal@chef.io>
-#
+# CloudFormation CLI command and options
 
 require 'inspec/plugin/v2'
 
 require 'inspec-iggy/version'
-require 'inspec-iggy/profile'
+require 'inspec-iggy/profile_helper'
 require 'inspec-iggy/cloudformation/parser'
 
 module InspecPlugins::Iggy
   module CloudFormation
     class CliCommand < Inspec.plugin(2, :cli_command)
-      subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate InSpec from CloudFormation'
+      subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate an InSpec profile from CloudFormation'
 
       # Thor.map(Hash) allows you to make aliases for commands.
       map('-v' => 'version')         # Treat `inspec terraform -v`` as `inspec terraform version`
@@ -84,7 +79,7 @@ module InspecPlugins::Iggy
         # hash of generated controls
         generated_controls = InspecPlugins::Iggy::CloudFormation::Parser.parse_generate(options[:template])
         printable_controls = InspecPlugins::Iggy::InspecHelper.cfn_controls(options[:title], generated_controls, options[:stack])
-        InspecPlugins::Iggy::Profile.render_profile(self, options, options[:template], printable_controls)
+        InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:template], printable_controls)
         exit 0
       end
     end

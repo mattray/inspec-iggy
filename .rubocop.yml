@@ -1,11 +1,20 @@
 ---
 AllCops:
+  DisplayCopNames: true
   TargetRubyVersion: 2.3
   Exclude:
   - Gemfile
   - Rakefile
   - 'test/**/*'
-  - 'examples/**/*'
+  - 'lib/plugins/*/test/**/*'
+  - 'lib/plugins/inspec-init/templates/**/*'
+  # This is delicate; we want to include examples/plugins/*/lib
+  # but not anything else.
+  - 'examples/*profile*/**/*'
+  - 'examples/kitchen*/**/*'
+  - 'examples/inheritance/**/*'
+  - 'examples/custom-resource/**/*'
+  - 'examples/plugins/*/test/**/*'
   - 'vendor/**/*'
   - 'lib/bundles/inspec-init/templates/**/*'
   - 'www/demo/**/*'
@@ -68,7 +77,9 @@ Style/GuardClause:
   Enabled: false
 Style/IfUnlessModifier:
   Enabled: false
-Style/MethodMissing:
+Style/MethodMissingSuper:
+  Enabled: false
+Style/MissingRespondToMissing:
   Enabled: false
 Style/MultilineIfModifier:
   Enabled: false
@@ -96,8 +107,6 @@ Style/SymbolArray:
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
 Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: comma
-Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 Style/UnlessElse:
   Enabled: false

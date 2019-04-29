@@ -3,15 +3,11 @@ source 'http://rubygems.org'
 
 gemspec
 
+# follows InSpec's versions
 group :test do
-  gem 'rake'              # Build task manager
-  gem 'chefstyle'
-  gem 'byebug'            # A debugger REPL
-  gem 'rubocop'           # Needed for style linting
+  gem 'minitest', '~> 5.5'
+  gem 'rake', '>= 10'
+  gem 'rubocop', '= 0.49.1'
   gem 'm'
-end
-
-group :tools do
-  gem 'github_changelog_generator'
-  gem 'rb-readline'
+  gem 'pry-byebug'
 end
