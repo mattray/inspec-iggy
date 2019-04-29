@@ -32,7 +32,7 @@ This is the current, previous and future development milestones and contains the
 * Expand Rakefile
 
 # 0.5.0
-* provide DESIGN.md explaining the organization of the codeo
+* provide DESIGN.md explaining the organization of the code
 * disabled the `inspec terraform extract` subcommand until a more sustainable solution is determined
 * moved back to https://github.com/mattray/inspec-iggy as a community plugin
 * Sync and upgrade InSpec's .rubocop.yml and associated code cleanups

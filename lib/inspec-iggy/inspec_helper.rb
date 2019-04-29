@@ -13,7 +13,7 @@ module InspecPlugins
         'aws_instance' => 'aws_ec2_instance',
         'aws_v_p_c' => 'aws_vpc', # CFN
         'azurerm_resource_group' => 'azure_resource_group',
-        'azurerm_virtual_machine' => 'azure_virtual_machine',
+        'azurerm_virtual_machine' => 'azure_virtual_machine'
         # "azure_virtual_machine_data_disk",
         # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
       }.freeze

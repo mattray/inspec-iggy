@@ -10,7 +10,7 @@ require 'inspec-iggy/inspec_helper'
 module InspecPlugins::Iggy::CloudFormation
   class Parser
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(cfn_template)
+    def self.parse_generate(cfn_template) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       template = InspecPlugins::Iggy::FileHelper.parse_json(cfn_template)
       absolutename = File.absolute_path(cfn_template)
 

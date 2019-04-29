@@ -25,16 +25,16 @@ module InspecPlugins
 
       def self.fetch(url)
         # if this is a file, just return it
-        return url if File.exists?(url)
+        return url if File.exist?(url)
+
         begin
-          open(url)
+          URI.parse(url).open
         rescue OpenURI::HTTPError => e
           STDERR.puts e.message
           STDERR.puts "ERROR: Parsing error from URL #{url}"
           exit(-1)
         end
       end
-
     end
   end
 end
