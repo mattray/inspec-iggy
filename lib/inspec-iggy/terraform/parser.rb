@@ -16,9 +16,8 @@ module InspecPlugins::Iggy::Terraform
 
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(tf_file) # rubocop:disable all
-      file = InspecPlugins::Iggy::FileHelper.fetch(tf_file)
-      tfstate = InspecPlugins::Iggy::FileHelper.parse_json(file)
-      absolutename = File.absolute_path(file)
+      tfstate = InspecPlugins::Iggy::FileHelper.parse_json(tf_file)
+      absolutename = File.absolute_path(tf_file)
 
       # InSpec controls generated
       generated_controls = []

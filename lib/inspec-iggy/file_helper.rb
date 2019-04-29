@@ -1,6 +1,7 @@
 # helper methods for retrieving and parsing files
 
 require 'json'
+require 'open-uri'
 
 module InspecPlugins
   module Iggy
@@ -8,28 +9,30 @@ module InspecPlugins
       # boilerplate JSON parsing
       def self.parse_json(file)
         Inspec::Log.debug "Iggy::FileHelper.parse_json file = #{file}"
+        lfile = fetch(file)
         begin
-          unless File.file?(file)
-            STDERR.puts "ERROR: #{file} is an invalid file, please check your path."
+          unless File.file?(lfile)
+            STDERR.puts "ERROR: #{lfile} is an invalid file, please check your path."
             exit(-1)
           end
-          JSON.parse(File.read(file))
+          JSON.parse(File.read(lfile))
         rescue JSON::ParserError => e
           STDERR.puts e.message
-          STDERR.puts "ERROR: Parsing error in #{file}."
+          STDERR.puts "ERROR: Parsing error in #{lfile}."
           exit(-1)
         end
       end
 
       def self.fetch(url)
-        temp_file = url
         # if this is a file, just return it
-        # retrieve the file into a temp_file
-        # do all urls start with http:// https://
-        # is s3:// a thing?
-        # how else do CFN and Terraform store this?
-        #  absolutename = File.absolute_path(file) will be broken for remote files
-        return temp_file
+        return url if File.exists?(url)
+        begin
+          open(url)
+        rescue OpenURI::HTTPError => e
+          STDERR.puts e.message
+          STDERR.puts "ERROR: Parsing error from URL #{url}"
+          exit(-1)
+        end
       end
 
     end

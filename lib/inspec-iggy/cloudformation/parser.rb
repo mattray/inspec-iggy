@@ -11,9 +11,8 @@ module InspecPlugins::Iggy::CloudFormation
   class Parser
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(cfn_template)
-      file = InspecPlugins::Iggy::FileHelper.fetch(cfn_template)
-      template = InspecPlugins::Iggy::FileHelper.parse_json(file)
-      absolutename = File.absolute_path(file)
+      template = InspecPlugins::Iggy::FileHelper.parse_json(cfn_template)
+      absolutename = File.absolute_path(cfn_template)
 
       # InSpec controls generated
       generated_controls = []

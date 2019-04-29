@@ -41,13 +41,9 @@ This is the current, previous and future development milestones and contains the
 * switch from 'eq' to 'cmp' comparators https://github.com/mattray/inspec-iggy/issues/23
 * enable minimal Azure support. This needs to be refactored.
 * add support for remote .tfstate and .cfn files via Iggy::FileHelper.fetch https://github.com/mattray/inspec-iggy/issues/3
-  http://
-  https://
-  s3://MyAstmazonS3BucketName/MyFileName.json
-
-* document Windows Omnibus installer usage
 
 # BACKLOG #
+* document Windows Omnibus installer usage
 * how are we going to preemptively know what's in the various resource packs?
   Perhaps load all Resources individually to map out their properties?
   Big translation helper hash?
