@@ -29,7 +29,7 @@ module InspecPlugins::Iggy::Terraform
           tf_res_type = tf_resources[tf_res]['type']
 
           # load resource pack resources
-          InspecPlugins::Iggy::InspecHelper::load_resource_pack(resource_path) if resource_path
+          InspecPlugins::Iggy::InspecHelper.load_resource_pack(resource_path) if resource_path
 
           # add translation layer
           if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(tf_res_type)
@@ -38,7 +38,7 @@ module InspecPlugins::Iggy::Terraform
           end
 
           # does this match an InSpec resource?
-          if InspecPlugins::Iggy::InspecHelper::available_resources.include?(tf_res_type)
+          if InspecPlugins::Iggy::InspecHelper.available_resources.include?(tf_res_type)
             Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCHED"
             tf_res_id = tf_resources[tf_res]['primary']['id']
 

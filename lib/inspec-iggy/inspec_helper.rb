@@ -18,8 +18,8 @@ module InspecPlugins
       @inspec_resources = Inspec::Resource.registry.keys
 
       # list of resources available from InSpec
-      def self.available_resources()
-        return @inspec_resources
+      def self.available_resources
+        @inspec_resources
       end
 
       # load the resource pack into InSpec::Resource.registry
@@ -33,7 +33,7 @@ module InspecPlugins
         $LOAD_PATH.push(libpath)
         # find all the classes in the libpath and require them
         # this adds them to the Inspec::Resource.registry
-        Dir.glob("#{libpath}/*.rb").each {|x| require(x)}
+        Dir.glob("#{libpath}/*.rb").each { |x| require(x) }
         @inspec_resources = Inspec::Resource.registry.keys
       end
 

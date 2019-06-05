@@ -32,7 +32,7 @@ module InspecPlugins::Iggy::CloudFormation
         end
 
         # does this match an InSpec resource?
-        if InspecPlugins::Iggy::InspecHelper::available_resources.include?(cfn_res_type)
+        if InspecPlugins::Iggy::InspecHelper.available_resources.include?(cfn_res_type)
           Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCHED"
 
           # insert new control based off the resource's ID
