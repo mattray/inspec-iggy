@@ -68,7 +68,14 @@ module IggyUnitTests
 
       def no_default_options
         [
+          :resourcepath,
           :name
+        ]
+      end
+
+      def not_required_options
+        [
+          :resourcepath # AWS is out-of-the-box?
         ]
       end
 
@@ -110,7 +117,7 @@ module IggyUnitTests
           refute_nil(generate_options[option].default)
         end
 
-        no_default_options.each do |option|
+        (no_default_options - not_required_options).each do |option|
           assert(generate_options[option].required)
         end
       end
