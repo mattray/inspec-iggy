@@ -42,12 +42,34 @@ This is the current, previous and future development milestones and contains the
 * enable minimal Azure support. This needs to be refactored.
 * add support for remote .tfstate and .cfn files via Iggy::FileHelper.fetch https://github.com/mattray/inspec-iggy/issues/3
 
-# BACKLOG #
-* document Windows Omnibus installer usage
-* how are we going to preemptively know what's in the various resource packs?
-  Perhaps load all Resources individually to map out their properties?
-  Big translation helper hash?
+# 0.6.0
+* InSpec 4.0 will likely break stuff
 * enable GCP support
+* controls/controls.rb needs:
+  gcp_project_id = attribute('gcp_project_id')
+* inspec.yml needs:
+```
+attributes:
+- name: gcp_project_id
+  required: true
+  description: 'The GCP project identifier.'
+  type: string
+depends:
+- name: inspec-gcp
+  url: https://github.com/inspec/inspec-gcp/archive/master.tar.gz
+supports:
+- platform: gcp
+```
+* do we need an attributes.yml?
+* how do we handle the "project: gcp_project_id" in all the describe blocks?
+* describe blocks need keys (project:, name:)
+* re-test Azure support now that GCP works
+* Terraform 0.12 support
+
+# BACKLOG #
+* upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
+* document uploading profiles to Automate and creating scan jobs via API
+* document Windows Omnibus installer usage
 * Habitat packaging
 * Rubocop the generated profiles
 * enable negative testing to look for things not covered by Terraform
@@ -56,8 +78,7 @@ This is the current, previous and future development milestones and contains the
 * Terraform
   * More Terraform back-ends https://www.terraform.io/docs/backends/types/index.html
   * do we want to generate inspec coverage for the tfplan?
-  * Terraform 0.12 support
 * restore extract functionality
   * create a Terraform Provisioner for attaching InSpec profiles to a resource
   * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)
-* InSpec 4.0 will likely break stuff
+* CloudFormation can be JSON or YAML
