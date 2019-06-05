@@ -15,7 +15,7 @@ module InspecPlugins::Iggy::Terraform
     # TAG_URL = 'iggy_url_'.freeze
 
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(tf_file) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+    def self.parse_generate(tf_file, resource_path) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       tfstate = InspecPlugins::Iggy::FileHelper.parse_json(tf_file)
       absolutename = File.absolute_path(tf_file)
 
@@ -28,6 +28,9 @@ module InspecPlugins::Iggy::Terraform
         tf_resources.keys.each do |tf_res|
           tf_res_type = tf_resources[tf_res]['type']
 
+          # load resource pack resources
+          InspecPlugins::Iggy::InspecHelper::load_resource_pack(resource_path) if resource_path
+
           # add translation layer
           if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(tf_res_type)
             Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[tf_res_type]} TRANSLATED"
@@ -35,7 +38,7 @@ module InspecPlugins::Iggy::Terraform
           end
 
           # does this match an InSpec resource?
-          if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(tf_res_type)
+          if InspecPlugins::Iggy::InspecHelper::available_resources.include?(tf_res_type)
             Inspec::Log.debug "Iggy::Terraform.parse_generate tf_res_type = #{tf_res_type} MATCHED"
             tf_res_id = tf_resources[tf_res]['primary']['id']
 

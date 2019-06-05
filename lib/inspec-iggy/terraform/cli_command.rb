@@ -68,10 +68,13 @@ module InspecPlugins::Iggy
              desc: 'Specify path to the input terraform.tfstate',
              default: 'terraform.tfstate'
 
+      option :resourcepath,
+             desc: 'Specify path to the InSpec Resource Pack providing the necessary resources'
+
       desc 'generate [options]', 'Generate InSpec compliance controls from terraform.tfstate'
       def generate
         Inspec::Log.level = :debug if options[:debug]
-        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate])
+        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], options[:resourcepath])
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
         InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:tfstate], printable_controls)
         exit 0

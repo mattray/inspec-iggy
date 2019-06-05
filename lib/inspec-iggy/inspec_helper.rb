@@ -5,9 +5,6 @@ require 'inspec'
 module InspecPlugins
   module Iggy
     class InspecHelper
-      # constants for the InSpec resources
-      RESOURCES = Inspec::Resource.registry.keys
-
       # translate Terraform resource name to InSpec
       TRANSLATED_RESOURCES = {
         'aws_instance' => 'aws_ec2_instance',
@@ -17,6 +14,28 @@ module InspecPlugins
         # "azure_virtual_machine_data_disk",
         # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
       }.freeze
+
+      @inspec_resources = Inspec::Resource.registry.keys
+
+      # list of resources available from InSpec
+      def self.available_resources()
+        return @inspec_resources
+      end
+
+      # load the resource pack into InSpec::Resource.registry
+      def self.load_resource_pack(resource_path)
+        # find the libraries path in the resource pack
+        if resource_path.end_with?('libraries')
+          libpath = resource_path
+        else
+          libpath = resource_path+'/libraries'
+        end
+        $LOAD_PATH.push(libpath)
+        # find all the classes in the libpath and require them
+        # this adds them to the Inspec::Resource.registry
+        Dir.glob("#{libpath}/*.rb").each {|x| require(x)}
+        @inspec_resources = Inspec::Resource.registry.keys
+      end
 
       # there really should be some way to get this directly from InSpec's resources
       def self.resource_properties(resource)
