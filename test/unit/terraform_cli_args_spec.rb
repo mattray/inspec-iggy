@@ -58,6 +58,7 @@ module IggyUnitTests
           :maintainer,
           :name,
           :overwrite,
+          :resourcepath,
           :summary,
           :tfstate,
           :title,
