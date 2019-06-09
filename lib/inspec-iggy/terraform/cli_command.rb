@@ -68,15 +68,27 @@ module InspecPlugins::Iggy
              desc: 'Specify path to the input terraform.tfstate',
              default: 'terraform.tfstate'
 
+      option :platform,
+             desc: 'The InSpec platform providing the necessary resources (aws, azure, or gcp)'
+
       option :resourcepath,
              desc: 'Specify path to the InSpec Resource Pack providing the necessary resources'
 
       desc 'generate [options]', 'Generate InSpec compliance controls from terraform.tfstate'
       def generate
         Inspec::Log.level = :debug if options[:debug]
-        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], options[:resourcepath])
-        printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls)
-        InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:tfstate], printable_controls)
+        platform = options[:platform]
+        resource_path = options[:resourcepath]
+        # require validation that if platform or resourcepath are passed, both are available
+        if platform or resource_path
+          unless platform and resource_path
+            self.error "You must pass both --platform and --resourcepath if using either"
+            self.exit(1)
+          end
+        end
+        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path)
+        printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
+        InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:tfstate], printable_controls, platform)
         exit 0
       end
 
