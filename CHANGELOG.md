@@ -43,33 +43,19 @@ This is the current, previous and future development milestones and contains the
 * add support for remote .tfstate and .cfn files via Iggy::FileHelper.fetch https://github.com/mattray/inspec-iggy/issues/3
 
 # 0.6.0
-* InSpec 4.0 will likely break stuff
-* enable GCP support
-* controls/controls.rb needs:
-  gcp_project_id = attribute('gcp_project_id')
-* inspec.yml needs:
-```
-attributes:
-- name: gcp_project_id
-  required: true
-  description: 'The GCP project identifier.'
-  type: string
-depends:
-- name: inspec-gcp
-  url: https://github.com/inspec/inspec-gcp/archive/master.tar.gz
-supports:
-- platform: gcp
-```
-* do we need an attributes.yml?
+* InSpec 4.0 support added
+* enable AWS, Azure, and GCP platform and resource pack support
 * how do we handle the "project: gcp_project_id" in all the describe blocks?
 * describe blocks need keys (project:, name:)
+* add gcp_project_id at the CLI?
 * re-test Azure support now that GCP works
 * Terraform 0.12 support
-
-# BACKLOG #
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
+* allow passing alternate source of depends profiles
+
+# BACKLOG #
 * Habitat packaging
 * Rubocop the generated profiles
 * enable negative testing to look for things not covered by Terraform
