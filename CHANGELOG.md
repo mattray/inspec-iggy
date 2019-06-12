@@ -45,20 +45,42 @@ This is the current, previous and future development milestones and contains the
 # 0.6.0
 * InSpec 4.0 support added
 * enable AWS, Azure, and GCP platform and resource pack support
+
 * how do we handle the "project: gcp_project_id" in all the describe blocks?
-* describe blocks need keys (project:, name:)
-* add gcp_project_id at the CLI?
-* re-test Azure support now that GCP works
-* Terraform 0.12 support
+ * let's just pull the project out of the .tfstate file!
+* google_compute_instance expects a :zone=>'australia-southeast1-c'
+* google_compute_target_pool expects a :region=>'australia-southeast1'
+* lots of comparators are broken
+
+* allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
-* allow passing alternate source of depends profiles
+*
+* re-test Azure support now that GCP works
+* AWS resource pack loading doesn't work
+
+* enable negative testing to look for things not covered by Terraform
+ * create list of everything Iggy finds
+ * subtract that list from everything within the gcp_project_id
+ * "inspec terraform negative --platform gcp --resourcepack ../inspec-gcp terraform.tfstate --name GCP-NEGATIVE"
+ * something like?
+  google_compute_instances_found_by_iggy = []
+  google_compute_instances_found_by_iggy.add('tf-www-0')
+  google_compute_instances_found_by_iggy.add('tf-www-1')
+  google_compute_instances_found_by_iggy.add('tf-www-2')
+
+  (google_compute_instances(gcp_project_id) - google_compute_instances_found_by_iggy).each do |negative_instance|
+    describe google_compute_instance(negative_instance) do
+      it { should not exist }
+    end
+  end
 
 # BACKLOG #
+
+* Terraform 0.12 support
 * Habitat packaging
 * Rubocop the generated profiles
-* enable negative testing to look for things not covered by Terraform
 * ARM templates
 * translate properties from cfn/tf->inspec
 * Terraform
