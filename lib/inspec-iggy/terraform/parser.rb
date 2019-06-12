@@ -67,6 +67,9 @@ module InspecPlugins::Iggy::Terraform
                 resource_group = tf_res_id.split('resourceGroups/').last.split('/').first
                 describe.qualifier.push([tf_res_type, name: name, group_name: resource_group])
               end
+            elsif tf_res_type.start_with?('google_')
+              gcp_project_id = tf_resources[tf_res]['primary']['attributes']['project']
+              describe.qualifier.push([tf_res_type, project: gcp_project_id, name: name])
             else
               describe.qualifier.push([tf_res_type, tf_res_id])
             end

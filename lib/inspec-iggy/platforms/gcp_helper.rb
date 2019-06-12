@@ -5,11 +5,6 @@ require 'yaml'
 module InspecPlugins::Iggy::Platforms
   class GcpHelper
 
-    # Terraform boilerplate controls/controls.rb content
-    def self.tf_controls
-      return "\ngcp_project_id = attribute('gcp_project_id')\n\n"
-    end
-
     # readme content
     def self.readme
       return "\n\nThis profile requires the `gcp_project_id` to be set within the `attributes.yml` to point to your project.\n\n"

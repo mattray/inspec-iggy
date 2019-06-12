@@ -5,11 +5,6 @@ require 'yaml'
 module InspecPlugins::Iggy::Platforms
   class AzureHelper
 
-    # Terraform boilerplate controls/controls.rb content
-    def self.tf_controls
-      return "\n"
-    end
-
     # readme content
     def self.readme
       return "\n"
