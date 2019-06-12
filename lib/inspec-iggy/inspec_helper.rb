@@ -37,7 +37,13 @@ module InspecPlugins
         $LOAD_PATH.push(libpath)
         # find all the classes in the libpath and require them
         # this adds them to the Inspec::Resource.registry
-        Dir.glob("#{libpath}/*.rb").each { |x| require(x) }
+        Dir.glob("#{libpath}/*.rb").each do |x|
+          begin
+            require(x)
+          rescue Exception =>e # AWS is blowing up for some reason
+            puts e
+          end
+        end
         @inspec_resources = Inspec::Resource.registry.keys
       end
 
