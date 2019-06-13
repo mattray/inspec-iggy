@@ -24,10 +24,5 @@ module InspecPlugins::Iggy::Platforms
       }]
       return yml
     end
-
-    # no attributes.yml for azure (yet)
-    def self.attributes_yml(cli_ui, name)
-    end
-
   end
 end
