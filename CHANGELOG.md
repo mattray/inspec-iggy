@@ -46,17 +46,17 @@ This is the current, previous and future development milestones and contains the
 * InSpec 4.0 support added
 * enable AWS, Azure, and GCP platform and resource pack support
 
-* how do we handle the "project: gcp_project_id" in all the describe blocks?
- * let's just pull the project out of the .tfstate file!
 * google_compute_instance expects a :zone=>'australia-southeast1-c'
 * google_compute_target_pool expects a :region=>'australia-southeast1'
 * lots of comparators are broken
+
+* remove deprecation warning from Inspec::UI cli_ui
 
 * allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
-*
+
 * re-test Azure support now that GCP works
 * AWS resource pack loading doesn't work
 
