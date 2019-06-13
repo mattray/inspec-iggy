@@ -27,7 +27,6 @@ module InspecPlugins
         FileUtils.mkdir_p("#{name}/controls")
         render_readme_md(cli_ui, name, source_file, platform)
         render_inspec_yml(cli_ui, name, source_file, options, platform)
-        render_attributes_yml(cli_ui, name, platform)
         render_controls_rb(cli_ui, name, controls)
       end
 
@@ -71,12 +70,6 @@ module InspecPlugins
         f.close
       end
 
-      #  * Create file attributes.yml
-      def self.render_attributes_yml(cli_ui, name, platform)
-        InspecPlugins::Iggy::Platforms::AwsHelper.attributes_yml(cli_ui, name) if platform.eql?('aws')
-        InspecPlugins::Iggy::Platforms::AzureHelper.attributes_yml(cli_ui, name) if platform.eql?('azure')
-        InspecPlugins::Iggy::Platforms::GcpHelper.attributes_yml(cli_ui, name) if platform.eql?('gcp')
-      end
 
       #  * Create file controls/controls.rb
       def self.render_controls_rb(cli_ui, name, controls)
