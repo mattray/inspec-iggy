@@ -14,12 +14,6 @@ module InspecPlugins::Iggy::Platforms
     def self.inspec_yml
       yml = {}
       yml['inspec_version'] = '>= 2.3.5'
-      yml['attributes'] = [{
-        'name' => 'gcp_project_id',
-        'required' => true,
-        'description' => 'The GCP project identifier.',
-        'type' => 'string'
-      }]
       yml['depends'] = [{
         'name' => 'inspec-gcp',
         'url' => 'https://github.com/inspec/inspec-gcp/archive/master.tar.gz',

@@ -19,13 +19,6 @@ module InspecPlugins::Iggy::Platforms
     def self.inspec_yml
       yml = {}
       yml['inspec_version'] = '~> 4'
-      yml['attributes'] = [{
-        'name' => 'aws_vpc_id',
-        'required' => false,
-        'description' => 'Optional Custom AWS VPC Id',
-        'default' => '',
-        'type' => 'string'
-      }]
       yml['depends'] = [{
         'name' => 'inspec-aws',
         'url' => 'https://github.com/inspec/inspec-aws/archive/master.tar.gz'
