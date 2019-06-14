@@ -88,7 +88,7 @@ module InspecPlugins::Iggy
         end
         generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path)
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
-        InspecPlugins::Iggy::ProfileHelper.render_profile(self, options, options[:tfstate], printable_controls, platform)
+        InspecPlugins::Iggy::ProfileHelper.render_profile(self.ui, options, options[:tfstate], printable_controls, platform)
         exit 0
       end
 
