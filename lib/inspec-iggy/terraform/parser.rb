@@ -69,9 +69,16 @@ module InspecPlugins::Iggy::Terraform
               end
             elsif tf_res_type.start_with?('google_')
               gcp_project_id = tf_resources[tf_res]['primary']['attributes']['project']
-              describe.qualifier.push([tf_res_type, project: gcp_project_id, name: name])
-            else
-              describe.qualifier.push([tf_res_type, tf_res_id])
+              qualifier = [tf_res_type, project: gcp_project_id, name: name]
+              # look up extra parameters for the qualifier
+              if InspecPlugins::Iggy::InspecHelper::RESOURCE_QUALIFIERS.has_key?(tf_res_type)
+                InspecPlugins::Iggy::InspecHelper::RESOURCE_QUALIFIERS[tf_res_type].each do |parameter|
+                  Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type}  qualifier found = #{parameter} MATCHED"
+                  value = tf_resources[tf_res]['primary']['attributes'][parameter.to_s] # pull value out of the tf attributes
+                  qualifier[1][parameter] = value
+                end
+              end
+              describe.qualifier.push(qualifier)
             end
 
             # ensure the resource exists unless Azure, which currently doesn't support it as of InSpec 2.2
