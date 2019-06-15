@@ -28,8 +28,15 @@ module InspecPlugins
 
       # find the additional parameters
       RESOURCE_QUALIFIERS = {
+        'google_bigquery_table' => [:dataset],
+        'google_cloudfunctions_cloud_function' => [:location],
+        'google_compute_address' => [:location],
+        'google_compute_autoscaler' => [:zone],
+        'google_compute_disk' => [:zone],
         'google_compute_forwarding_rule' => [:region],
-        'google_compute_forwarding_rule' => [:region],
+        'google_compute_instance' => [:zone],
+        'google_compute_instance_group' => [:zone],
+        'google_compute_instance_group_manager' => [:zone],
         'google_compute_region_backend_service' => [:region],
         'google_compute_region_instance_group_manager' => [:region],
         'google_compute_router' => [:region],
@@ -37,20 +44,11 @@ module InspecPlugins
         'google_compute_subnetwork_iam_policy' => [:region],
         'google_compute_target_pool' => [:region],
         'google_compute_vpn_tunnel' => [:region],
-        'google_compute_instance' => [:zone],
-        'google_compute_autoscaler' => [:zone],
-        'google_compute_disk' => [:zone],
-        'google_compute_instance' => [:zone],
-        'google_compute_instance_group' => [:zone],
-        'google_compute_instance_group_manager' => [:zone],
         'google_compute_zone' => [:zone],
         'google_container_cluster' => [:zone],
-        'google_cloudfunctions_cloud_function' => [:location],
-        'google_compute_address' => [:location],
         'google_container_regional_cluster' => [:location],
         'google_kms_key_ring' => [:location],
         'google_project_iam_binding' => [:role],
-        'google_bigquery_table' => [:dataset],
       }.freeze
 
       # a hack for sure, finds common methods as proxy for InSpec properties
