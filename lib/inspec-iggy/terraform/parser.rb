@@ -15,7 +15,7 @@ module InspecPlugins::Iggy::Terraform
     # TAG_URL = 'iggy_url_'.freeze
 
     # parse through the JSON and generate InSpec controls
-    def self.parse_generate(tf_file, resource_path) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+    def self.parse_generate(tf_file, resource_path, platform) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       tfstate = InspecPlugins::Iggy::FileHelper.parse_json(tf_file)
       absolutename = File.absolute_path(tf_file)
 
@@ -60,19 +60,21 @@ module InspecPlugins::Iggy::Terraform
 
             # describes the resource with the id as argument
             # going to need to move the special Azure code out, and add helpers for each provider
-            if tf_res_type.start_with?('azure_')
-              if tf_res_type.eql?('azure_resource_group')
-                describe.qualifier.push([tf_res_type, name: name])
-              else
-                resource_group = tf_res_id.split('resourceGroups/').last.split('/').first
-                describe.qualifier.push([tf_res_type, name: name, group_name: resource_group])
-              end
-            elsif tf_res_type.start_with?('google_')
+            case platform
+            when 'aws'
+            when 'azure'
+              # if tf_res_type.start_with?('azure_')
+              # if tf_res_type.eql?('azure_resource_group')
+              #   describe.qualifier.push([tf_res_type, name: name])
+              # else
+              #   resource_group = tf_res_id.split('resourceGroups/').last.split('/').first
+              #   describe.qualifier.push([tf_res_type, name: name, group_name: resource_group])
+              # end
+            when 'gcp'
               gcp_project_id = tf_resources[tf_res]['primary']['attributes']['project']
-              qualifier = [tf_res_type, project: gcp_project_id, name: name]
-              # look up extra parameters for the qualifier
-              if InspecPlugins::Iggy::InspecHelper::RESOURCE_QUALIFIERS.has_key?(tf_res_type)
-                InspecPlugins::Iggy::InspecHelper::RESOURCE_QUALIFIERS[tf_res_type].each do |parameter|
+              qualifier = [tf_res_type, {}]
+              if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).has_key?(tf_res_type)
+                InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[tf_res_type].each do |parameter|
                   Inspec::Log.debug "Iggy::Terraform.parse_generate #{tf_res_type}  qualifier found = #{parameter} MATCHED"
                   value = tf_resources[tf_res]['primary']['attributes'][parameter.to_s] # pull value out of the tf attributes
                   qualifier[1][parameter] = value

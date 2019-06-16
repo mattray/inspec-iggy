@@ -26,30 +26,16 @@ module InspecPlugins
         # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
       }.freeze
 
-      # find the additional parameters
-      RESOURCE_QUALIFIERS = {
-        'google_bigquery_table' => [:dataset],
-        'google_cloudfunctions_cloud_function' => [:location],
-        'google_compute_address' => [:location],
-        'google_compute_autoscaler' => [:zone],
-        'google_compute_disk' => [:zone],
-        'google_compute_forwarding_rule' => [:region],
-        'google_compute_instance' => [:zone],
-        'google_compute_instance_group' => [:zone],
-        'google_compute_instance_group_manager' => [:zone],
-        'google_compute_region_backend_service' => [:region],
-        'google_compute_region_instance_group_manager' => [:region],
-        'google_compute_router' => [:region],
-        'google_compute_subnetwork' => [:region],
-        'google_compute_subnetwork_iam_policy' => [:region],
-        'google_compute_target_pool' => [:region],
-        'google_compute_vpn_tunnel' => [:region],
-        'google_compute_zone' => [:zone],
-        'google_container_cluster' => [:zone],
-        'google_container_regional_cluster' => [:location],
-        'google_kms_key_ring' => [:location],
-        'google_project_iam_binding' => [:role],
-      }.freeze
+      def self.available_resource_qualifiers(platform)
+        case platform
+        when 'aws'
+          return InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_QUALIFIERS
+        when 'azure'
+          return InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_QUALIFIERS
+        when 'gcp'
+          return InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_QUALIFIERS
+        end
+      end
 
       # a hack for sure, finds common methods as proxy for InSpec properties
       COMMON_PROPERTIES = Inspec::Resource.registry['aws_subnet'].instance_methods &
