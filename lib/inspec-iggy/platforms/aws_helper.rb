@@ -9,6 +9,10 @@ module InspecPlugins::Iggy::Platforms
     AWS_RESOURCE_QUALIFIERS = {
     }.freeze
 
+    # the iterators for the various resource types
+    AWS_RESOURCE_ITERATORS = {
+    }.freeze
+
     # Terraform boilerplate controls/controls.rb content
     def self.tf_controls
       return "\n\naws_vpc_id = attribute('aws_vpc_id', default: '', description: 'Optional AWS VPC identifier.')\n\n"

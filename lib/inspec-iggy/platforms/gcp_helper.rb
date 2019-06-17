@@ -7,6 +7,7 @@ module InspecPlugins::Iggy::Platforms
 
     # find the additional parameters
     GCP_RESOURCE_QUALIFIERS = {
+      # TODO add the iterators in case they're different
       'google_bigquery_table' => [:name, :project, :dataset],
       'google_cloudfunctions_cloud_function' => [:name, :project,:location],
       'google_compute_address' => [:name, :project,:location],
@@ -31,6 +32,17 @@ module InspecPlugins::Iggy::Platforms
       'google_container_regional_cluster' => [:location],
       'google_kms_key_ring' => [:location],
       'google_project_iam_binding' => [:role],
+    }.freeze
+
+    # the iterators for the various resource types
+    GCP_RESOURCE_ITERATORS = {
+      'google_bigquery_dataset' => {'iterator' => 'google_bigquery_datasets', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_bigquery_table' => {'iterator' => 'google_bigquery_tables', 'index' => 'table_references', 'qualifiers' => [:project, :dataset] },
+      'google_compute_firewall' => {'iterator' => 'google_compute_firewalls', 'index' => 'firewall_names', 'qualifiers' => [:project] },
+      'google_compute_forwarding_rule' => {'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rules_names', 'qualifiers' => [:project, :region] },
+      'google_compute_http_health_check' => {'iterator' => 'google_compute_http_health_checks','index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_instance' => {'iterator' => 'google_compute_instances','index' => 'instance_names', 'qualifiers' => [:project, :zone] },
+      'google_compute_target_pool' => {'iterator' => 'google_compute_target_pools','index' => 'names', 'qualifiers' => [:project, :region] },
     }.freeze
 
     # readme content

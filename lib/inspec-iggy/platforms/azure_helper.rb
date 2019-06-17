@@ -9,6 +9,10 @@ module InspecPlugins::Iggy::Platforms
     AZURE_RESOURCE_QUALIFIERS = {
     }.freeze
 
+    # the iterators for the various resource types
+    AZURE_RESOURCE_ITERATORS = {
+    }.freeze
+
     # readme content
     def self.readme
       return "\n"

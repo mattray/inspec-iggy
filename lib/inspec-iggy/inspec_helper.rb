@@ -37,6 +37,17 @@ module InspecPlugins
         end
       end
 
+      def self.available_resource_iterators(platform)
+        case platform
+        when 'aws'
+          return InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_ITERATORS
+        when 'azure'
+          return InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_ITERATORS
+        when 'gcp'
+          return InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_ITERATORS
+        end
+      end
+
       # a hack for sure, finds common methods as proxy for InSpec properties
       COMMON_PROPERTIES = Inspec::Resource.registry['aws_subnet'].instance_methods &
                           Inspec::Resource.registry['directory'].instance_methods
