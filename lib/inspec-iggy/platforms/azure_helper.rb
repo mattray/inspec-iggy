@@ -5,6 +5,10 @@ require 'yaml'
 module InspecPlugins::Iggy::Platforms
   class AzureHelper
 
+    # find the additional parameters
+    AZURE_RESOURCE_QUALIFIERS = {
+    }.freeze
+
     # readme content
     def self.readme
       return "\n"

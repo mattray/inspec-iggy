@@ -86,11 +86,28 @@ module InspecPlugins::Iggy
             self.exit(1)
           end
         end
-        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path)
+        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path, platform)
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
         InspecPlugins::Iggy::ProfileHelper.render_profile(self.ui, options, options[:tfstate], printable_controls, platform)
         exit 0
       end
+
+      # desc 'negative [options]', 'Generate negative InSpec compliance controls from terraform.tfstate'
+      # def negative
+      #   Inspec::Log.level = :debug if options[:debug]
+      #   resource_path = options[:resourcepath]
+      #   # require validation that if platform or resourcepath are passed, both are available
+      #   if platform or resource_path
+      #     unless platform and resource_path
+      #       self.error "You must pass both --platform and --resourcepath if using either"
+      #       self.exit(1)
+      #     end
+      #   end
+      #   generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path)
+      #   printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
+      #   InspecPlugins::Iggy::ProfileHelper.render_profile(self.ui, options, options[:tfstate], printable_controls, platform)
+      #   exit 0
+      # end
 
       # disabled extract functionality
       # desc 'extract [options]', 'Extract tagged InSpec profiles from terraform.tfstate'
