@@ -9,7 +9,10 @@ module InspecPlugins::Iggy::Platforms
     AZURE_RESOURCE_QUALIFIERS = {
     }.freeze
 
-    # readme content
+    AZURE_REMOVED_PROPERTIES = {
+    }.freeze
+
+   # readme content
     def self.readme
       return "\n"
     end
