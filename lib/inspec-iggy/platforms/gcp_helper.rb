@@ -90,9 +90,16 @@ module InspecPlugins::Iggy::Platforms
     GCP_RESOURCE_ITERATORS = {
       'google_bigquery_dataset' => {'iterator' => 'google_bigquery_datasets', 'index' => 'names', 'qualifiers' => [:project] },
       'google_bigquery_table' => {'iterator' => 'google_bigquery_tables', 'index' => 'table_references', 'qualifiers' => [:project, :dataset] },
+      'google_cloudbuild_trigger' => {'iterator' => 'google_cloudbuild_triggers', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_cloudfunctions_cloud_function' => {'iterator' => 'google_cloudfunctions_cloud_functions', 'index' => 'names', 'qualifiers' => [:project, :location] },
+      'google_compute_autoscaler' => {'iterator' => 'google_compute_autoscalers', 'index' => 'names', 'qualifiers' => [:project, :zone] },
+      'google_compute_backend_bucket' => {'iterator' => 'google_compute_backend_buckets', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_backend_service' => {'iterator' => 'google_compute_backend_services', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_disk' => {'iterator' => 'google_compute_disks', 'index' => 'names', 'qualifiers' => [:project, :zone] }, # false positives because instance attached disks aren't managed by Terraform
       'google_compute_firewall' => {'iterator' => 'google_compute_firewalls', 'index' => 'firewall_names', 'qualifiers' => [:project] },
       'google_compute_forwarding_rule' => {'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rules_names', 'qualifiers' => [:project, :region] },
       'google_compute_http_health_check' => {'iterator' => 'google_compute_http_health_checks','index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_https_health_check' => {'iterator' => 'google_compute_https_health_checks','index' => 'names', 'qualifiers' => [:project] },
       'google_compute_instance' => {'iterator' => 'google_compute_instances','index' => 'instance_names', 'qualifiers' => [:project, :zone] },
       'google_compute_target_pool' => {'iterator' => 'google_compute_target_pools','index' => 'names', 'qualifiers' => [:project, :region] },
     }.freeze
