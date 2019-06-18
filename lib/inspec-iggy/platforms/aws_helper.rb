@@ -9,6 +9,10 @@ module InspecPlugins::Iggy::Platforms
     AWS_RESOURCE_QUALIFIERS = {
     }.freeze
 
+    # the iterators for the various resource types
+    AWS_RESOURCE_ITERATORS = {
+    }.freeze
+
     AWS_REMOVED_PROPERTIES = {
     }.freeze
 
