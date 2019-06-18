@@ -29,22 +29,22 @@ module InspecPlugins
       def self.available_resource_qualifiers(platform)
         case platform
         when 'aws'
-          return InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_QUALIFIERS
+          InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_QUALIFIERS
         when 'azure'
-          return InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_QUALIFIERS
+          InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_QUALIFIERS
         when 'gcp'
-          return InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_QUALIFIERS
+          InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_QUALIFIERS
         end
       end
 
       def self.available_resource_iterators(platform)
         case platform
         when 'aws'
-          return InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_ITERATORS
+          InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_ITERATORS
         when 'azure'
-          return InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_ITERATORS
+          InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_ITERATORS
         when 'gcp'
-          return InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_ITERATORS
+          InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_ITERATORS
         end
       end
 
@@ -126,8 +126,8 @@ module InspecPlugins
         :untaint,
         :untrust,
         :untrusted?,
-        :yield_self,
-      ]
+        :yield_self
+      ].freeze
 
       # properties are often dynamically generated, making it hard to determine
       # their existence without instantiating them. Because of this, we will
@@ -155,8 +155,8 @@ module InspecPlugins
         :self_link,
         :source_ranges,
         :target,
-        :target_tags,
-      ]
+        :target_tags
+      ].freeze
 
       # load the resource pack into InSpec::Resource.registry
       def self.load_resource_pack(resource_path)
@@ -228,8 +228,6 @@ module InspecPlugins
         controls.gsub!(/\]\"/, '"]')
         content + controls
       end
-
     end
-
   end
 end

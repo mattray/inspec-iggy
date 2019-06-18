@@ -4,10 +4,8 @@ require 'yaml'
 
 module InspecPlugins::Iggy::Platforms
   class GcpHelper
-
-    # find the additional parameters
+    # find the additional parameters for the 'describe'
     GCP_RESOURCE_QUALIFIERS = {
-      # TODO add the iterators in case they're different
       'google_bigquery_dataset' => [:project, :name],
       'google_bigquery_table' => [:project, :dataset, :name],
       'google_cloudfunctions_cloud_function' => [:project, :location, :name],
@@ -88,25 +86,25 @@ module InspecPlugins::Iggy::Platforms
 
     # the iterators for the various resource types
     GCP_RESOURCE_ITERATORS = {
-      'google_bigquery_dataset' => {'iterator' => 'google_bigquery_datasets', 'index' => 'names', 'qualifiers' => [:project] },
-      'google_bigquery_table' => {'iterator' => 'google_bigquery_tables', 'index' => 'table_references', 'qualifiers' => [:project, :dataset] },
-      'google_cloudbuild_trigger' => {'iterator' => 'google_cloudbuild_triggers', 'index' => 'names', 'qualifiers' => [:project] },
-      'google_cloudfunctions_cloud_function' => {'iterator' => 'google_cloudfunctions_cloud_functions', 'index' => 'names', 'qualifiers' => [:project, :location] },
-      'google_compute_autoscaler' => {'iterator' => 'google_compute_autoscalers', 'index' => 'names', 'qualifiers' => [:project, :zone] },
-      'google_compute_backend_bucket' => {'iterator' => 'google_compute_backend_buckets', 'index' => 'names', 'qualifiers' => [:project] },
-      'google_compute_backend_service' => {'iterator' => 'google_compute_backend_services', 'index' => 'names', 'qualifiers' => [:project] },
-      'google_compute_disk' => {'iterator' => 'google_compute_disks', 'index' => 'names', 'qualifiers' => [:project, :zone] }, # false positives because instance attached disks aren't managed by Terraform
-      'google_compute_firewall' => {'iterator' => 'google_compute_firewalls', 'index' => 'firewall_names', 'qualifiers' => [:project] },
-      'google_compute_forwarding_rule' => {'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rules_names', 'qualifiers' => [:project, :region] },
-      'google_compute_http_health_check' => {'iterator' => 'google_compute_http_health_checks','index' => 'names', 'qualifiers' => [:project] },
-      'google_compute_https_health_check' => {'iterator' => 'google_compute_https_health_checks','index' => 'names', 'qualifiers' => [:project] },
-      'google_compute_instance' => {'iterator' => 'google_compute_instances','index' => 'instance_names', 'qualifiers' => [:project, :zone] },
-      'google_compute_target_pool' => {'iterator' => 'google_compute_target_pools','index' => 'names', 'qualifiers' => [:project, :region] },
+      'google_bigquery_dataset' => { 'iterator' => 'google_bigquery_datasets', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_bigquery_table' => { 'iterator' => 'google_bigquery_tables', 'index' => 'table_references', 'qualifiers' => [:project, :dataset] },
+      'google_cloudbuild_trigger' => { 'iterator' => 'google_cloudbuild_triggers', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_cloudfunctions_cloud_function' => { 'iterator' => 'google_cloudfunctions_cloud_functions', 'index' => 'names', 'qualifiers' => [:project, :location] },
+      'google_compute_autoscaler' => { 'iterator' => 'google_compute_autoscalers', 'index' => 'names', 'qualifiers' => [:project, :zone] },
+      'google_compute_backend_bucket' => { 'iterator' => 'google_compute_backend_buckets', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_backend_service' => { 'iterator' => 'google_compute_backend_services', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_disk' => { 'iterator' => 'google_compute_disks', 'index' => 'names', 'qualifiers' => [:project, :zone] }, # false positives because instance attached disks aren't managed by Terraform
+      'google_compute_firewall' => { 'iterator' => 'google_compute_firewalls', 'index' => 'firewall_names', 'qualifiers' => [:project] },
+      'google_compute_forwarding_rule' => { 'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rules_names', 'qualifiers' => [:project, :region] },
+      'google_compute_http_health_check' => { 'iterator' => 'google_compute_http_health_checks', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_https_health_check' => { 'iterator' => 'google_compute_https_health_checks', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_compute_instance' => { 'iterator' => 'google_compute_instances', 'index' => 'instance_names', 'qualifiers' => [:project, :zone] },
+      'google_compute_target_pool' => { 'iterator' => 'google_compute_target_pools', 'index' => 'names', 'qualifiers' => [:project, :region] }
     }.freeze
 
     GCP_REMOVED_PROPERTIES = {
       'google_compute_http_health_check' => [:self_link, :id], # id: terraform has name not id, self_link: undocumented but broken
-    }
+    }.freeze
 
     # readme content
     def self.readme
@@ -119,12 +117,12 @@ module InspecPlugins::Iggy::Platforms
       yml['inspec_version'] = '>= 2.3.5'
       yml['depends'] = [{
         'name' => 'inspec-gcp',
-        'url' => 'https://github.com/inspec/inspec-gcp/archive/master.tar.gz',
+        'url' => 'https://github.com/inspec/inspec-gcp/archive/master.tar.gz'
       }]
       yml['supports'] = [{
         'platform' => 'gcp'
       }]
-      return yml
+      yml
     end
   end
 end

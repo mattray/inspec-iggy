@@ -10,7 +10,6 @@ require 'inspec-iggy/terraform/parser'
 
 module InspecPlugins::Iggy::Terraform
   class Negative
-
     # parse through the JSON and generate InSpec controls
     def self.parse_negative(tf_file, resource_path, platform)
       tfstate = InspecPlugins::Iggy::FileHelper.parse_json(tf_file)
@@ -20,8 +19,8 @@ module InspecPlugins::Iggy::Terraform
       parsed_resources = InspecPlugins::Iggy::Terraform::Parser.parse_resources(tfstate, resource_path, platform)
 
       # subtract matched resources from all available resources
-      negative_controls = self.parse_unmatched_resources(parsed_resources, sourcefile, platform)
-      negative_controls += self.parse_matched_resources(parsed_resources, sourcefile, platform)
+      negative_controls = parse_unmatched_resources(parsed_resources, sourcefile, platform)
+      negative_controls += parse_matched_resources(parsed_resources, sourcefile, platform)
 
       negative_controls
     end
@@ -48,7 +47,7 @@ module InspecPlugins::Iggy::Terraform
           qualifier[1][parameter] = value
         end
         describe.qualifier.push(qualifier)
-        describe.add_test(nil, 'exist', nil, {:negated => true} ) # last field is negated
+        describe.add_test(nil, 'exist', nil, { negated: true }) # last field is negated
         ctrl.add_test(describe)
         unmatched_controls.push(ctrl)
       end
@@ -78,7 +77,7 @@ module InspecPlugins::Iggy::Terraform
         end
         describe.qualifier.push(qualifier)
         # describe.add_test(nil, 'exist', nil, {:negated => true} ) # last field is negated
-        describe.add_test(nil, 'exist', nil ) # TODO negative of everything besides the existing nodes
+        describe.add_test(nil, 'exist', nil) # TODO negative of everything besides the existing nodes
         ctrl.add_test(describe)
         matched_controls.push(ctrl)
       end

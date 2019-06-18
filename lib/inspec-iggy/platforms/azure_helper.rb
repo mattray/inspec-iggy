@@ -4,7 +4,6 @@ require 'yaml'
 
 module InspecPlugins::Iggy::Platforms
   class AzureHelper
-
     # find the additional parameters
     AZURE_RESOURCE_QUALIFIERS = {
     }.freeze
@@ -18,7 +17,7 @@ module InspecPlugins::Iggy::Platforms
 
     # readme content
     def self.readme
-      return "\n"
+      "\n"
     end
 
     # inspec.yml boilerplate content from
@@ -33,7 +32,7 @@ module InspecPlugins::Iggy::Platforms
       yml['supports'] = [{
         'platform' => 'azure'
       }]
-      return yml
+      yml
     end
   end
 end
