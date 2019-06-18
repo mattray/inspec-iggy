@@ -85,6 +85,10 @@ module InspecPlugins::Iggy::Platforms
       'google_user' => [:user_key]
     }.freeze
 
+    GCP_REMOVED_PROPERTIES = {
+      'google_compute_http_health_check' => [:self_link, :id], # id: terraform has name not id, self_link: undocumented but broken
+    }
+
     # readme content
     def self.readme
     end

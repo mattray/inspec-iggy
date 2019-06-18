@@ -46,10 +46,8 @@ This is the current, previous and future development milestones and contains the
 * InSpec 4.0 support added
 * enable AWS, Azure, and GCP platform and resource pack support
 
-* RESOURCE_PARAMETERS added to add missing parameters as Describe qualifiers
 * lots of comparators are broken
-
-* remove deprecation warning from Inspec::UI cli_ui
+* many/most attributes aren't mapping with GCP
 
 * allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
@@ -76,7 +74,6 @@ This is the current, previous and future development milestones and contains the
   end
 
 # BACKLOG #
-
 * Terraform 0.12 support
 * Habitat packaging
 * Rubocop the generated profiles

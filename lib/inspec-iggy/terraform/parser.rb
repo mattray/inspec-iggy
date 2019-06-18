@@ -106,9 +106,8 @@ module InspecPlugins::Iggy::Terraform
           describe.add_test(nil, 'exist', nil) unless resource_type.start_with?('azure_')
 
           # if there's a match, see if there are matching InSpec properties
-          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(resource_type)
+          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(resource_type, platform)
           # push stuff back into inspec_properties?
-          inspec_properties.push('name') if resource_type.start_with?('azure_')
           resources[resource_type][resource_id].keys.each do |attr|
             if inspec_properties.member?(attr)
               Inspec::Log.debug "Iggy::Terraform.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
