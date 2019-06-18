@@ -12,7 +12,7 @@ module InspecPlugins
     class ProfileHelper
       # match the output of 'inspec init profile'
       # inspec/lib/plugins/inspec-init/lib/inspec-init/renderer.rb
-      def self.render_profile(ui, options, source_file, controls, platform=nil)
+      def self.render_profile(ui, options, source_file, controls, platform = nil)
         name = options[:name]
         overwrite_mode = options[:overwrite]
 
@@ -34,7 +34,7 @@ module InspecPlugins
         # • Creating file README.md
         render_readme_md(ui, name, source_file, platform)
         # • Creating directory controls
-        ui.list_item "Creating directory #{ui.emphasis("controls")}"
+        ui.list_item "Creating directory #{ui.emphasis('controls')}"
         FileUtils.mkdir_p("#{name}/controls")
         # • Creating file controls/generated.rb
         render_controls_rb(ui, name, controls)

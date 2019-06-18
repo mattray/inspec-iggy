@@ -4,7 +4,6 @@ require 'yaml'
 
 module InspecPlugins::Iggy::Platforms
   class AwsHelper
-
     # find the additional parameters
     AWS_RESOURCE_QUALIFIERS = {
     }.freeze
@@ -18,7 +17,7 @@ module InspecPlugins::Iggy::Platforms
 
     # Terraform boilerplate controls/controls.rb content
     def self.tf_controls
-      return "\n\naws_vpc_id = attribute('aws_vpc_id', default: '', description: 'Optional AWS VPC identifier.')\n\n"
+      "\n\naws_vpc_id = attribute('aws_vpc_id', default: '', description: 'Optional AWS VPC identifier.')\n\n"
     end
 
     # readme content
@@ -37,7 +36,7 @@ module InspecPlugins::Iggy::Platforms
       yml['supports'] = [{
         'platform' => 'aws'
       }]
-      return yml
+      yml
     end
   end
 end

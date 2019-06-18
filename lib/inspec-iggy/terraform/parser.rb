@@ -9,7 +9,6 @@ require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::Terraform
   class Parser
-
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(tf_file, resource_path, platform)
       # parse the tfstate file to get the Terraform resources
@@ -28,7 +27,7 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # returns the list of all InSpec resources found in the tfstate file
-    def self.parse_resources(tfstate, resource_path, platform)
+    def self.parse_resources(tfstate, resource_path, _platform)
       # iterate over the resources
       resources = {}
       tfstate['modules'].each do |m|
@@ -92,7 +91,7 @@ module InspecPlugins::Iggy::Terraform
             # end
           when 'gcp'
             qualifier = [resource_type, {}]
-            if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).has_key?(resource_type)
+            if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).key?(resource_type)
               InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
                 Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
                 value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
@@ -125,6 +124,5 @@ module InspecPlugins::Iggy::Terraform
       Inspec::Log.debug "Iggy::Terraform::Parser.parse_generate controls = #{controls}"
       controls
     end
-
   end
 end
