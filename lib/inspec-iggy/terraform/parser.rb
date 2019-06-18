@@ -23,7 +23,7 @@ module InspecPlugins::Iggy::Terraform
       # InSpec controls generated from matched_resources and attributes
       generated_controls = parse_controls(parsed_resources, absolutename, platform)
 
-      Inspec::Log.debug "Iggy::Terraform.parse_generate generated_controls = #{generated_controls}"
+      Inspec::Log.debug "Iggy::Terraform::Parser.parse_generate generated_controls = #{generated_controls}"
       generated_controls
     end
 
@@ -41,18 +41,18 @@ module InspecPlugins::Iggy::Terraform
 
           # add translation layer
           if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
+            Inspec::Log.debug "Iggy::Terraform::Parser.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
             resource_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]
           end
           resources[resource_type] = {} if resources[resource_type].nil?
           # does this match an InSpec resource?
           if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform.parse_resources resource_type = #{resource_type} MATCHED"
+            Inspec::Log.debug "Iggy::Terraform::Parser.parse_resources resource_type = #{resource_type} MATCHED"
             resource_id = tf_resources[tf_res]['primary']['id']
             resource_attributes = tf_resources[tf_res]['primary']['attributes']
             resources[resource_type][resource_id] = resource_attributes
           else
-            Inspec::Log.debug "Iggy::Terraform.parse_generate resource_type = #{resource_type} SKIPPED"
+            Inspec::Log.debug "Iggy::Terraform.Parser.parse_generate resource_type = #{resource_type} SKIPPED"
           end
         end
       end
@@ -94,7 +94,7 @@ module InspecPlugins::Iggy::Terraform
             qualifier = [resource_type, {}]
             if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).has_key?(resource_type)
               InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
-                Inspec::Log.debug "Iggy::Terraform.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
+                Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
                 value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
                 qualifier[1][parameter] = value
               end
@@ -110,11 +110,11 @@ module InspecPlugins::Iggy::Terraform
           # push stuff back into inspec_properties?
           resources[resource_type][resource_id].keys.each do |attr|
             if inspec_properties.member?(attr)
-              Inspec::Log.debug "Iggy::Terraform.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
+              Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
               value = resources[resource_type][resource_id][attr]
               describe.add_test(attr, 'cmp', value)
             else
-              Inspec::Log.debug "Iggy::Terraform.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED"
+              Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED"
             end
           end
 
@@ -122,58 +122,9 @@ module InspecPlugins::Iggy::Terraform
           controls.push(ctrl)
         end
       end
-      Inspec::Log.debug "Iggy::Terraform.parse_generate controls = #{controls}"
+      Inspec::Log.debug "Iggy::Terraform::Parser.parse_generate controls = #{controls}"
       controls
     end
 
-
-    # disabled extract functionality
-    # # parse through the JSON for the tagged Resources
-    # def self.parse_extract(file)
-    #   tfstate = parse_tfstate(file)
-    #   # InSpec profiles extracted
-    #   extracted_profiles = {}
-
-    #   # iterate over the resources
-    #   tf_resources = tfstate['modules'][0]['resources']
-    #   tf_resources.keys.each do |tf_res|
-    #     tf_res_id = tf_resources[tf_res]['primary']['id']
-
-    #     # get the attributes, see if any of them have a tagged profile attached
-    #     tf_resources[tf_res]['primary']['attributes'].keys.each do |attr|
-    #       next unless attr.start_with?('tags.' + TAG_NAME)
-    #       Inspec::Log.debug "Iggy::Terraform.parse_extract tf_res = #{tf_res} attr = #{attr} MATCHED TAG"
-    #       # get the URL and the name of the profiles
-    #       name = attr.split(TAG_NAME)[1]
-    #       url = tf_resources[tf_res]['primary']['attributes']["tags.#{TAG_URL}#{name}"]
-    #       if tf_res.start_with?('aws_vpc') # should this be VPC or subnet?
-    #         # if it's a VPC, store it as the VPC id + name
-    #         key = tf_res_id + ':' + name
-    #         Inspec::Log.debug "Iggy::Terraform.parse_extract aws_vpc tagged with InSpec #{key}"
-    #         extracted_profiles[key] = {
-    #           'type' => 'aws_vpc',
-    #           'az' => 'us-west-2',
-    #           'url' => url,
-    #         }
-    #       elsif tf_res.start_with?('aws_instance')
-    #         # if it's a node, get information about the IP and SSH/WinRM
-    #         key = tf_res_id + ':' + name
-    #         Inspec::Log.debug "Iggy::Terraform.parse_extract aws_instance tagged with InSpec #{key}"
-    #         extracted_profiles[key] = {
-    #           'type' => 'aws_instance',
-    #           'public_ip' => tf_resources[tf_res]['primary']['attributes']['public_ip'],
-    #           'key_name' => tf_resources[tf_res]['primary']['attributes']['key_name'],
-    #           'url' => url,
-    #         }
-    #       else
-    #         # should generic AWS just be the default except for instances?
-    #         STDERR.puts "ERROR: #{file} #{tf_res_id} has an InSpec-tagged resource but #{tf_res} is currently unsupported."
-    #         exit(-1)
-    #       end
-    #     end
-    #   end
-    #   Inspec::Log.debug "Iggy::Terraform.parse_extract extracted_profiles = #{extracted_profiles}"
-    #   extracted_profiles
-    # end
   end
 end

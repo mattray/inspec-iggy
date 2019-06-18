@@ -1,4 +1,4 @@
-# helpers for working with InSpec-AWS profiles
+# helpers for working with InSpec-Azure profiles
 
 require 'yaml'
 
@@ -9,10 +9,14 @@ module InspecPlugins::Iggy::Platforms
     AZURE_RESOURCE_QUALIFIERS = {
     }.freeze
 
+    # the iterators for the various resource types
+    AZURE_RESOURCE_ITERATORS = {
+    }.freeze
+
     AZURE_REMOVED_PROPERTIES = {
     }.freeze
 
-   # readme content
+    # readme content
     def self.readme
       return "\n"
     end
