@@ -37,6 +37,17 @@ module InspecPlugins
         end
       end
 
+      def self.available_resource_iterators(platform)
+        case platform
+        when 'aws'
+          return InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_ITERATORS
+        when 'azure'
+          return InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_ITERATORS
+        when 'gcp'
+          return InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_ITERATORS
+        end
+      end
+
       # manually maintained common methods we don't want to test InSpec properties
       REMOVED_COMMON_PROPERTIES = [
         :!,
@@ -220,19 +231,5 @@ module InspecPlugins
 
     end
 
-    # disabled extract functionality
-    # def self.print_commands(extracted_profiles)
-    #   extracted_profiles.keys.each do |cmd|
-    #     type = extracted_profiles[cmd]['type']
-    #     url = extracted_profiles[cmd]['url']
-    #     key_name = extracted_profiles[cmd]['key_name']
-    #     if type == 'aws_instance'
-    #       ip = extracted_profiles[cmd]['public_ip']
-    #       puts "inspec exec #{url} -t ssh://#{ip} -i #{key_name}"
-    #     else
-    #       puts "inspec exec #{url} -t aws://us-west-2"
-    #     end
-    #   end
-    # end
   end
 end
