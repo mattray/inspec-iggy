@@ -16,7 +16,7 @@ module InspecPlugins::Iggy::Terraform
       sourcefile = File.absolute_path(tf_file)
 
       # take those Terraform resources and map to InSpec resources by name and keep all attributes
-      parsed_resources = InspecPlugins::Iggy::Terraform::Parser.parse_resources(tfstate, resource_path, platform)
+      parsed_resources = InspecPlugins::Iggy::Terraform::Generate.parse_resources(tfstate, resource_path, platform)
 
       # subtract matched resources from all available resources
       negative_controls = parse_unmatched_resources(parsed_resources, sourcefile, platform)
