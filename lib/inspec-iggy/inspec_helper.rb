@@ -172,7 +172,7 @@ module InspecPlugins
         Dir.glob("#{libpath}/*.rb").each do |x|
           begin
             require(x)
-          rescue Exception =>e # AWS is blowing up for some reason
+          rescue Exception =>e # rubocop:disable Lint/RescueException AWS is blowing up for some reason
             puts e
           end
         end

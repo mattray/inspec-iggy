@@ -53,10 +53,6 @@ Metrics/CyclomaticComplexity:
   Max: 10
 Metrics/PerceivedComplexity:
   Max: 11
-Naming/FileName:
-  Enabled: false
-Naming/PredicateName:
-  Enabled: false
 NumericLiterals:
   MinDigits: 10
 Security/YAMLLoad:
@@ -73,13 +69,11 @@ Style/EmptyMethod:
   Enabled: false
 Style/Encoding:
   Enabled: false
+Style/FileName:
+  Enabled: false
 Style/GuardClause:
   Enabled: false
 Style/IfUnlessModifier:
-  Enabled: false
-Style/MethodMissingSuper:
-  Enabled: false
-Style/MissingRespondToMissing:
   Enabled: false
 Style/MultilineIfModifier:
   Enabled: false
@@ -102,11 +96,11 @@ Style/PercentLiteralDelimiters:
     '%w': '{}'
     '%W': ()
     '%x': ()
+Style/PredicateName:
+  Enabled: false
 Style/SymbolArray:
   Enabled: false
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: comma
-Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 Style/UnlessElse:
   Enabled: false

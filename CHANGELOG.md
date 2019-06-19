@@ -46,32 +46,18 @@ This is the current, previous and future development milestones and contains the
 * InSpec 4.0 support added
 * enable AWS, Azure, and GCP platform and resource pack support
 
-* lots of comparators are broken
-* many/most attributes aren't mapping with GCP
-
 * allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
 
+* switch to chefstyle like InSpec
+
+* unit tests are broken by updates in InSpec. Fix them.
+
 * re-test Azure support now that GCP works
 * AWS resource pack loading doesn't work
-
-* enable negative testing to look for things not covered by Terraform
- * create list of everything Iggy finds
- * subtract that list from everything within the gcp_project_id
- * "inspec terraform negative --platform gcp --resourcepack ../inspec-gcp terraform.tfstate --name GCP-NEGATIVE"
- * something like?
-  google_compute_instances_found_by_iggy = []
-  google_compute_instances_found_by_iggy.add('tf-www-0')
-  google_compute_instances_found_by_iggy.add('tf-www-1')
-  google_compute_instances_found_by_iggy.add('tf-www-2')
-
-  (google_compute_instances(gcp_project_id) - google_compute_instances_found_by_iggy).each do |negative_instance|
-    describe google_compute_instance(negative_instance) do
-      it { should not exist }
-    end
-  end
+* make platform and resourcepack required
 
 # BACKLOG #
 * Terraform 0.12 support

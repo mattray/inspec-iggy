@@ -4,7 +4,7 @@ require 'inspec/plugin/v2'
 
 require 'inspec-iggy/version'
 require 'inspec-iggy/profile_helper'
-require 'inspec-iggy/cloudformation/parser'
+require 'inspec-iggy/cloudformation/generate'
 
 module InspecPlugins::Iggy
   module CloudFormation
@@ -77,7 +77,7 @@ module InspecPlugins::Iggy
       def generate
         Inspec::Log.level = :debug if options[:debug]
         # hash of generated controls
-        generated_controls = InspecPlugins::Iggy::CloudFormation::Parser.parse_generate(options[:template])
+        generated_controls = InspecPlugins::Iggy::CloudFormation::Generate.parse_generate(options[:template])
         printable_controls = InspecPlugins::Iggy::InspecHelper.cfn_controls(options[:title], generated_controls, options[:stack])
         InspecPlugins::Iggy::ProfileHelper.render_profile(ui, options, options[:template], printable_controls)
         exit 0

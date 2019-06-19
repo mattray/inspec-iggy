@@ -6,7 +6,7 @@ require 'inspec/objects/describe'
 
 require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
-require 'inspec-iggy/terraform/parser'
+require 'inspec-iggy/terraform/generate'
 
 module InspecPlugins::Iggy::Terraform
   class Negative
@@ -16,7 +16,7 @@ module InspecPlugins::Iggy::Terraform
       sourcefile = File.absolute_path(tf_file)
 
       # take those Terraform resources and map to InSpec resources by name and keep all attributes
-      parsed_resources = InspecPlugins::Iggy::Terraform::Parser.parse_resources(tfstate, resource_path, platform)
+      parsed_resources = InspecPlugins::Iggy::Terraform::Generate.parse_resources(tfstate, resource_path, platform)
 
       # subtract matched resources from all available resources
       negative_controls = parse_unmatched_resources(parsed_resources, sourcefile, platform)
@@ -77,7 +77,7 @@ module InspecPlugins::Iggy::Terraform
         end
         describe.qualifier.push(qualifier)
         # describe.add_test(nil, 'exist', nil, {:negated => true} ) # last field is negated
-        describe.add_test(nil, 'exist', nil) # TODO negative of everything besides the existing nodes
+        describe.add_test(nil, 'exist', nil) # TODO: negative of everything besides the existing nodes
         ctrl.add_test(describe)
         matched_controls.push(ctrl)
       end

@@ -8,7 +8,7 @@ require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::Terraform
-  class Parser
+  class Generate
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(tf_file, resource_path, platform)
       # parse the tfstate file to get the Terraform resources
@@ -22,7 +22,7 @@ module InspecPlugins::Iggy::Terraform
       # InSpec controls generated from matched_resources and attributes
       generated_controls = parse_controls(parsed_resources, absolutename, platform)
 
-      Inspec::Log.debug "Iggy::Terraform::Parser.parse_generate generated_controls = #{generated_controls}"
+      Inspec::Log.debug "Iggy::Terraform::Generate.parse_generate generated_controls = #{generated_controls}"
       generated_controls
     end
 
@@ -40,18 +40,18 @@ module InspecPlugins::Iggy::Terraform
 
           # add translation layer
           if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform::Parser.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
+            Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
             resource_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]
           end
           resources[resource_type] = {} if resources[resource_type].nil?
           # does this match an InSpec resource?
           if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform::Parser.parse_resources resource_type = #{resource_type} MATCHED"
+            Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} MATCHED"
             resource_id = tf_resources[tf_res]['primary']['id']
             resource_attributes = tf_resources[tf_res]['primary']['attributes']
             resources[resource_type][resource_id] = resource_attributes
           else
-            Inspec::Log.debug "Iggy::Terraform.Parser.parse_generate resource_type = #{resource_type} SKIPPED"
+            Inspec::Log.debug "Iggy::Terraform.Generate.parse_generate resource_type = #{resource_type} SKIPPED"
           end
         end
       end
@@ -59,7 +59,7 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # take the resources and map to describes
-    def self.parse_controls(resources, absolutename, platform)
+    def self.parse_controls(resources, absolutename, platform) # rubocop:disable Metrics/AbcSize
       controls = []
       # iterate over the resources types and their ids
       resources.keys.each do |resource_type|
@@ -73,8 +73,8 @@ module InspecPlugins::Iggy::Terraform
 
           describe = Inspec::Describe.new
           case platform
-          when 'aws'
-          when 'azure'
+          when 'aws' # rubocop:disable Lint/EmptyWhen
+          when 'azure' # rubocop:disable Lint/EmptyWhen
             # this is a hack for azure, we need a better longterm solution
             # if resource.start_with?('azure_')
             #   name = resource_id.split('/').last
@@ -93,7 +93,7 @@ module InspecPlugins::Iggy::Terraform
             qualifier = [resource_type, {}]
             if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).key?(resource_type)
               InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
-                Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
+                Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
                 value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
                 qualifier[1][parameter] = value
               end
@@ -109,11 +109,11 @@ module InspecPlugins::Iggy::Terraform
           # push stuff back into inspec_properties?
           resources[resource_type][resource_id].keys.each do |attr|
             if inspec_properties.member?(attr)
-              Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
+              Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
               value = resources[resource_type][resource_id][attr]
               describe.add_test(attr, 'cmp', value)
             else
-              Inspec::Log.debug "Iggy::Terraform::Parser.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED"
+              Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED"
             end
           end
 
@@ -121,7 +121,7 @@ module InspecPlugins::Iggy::Terraform
           controls.push(ctrl)
         end
       end
-      Inspec::Log.debug "Iggy::Terraform::Parser.parse_generate controls = #{controls}"
+      Inspec::Log.debug "Iggy::Terraform::Generate.parse_generate controls = #{controls}"
       controls
     end
   end

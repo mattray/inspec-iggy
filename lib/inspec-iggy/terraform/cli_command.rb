@@ -4,8 +4,8 @@ require 'inspec/plugin/v2'
 
 require 'inspec-iggy/version'
 require 'inspec-iggy/profile_helper'
+require 'inspec-iggy/terraform/generate'
 require 'inspec-iggy/terraform/negative'
-require 'inspec-iggy/terraform/parser'
 
 module InspecPlugins::Iggy
   module Terraform
@@ -87,7 +87,7 @@ module InspecPlugins::Iggy
             exit(1)
           end
         end
-        generated_controls = InspecPlugins::Iggy::Terraform::Parser.parse_generate(options[:tfstate], resource_path, platform)
+        generated_controls = InspecPlugins::Iggy::Terraform::Generate.parse_generate(options[:tfstate], resource_path, platform)
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
         InspecPlugins::Iggy::ProfileHelper.render_profile(ui, options, options[:tfstate], printable_controls, platform)
         exit 0
