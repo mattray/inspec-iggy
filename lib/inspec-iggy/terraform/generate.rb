@@ -59,7 +59,7 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # take the resources and map to describes
-    def self.parse_controls(resources, absolutename, platform)
+    def self.parse_controls(resources, absolutename, platform) # rubocop:disable Metrics/AbcSize
       controls = []
       # iterate over the resources types and their ids
       resources.keys.each do |resource_type|
@@ -73,8 +73,8 @@ module InspecPlugins::Iggy::Terraform
 
           describe = Inspec::Describe.new
           case platform
-          when 'aws'
-          when 'azure'
+          when 'aws' # rubocop:disable Lint/EmptyWhen
+          when 'azure' # rubocop:disable Lint/EmptyWhen
             # this is a hack for azure, we need a better longterm solution
             # if resource.start_with?('azure_')
             #   name = resource_id.split('/').last

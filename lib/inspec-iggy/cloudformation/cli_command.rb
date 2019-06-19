@@ -4,7 +4,7 @@ require 'inspec/plugin/v2'
 
 require 'inspec-iggy/version'
 require 'inspec-iggy/profile_helper'
-require 'inspec-iggy/cloudformation/parser'
+require 'inspec-iggy/cloudformation/generate'
 
 module InspecPlugins::Iggy
   module CloudFormation

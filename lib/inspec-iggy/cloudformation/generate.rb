@@ -53,7 +53,7 @@ module InspecPlugins::Iggy::CloudFormation
           describe.add_test(nil, 'be_running', nil) if cfn_res_type.eql?('aws_ec2_instance')
 
           # if there's a match, see if there are matching InSpec properties
-          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(cfn_res_type)
+          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(cfn_res_type, 'aws')
           cfn_resources[cfn_res]['Properties'].keys.each do |attr|
             # insert '_' on the CamelCase to get camel_case
             attr_split = attr.split(/(?=[A-Z])/)

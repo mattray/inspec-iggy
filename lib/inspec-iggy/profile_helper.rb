@@ -12,39 +12,39 @@ module InspecPlugins
     class ProfileHelper
       # match the output of 'inspec init profile'
       # inspec/lib/plugins/inspec-init/lib/inspec-init/renderer.rb
-      def self.render_profile(ui, options, source_file, controls, platform = nil)
+      def self.render_profile(cli, options, source_file, controls, platform = nil)
         name = options[:name]
         overwrite_mode = options[:overwrite]
 
-        #  ─────────────────────────── InSpec Code Generator ───────────────────────────
-        ui.headline('InSpec Iggy Code Generator')
+        #  --------------------------- InSpec Code Generator ---------------------------
+        cli.headline('InSpec Iggy Code Generator')
 
         full_destination_path = Pathname.new(Dir.pwd).join(name)
 
         if File.exist?(full_destination_path) && !overwrite_mode
-          ui.plain_line "#{ui.emphasis(full_destination_path)} exists already, use --overwrite"
-          ui.exit(1)
+          cli.plain_line "#{cli.emphasis(full_destination_path)} exists already, use --overwrite"
+          cli.exit(1)
         end
 
         # ensure that full_destination_path directory is available
         FileUtils.mkdir_p(full_destination_path)
 
         # Creating new profile at /Users/mattray/ws/inspec-iggy/FOO
-        ui.plain_line "Creating new profile at #{ui.emphasis(full_destination_path)}"
-        # • Creating file README.md
-        render_readme_md(ui, name, source_file, platform)
-        # • Creating directory controls
-        ui.list_item "Creating directory #{ui.emphasis('controls')}"
+        cli.plain_line "Creating new profile at #{cli.emphasis(full_destination_path)}"
+        # * Creating file README.md
+        render_readme_md(cli, name, source_file, platform)
+        # * Creating directory controls
+        cli.list_item "Creating directory #{cli.emphasis('controls')}"
         FileUtils.mkdir_p("#{name}/controls")
-        # • Creating file controls/generated.rb
-        render_controls_rb(ui, name, controls)
-        # • Creating file inspec.yml
-        render_inspec_yml(ui, name, source_file, options, platform)
-        ui.plain_line
+        # * Creating file controls/generated.rb
+        render_controls_rb(cli, name, controls)
+        # * Creating file inspec.yml
+        render_inspec_yml(cli, name, source_file, options, platform)
+        cli.plain_line
       end
 
-      def self.render_readme_md(ui, name, source_file, platform)
-        ui.list_item "Creating file #{ui.emphasis('README.md')}"
+      def self.render_readme_md(cli, name, source_file, platform)
+        cli.list_item "Creating file #{cli.emphasis('README.md')}"
         f = File.new("#{name}/README.md", 'w')
         f.puts("# #{name}")
         f.puts
@@ -57,8 +57,8 @@ module InspecPlugins
         f.close
       end
 
-      def self.render_inspec_yml(ui, name, source_file, options, platform)
-        ui.list_item "Creating file #{ui.emphasis('inspec.yml')}"
+      def self.render_inspec_yml(cli, name, source_file, options, platform)
+        cli.list_item "Creating file #{cli.emphasis('inspec.yml')}"
         yml = {}
         yml['name'] = name
         yml['title'] = options[:title]
@@ -79,8 +79,8 @@ module InspecPlugins
         f.close
       end
 
-      def self.render_controls_rb(ui, name, controls)
-        ui.list_item "Creating file #{ui.emphasis('controls/generated.rb')}"
+      def self.render_controls_rb(cli, name, controls)
+        cli.list_item "Creating file #{cli.emphasis('controls/generated.rb')}"
         f = File.new("#{name}/controls/generated.rb", 'w')
         f.write(controls)
         f.close
