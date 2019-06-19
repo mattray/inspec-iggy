@@ -58,6 +58,8 @@ Iggy dynamically pulls the available AWS resources from InSpec and attempts to m
      [--debug], [--no-debug]          Verbose debugging messages
      [--log-level=LOG_LEVEL]          Set the log level: info (default), debug, warn, error
      [--log-location=LOG_LOCATION]    Location to send diagnostic log messages to. (default: STDOUT or Inspec::Log.error)
+     [--platform=gcp|aws|azure]       Cloud provider name
+     [--resourcepath=INSPEC_CLOUD_RESOURCE_PATH] Location of inspec-gcp|inspec-aws|inspec-azure resources
 
 # InSpec CloudFormation Generate<a name="icg"></a>
 
