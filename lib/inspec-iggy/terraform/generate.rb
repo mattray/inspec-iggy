@@ -35,6 +35,8 @@ module InspecPlugins::Iggy::Terraform
         tf_resources.keys.each do |tf_res|
           resource_type = tf_resources[tf_res]['type']
 
+          next if resource_type.eql?('random_id') # this is a Terraform resource, not a provider resource
+
           # load resource pack resources
           InspecPlugins::Iggy::InspecHelper.load_resource_pack(resource_path) if resource_path
 
