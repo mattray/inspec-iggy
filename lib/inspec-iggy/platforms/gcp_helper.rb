@@ -95,7 +95,7 @@ module InspecPlugins::Iggy::Platforms
       'google_compute_backend_service' => { 'iterator' => 'google_compute_backend_services', 'index' => 'names', 'qualifiers' => [:project] },
       'google_compute_disk' => { 'iterator' => 'google_compute_disks', 'index' => 'names', 'qualifiers' => [:project, :zone] }, # false positives because instance attached disks aren't managed by Terraform
       'google_compute_firewall' => { 'iterator' => 'google_compute_firewalls', 'index' => 'firewall_names', 'qualifiers' => [:project] },
-      'google_compute_forwarding_rule' => { 'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rules_names', 'qualifiers' => [:project, :region] },
+      'google_compute_forwarding_rule' => { 'iterator' => 'google_compute_forwarding_rules', 'index' => 'forwarding_rule_names', 'qualifiers' => [:project, :region] },
       'google_compute_http_health_check' => { 'iterator' => 'google_compute_http_health_checks', 'index' => 'names', 'qualifiers' => [:project] },
       'google_compute_https_health_check' => { 'iterator' => 'google_compute_https_health_checks', 'index' => 'names', 'qualifiers' => [:project] },
       'google_compute_instance' => { 'iterator' => 'google_compute_instances', 'index' => 'instance_names', 'qualifiers' => [:project, :zone] },
