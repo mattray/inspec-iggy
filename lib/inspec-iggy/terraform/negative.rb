@@ -56,7 +56,7 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # controls for iterators minus the matched resources
-    def self.parse_matched_resources(resources, sourcefile, platform)
+    def self.parse_matched_resources(resources, sourcefile, platform) # rubocop:disable Metrics/AbcSize
       Inspec::Log.debug "Terraform::Negative.parse_matched_resources matched_resources #{resources.keys}"
       matched_controls = []
       resources.keys.each do |resource|
