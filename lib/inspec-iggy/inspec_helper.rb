@@ -462,7 +462,15 @@ module InspecPlugins
         content += InspecPlugins::Iggy::Platforms::AwsHelper.tf_controls if platform.eql?('aws')
 
         # write all controls
-        content + generated_controls.flatten.map(&:to_ruby).join("\n\n")
+        generated_controls.flatten.each do |control|
+          if control.class.eql?(Inspec::Control)
+            content += control.to_ruby
+            content += "\n\n"
+          else # this is for embedded iterators in negative tests
+            content += control
+          end
+        end
+        content
       end
 
       def self.cfn_controls(title, generated_controls, stack)
