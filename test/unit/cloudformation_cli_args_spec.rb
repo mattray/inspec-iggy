@@ -1,8 +1,7 @@
 # This unit test performs some tests to verify that the command line options for
 # inspec-iggy are correct.
 
-# Include our test harness
-require 'helper'
+require "minitest/autorun"
 
 # Load the class under test, the CliCommand definition.
 require 'inspec-iggy/cloudformation/cli_command'
