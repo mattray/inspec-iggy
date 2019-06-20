@@ -138,7 +138,7 @@ module InspecPlugins
         # :ip_version, # documented but undefined
         # :network, # documented but undefined
         # :subnetwork, # documented but undefined
-                :addons_config,
+        :addons_config,
         :address_type,
         :address,
         :aggregation_alignment_period,
@@ -254,7 +254,7 @@ module InspecPlugins
         :monitoring_service,
         :mutation_record,
         :name_servers,
-                :family,
+        :family,
         :filename,
         :filter,
         :fingerprint,
@@ -412,7 +412,7 @@ module InspecPlugins
         :writer_identity,
         :xpn_project_status,
         :zone_signing_key_algorithm,
-        :zone,
+        :zone
       ].freeze
 
       # load the resource pack into InSpec::Resource.registry

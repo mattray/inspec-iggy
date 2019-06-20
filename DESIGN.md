@@ -4,7 +4,9 @@ This document attempts to explain the organization of the InSpec-Iggy code and h
 
 # Files
 
+* [CHANGELOG.md](#changelog)
 * [inspec-iggy.gemspec](#gemspec)
+* [Gemfile](#gemfile)
 * [.rubocop.yml](#rubocop)
 * [lib/inspec-iggy.rb](#iggy)
 * [lib/inspec-iggy/plugin.rb](#plugin)
@@ -16,13 +18,21 @@ This document attempts to explain the organization of the InSpec-Iggy code and h
 * [lib/inspec-iggy/profile_helper.rb](#profile_helper)
 * [lib/inspec-iggy/version.rb](#version)
 
+## [CHANGELOG.md](CHANGELOG.md)<a name="changelog"/>
+
+Has the rough feature set by each release but also contains the BACKLOG for the project, ideas considered but not yet implemented.
+
 ## [inspec-iggy.gemspec](inspec-iggy.gemspec)<a name="gemspec"/>
 
- This is where metadata for the Gem goes. We have also pinned the version of InSpec to between 2.3 and less than 4.0 to prevent breaking changes.
+This is where metadata for the Gem goes. We have also pinned the version of InSpec to between 2.3 and less than 5 to prevent breaking changes.
+
+## [Gemfile](Gemfile)<a name="gemfile"/>
+
+The source of the gems and additional gemsets for use with Bundler (ie. `test`).
 
 ## [.rubocop.yml](.rubocop.yml)<a name="rubocop"/>
 
-Tracks against InSpec's settings for code style.
+Tracks against InSpec's settings for code style, currently using 0.49.1 with [Chefstyle](https://github.com/chef/chefstyle).
 
 ## [lib/inspec-iggy.rb](lib/inspec-iggy.rb)<a name="iggy"/>
 

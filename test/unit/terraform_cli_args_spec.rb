@@ -1,8 +1,7 @@
 # This unit test performs some tests to verify that the command line options for
 # inspec-iggy are correct.
 
-# Include our test harness
-require 'helper'
+require 'minitest/autorun'
 
 # Load the class under test, the CliCommand definition.
 require 'inspec-iggy/terraform/cli_command'
@@ -17,20 +16,19 @@ module IggyUnitTests
     end
 
     def commands
-      [
-        'generate',
-        'help',
-        'version',
-      ]
+      %w{
+        generate
+        help
+        negative
+        version
+      }
     end
   end
 
   class TerraformCli
-
     # This is the CLI Command implementation class.
     # It is a subclass of Thor, which is a CLI framework.
     # This unit test file is mostly about verifying the Thor settings.
-
 
     class CommandSet < Minitest::Test
       include TfLets
@@ -55,112 +53,142 @@ module IggyUnitTests
           :debug,
           :email,
           :license,
+          :log_level,
+          :log_location,
           :maintainer,
           :name,
           :overwrite,
+          :platform,
           :resourcepath,
           :summary,
           :tfstate,
           :title,
-          :version,
+          :version
         ]
       end
 
       def no_default_options
         [
-          :resourcepath,
-          :name
+          :log_level,
+          :log_location,
+          :name,
+          :platform,
+          :resourcepath
         ]
       end
 
       def not_required_options
         [
+          :log_level,
+          :log_location,
+          :platform,
           :resourcepath # AWS is out-of-the-box?
         ]
       end
 
       def short_options
         {
-          :name => ['-n'],
-          :tfstate => ['-t'],
+          name: ['-n'],
+          tfstate: ['-t']
         }
       end
 
       def boolean_options
         [
           :debug,
-          :overwrite,
+          :overwrite
         ]
       end
 
       # This is a Hash of Structs that tells us details of options for the 'core' subcommand.
-      def generate_options
-        cli_class.all_commands['generate'].options
+      def cli_options
+        cli_class.class_options
       end
 
-      def test_it_should_have_the_right_option_count
-        assert_equal(all_options.count, generate_options.count)
+      def test_generate_should_have_the_right_option_count
+        assert_equal(all_options.count, cli_options.count)
       end
 
-      def test_it_should_have_the_right_options
-        assert_equal(all_options.sort, generate_options.keys.sort)
+      def test_generate_should_have_the_right_options
+        assert_equal(all_options.sort, cli_options.keys.sort)
       end
 
-      def test_it_should_have_descriptions_for_all_options
+      def test_generate_should_have_descriptions_for_all_options
         all_options.each do |option|
-          refute_nil(generate_options[option].description)
+          refute_nil(cli_options[option].description)
         end
       end
 
-      def test_it_should_have_a_default_for_most_options
+      def test_generate_should_have_a_default_for_most_options
         (all_options - no_default_options).each do |option|
-          refute_nil(generate_options[option].default)
+          refute_nil(cli_options[option].default)
         end
 
         (no_default_options - not_required_options).each do |option|
-          assert(generate_options[option].required)
+          assert(cli_options[option].required)
         end
       end
 
-      def test_it_should_have_certain_options_be_typed_boolean
+      def test_generate_should_have_certain_options_be_typed_boolean
         boolean_options.each do |option|
-          assert_equal(:boolean, generate_options[option].type)
+          assert_equal(:boolean, cli_options[option].type)
         end
       end
 
-      def test_it_should_have_some_options_be_abbreviated
+      def test_generate_should_have_some_options_be_abbreviated
         short_options.each do |option, abbrevs|
-          assert_equal(abbrevs.sort, generate_options[option].aliases.sort)
+          assert_equal(abbrevs.sort, cli_options[option].aliases.sort)
         end
       end
 
       # Argument count
       # The 'generate' command does not accept arguments.
-      def test_it_should_take_no_arguments
+      def test_generate_should_take_no_arguments
         assert_equal(0, cli_class.instance_method(:generate).arity)
+      end
+
+      # 'inspec terraform negative' currently has all the same options as 'generate'
+      def test_negative_should_have_the_right_option_count
+        assert_equal(all_options.count, cli_options.count)
+      end
+
+      def test_negative_should_have_the_right_options
+        assert_equal(all_options.sort, cli_options.keys.sort)
+      end
+
+      def test_negative_should_have_descriptions_for_all_options
+        all_options.each do |option|
+          refute_nil(cli_options[option].description)
+        end
+      end
+
+      def test_negative_should_have_a_default_for_most_options
+        (all_options - no_default_options).each do |option|
+          refute_nil(cli_options[option].default)
+        end
+
+        (no_default_options - not_required_options).each do |option|
+          assert(cli_options[option].required)
+        end
+      end
+
+      def test_negative_should_have_certain_options_be_typed_boolean
+        boolean_options.each do |option|
+          assert_equal(:boolean, cli_options[option].type)
+        end
+      end
+
+      def test_negative_should_have_some_options_be_abbreviated
+        short_options.each do |option, abbrevs|
+          assert_equal(abbrevs.sort, cli_options[option].aliases.sort)
+        end
+      end
+
+      # Argument count
+      # The 'negative' command does not accept arguments.
+      def test_negative_should_take_no_arguments
+        assert_equal(0, cli_class.instance_method(:negative).arity)
       end
     end
   end
-
-  # class ExtractCommand < Minitest::Test
-  #   include TfLets
-
-  #   def all_options
-  #     []
-  #   end
-
-  #   def extract_options
-  #     cli_class.all_commands['extract'].options
-  #   end
-
-  #   def test_it_should_have_the_correct_option_count
-  #     assert_equal(all_options.count, extract_options.count)
-  #   end
-
-  #   # Argument count
-  #   # The 'generate' command does not accept arguments.
-  #   def test_it_should_take_no_arguments
-  #     assert_equal(0, cli_class.instance_method(:generate).arity)
-  #   end
-  # end
 end

@@ -5,7 +5,7 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require 'helper'
+require 'minitest/autorun'
 require 'inspec-iggy/version'
 
 module IggyUnitTests

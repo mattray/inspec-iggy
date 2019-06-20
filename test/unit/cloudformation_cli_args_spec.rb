@@ -1,12 +1,10 @@
 # This unit test performs some tests to verify that the command line options for
 # inspec-iggy are correct.
 
-# Include our test harness
-require 'helper'
+require 'minitest/autorun'
 
 # Load the class under test, the CliCommand definition.
 require 'inspec-iggy/cloudformation/cli_command'
-
 
 # In general, plugin authors can choose many different test harnesses, such as RSpec or Minitest/Spec.
 # However, Iggy loads all of InSpec, which causes interference with both of those, so here we use
@@ -18,16 +16,15 @@ module IggyUnitTests
     end
 
     def commands
-      [
-        'generate',
-        'help',
-        'version',
-      ]
+      %w{
+        generate
+        help
+        version
+      }
     end
   end
 
   class CloudFormationCli
-
     class CommandSet < Minitest::Test
       include CfLets
 
@@ -58,7 +55,7 @@ module IggyUnitTests
           :summary,
           :template,
           :title,
-          :version,
+          :version
         ]
       end
 
@@ -66,22 +63,22 @@ module IggyUnitTests
         [
           :name,
           :stack,
-          :template,
+          :template
         ]
       end
 
       def short_options
         {
-          :name => ['-n'],
-          :stack => ['-s'],
-          :template => ['-t'],
+          name: ['-n'],
+          stack: ['-s'],
+          template: ['-t']
         }
       end
 
       def boolean_options
         [
           :debug,
-          :overwrite,
+          :overwrite
         ]
       end
 

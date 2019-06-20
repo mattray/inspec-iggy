@@ -45,16 +45,15 @@ This is the current, previous and future development milestones and contains the
 # 0.6.0
 * InSpec 4.0 support added
 * enable AWS, Azure, and GCP platform and resource pack support
+* `inspec terraform negative` was added, providing negative coverage testing
+* unit tests were broken by updates in InSpec and fixed. Functional and integration tests were disabled for now.
+* switch to Chefstyle like InSpec
 
+# NEXT
 * allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
-
-* switch to chefstyle like InSpec
-
-* unit tests are broken by updates in InSpec. Fix them.
-
 * re-test Azure support now that GCP works
 * AWS resource pack loading doesn't work
 * make platform and resourcepack required
