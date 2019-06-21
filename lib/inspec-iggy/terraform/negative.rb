@@ -62,8 +62,14 @@ module InspecPlugins::Iggy::Terraform
       resources.keys.each do |resource|
         resources[resource].extend Hashie::Extensions::DeepFind # use to find iterators' values from other attributes
         resource_iterators = InspecPlugins::Iggy::InspecHelper.available_resource_iterators(platform)[resource]
-        iterator = resource_iterators['iterator']
-        index = resource_iterators['index']
+        if resource_iterators.nil?
+          Inspec::Log.warn "No iterator matching #{resource} for #{platform} found!"
+          next
+        else
+          iterator = resource_iterators['iterator']
+          index = resource_iterators['index']
+          Inspec::Log.debug "Terraform::Negative.parse_matched_resources iterator:#{iterator} index:#{index}"
+        end
         # Nothing but the finest bespoke hand-built InSpec
         ctrl =  "control 'NEGATIVE-COVERAGE:#{iterator}' do\n"
         ctrl += "  title 'InSpec-Iggy NEGATIVE-COVERAGE:#{iterator}'\n"
