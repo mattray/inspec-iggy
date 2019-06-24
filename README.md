@@ -16,8 +16,9 @@ The [CHANGELOG.md](https://github.com/mattray/iggy/blob/master/CHANGELOG.md) cov
 2. [Support](#support)
 3. [Installation](#installation)
 4. [InSpec Terraform Generate](#itg)
-5. [InSpec Cloudformation Generate](#icg)
-6. [Development and Testing](#development)
+5. [InSpec Terraform Negative](#itn)
+6. [InSpec Cloudformation Generate](#icg)
+7. [Development and Testing](#development)
 
 # Support<a name="support"></a>
 
@@ -39,7 +40,7 @@ Written and tested with Ruby 2.6.
 
     inspec terraform generate --tfstate terraform.tfstate --name myprofile
 
-Iggy dynamically pulls the available AWS resources from InSpec and attempts to map them to Terraform resources, producing an InSpec profile. ```inspec terraform generate --help``` will show all available options.
+Iggy dynamically pulls the available Cloud resources from InSpec and attempts to map them to Terraform resources, producing an InSpec profile. ```inspec terraform generate --help``` will show all available options.
 
 ## Usage
 
@@ -60,6 +61,34 @@ Iggy dynamically pulls the available AWS resources from InSpec and attempts to m
      [--log-location=LOG_LOCATION]    Location to send diagnostic log messages to. (default: STDOUT or Inspec::Log.error)
      [--platform=gcp|aws|azure]       Cloud provider name
      [--resourcepath=INSPEC_CLOUD_RESOURCE_PATH] Location of inspec-gcp|inspec-aws|inspec-azure resources
+     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from Github.
+
+# InSpec Terraform Negative<a name="itn"></a>
+
+    inspec terraform negative --tfstate terraform.tfstate --name myprofile
+
+Iggy dynamically pulls the available Cloud resources from InSpec and attempts to map them to Terraform resources, producing an InSpec profile which are not part of tfstate file. It informs the user that these resources are not part of tfstate file and can be deleted if not needed.```inspec terraform negative --help``` will show all available options.
+
+## Usage
+
+    inspec terraform negative [options] -n, --name=NAME
+
+     -n, --name=NAME                  Name of profile to be generated (required)
+     -t, [--tfstate=TFSTATE]          Specify path to the input terraform.tfstate (default: .)
+     [--copyright=COPYRIGHT]          Name of the copyright holder (default: The Authors)
+     [--email=EMAIL]                  Email address of the author (default: you@example.com)
+     [--license=LICENSE]              License for the profile (default: Apache-2.0)
+     [--maintainer=MAINTAINER]        Name of the copyright holder (default: The Authors)
+     [--summary=SUMMARY]              One line summary for the profile (default: An InSpec Compliance Profile)
+     [--title=TITLE]                  Human-readable name for the profile (default: InSpec Profile)
+     [--version=VERSION]              Specify the profile version (default: 0.1.0)
+     [--overwrite], [--no-overwrite]  Overwrites existing profile directory
+     [--debug], [--no-debug]          Verbose debugging messages
+     [--log-level=LOG_LEVEL]          Set the log level: info (default), debug, warn, error
+     [--log-location=LOG_LOCATION]    Location to send diagnostic log messages to. (default: STDOUT or Inspec::Log.error)
+     [--platform=gcp|aws|azure]       Cloud provider name
+     [--resourcepath=INSPEC_CLOUD_RESOURCE_PATH] Location of inspec-gcp|inspec-aws|inspec-azure resources
+     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from Github.
 
 # InSpec CloudFormation Generate<a name="icg"></a>
 
