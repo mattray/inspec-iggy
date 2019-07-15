@@ -13,8 +13,12 @@ end
 #------------------------------------------------------------------#
 
 begin
+  # require "chefstyle"
   require 'rubocop/rake_task'
-  RuboCop::RakeTask.new(:lint)
+  RuboCop::RakeTask.new(:lint) do |task|
+    task.options += ["--display-cop-names", "--no-color", "--parallel"]
+  end
+
 rescue LoadError
   puts 'rubocop is not available. Install the rubocop gem to run the lint tests.'
 end
@@ -39,15 +43,14 @@ namespace(:test) do
   desc 'Run functional tests, to verify user experience'
   Rake::TestTask.new(:functional) do |task|
     task.libs << 'test'
-
-    task.pattern = 'test/functional/*_spec.rb'
+    #    task.pattern = 'test/functional/*_spec.rb'
     task.warning = false
   end
 
   desc 'Run integration tests for check for interface changes'
   Rake::TestTask.new(:integration) do |task|
     task.libs << 'test'
-    task.pattern = 'test/integration/*_spec.rb'
+    #    task.pattern = 'test/integration/*_spec.rb'
     task.warning = false
   end
 
@@ -56,8 +59,8 @@ namespace(:test) do
     task.libs << 'test'
     task.pattern = [
       'test/unit/*_spec.rb',
-      'test/functional/*_spec.rb',
-      'test/integration/*_spec.rb',
+      #     'test/functional/*_spec.rb',
+      #     'test/integration/*_spec.rb',
     ]
     task.warning = false
     #task.verbose = true

@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Matt Ray']
   spec.email       = ['matt@chef.io']
   spec.summary     = 'InSpec plugin to generate InSpec compliance profiles from Terraform and CloudFormation.'
-  spec.description = 'InSpec plugin to generate InSpec compliance profiles from Terraform and CloudFormation.'
+  spec.description = 'InSpec plugin to generate InSpec profiles from Terraform and CloudFormation to ensure automatic compliance coverage.'
   spec.homepage    = 'https://github.com/mattray/inspec-iggy'
   spec.license     = 'Apache-2.0'
 
@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'inspec', '>=2.3', '<4.0.0'
+  spec.add_dependency 'inspec', '>=2.3', '<5'
 end

@@ -8,7 +8,7 @@ require 'inspec-iggy/file_helper'
 require 'inspec-iggy/inspec_helper'
 
 module InspecPlugins::Iggy::CloudFormation
-  class Parser
+  class Generate
     # parse through the JSON and generate InSpec controls
     def self.parse_generate(cfn_template) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
       template = InspecPlugins::Iggy::FileHelper.parse_json(cfn_template)
@@ -27,13 +27,13 @@ module InspecPlugins::Iggy::CloudFormation
 
         # add translation layer
         if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(cfn_res_type)
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]} TRANSLATED"
+          Inspec::Log.debug "CloudFormation::Generate.parse_generate cfn_res_type = #{cfn_res_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]} TRANSLATED"
           cfn_res_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[cfn_res_type]
         end
 
         # does this match an InSpec resource?
-        if InspecPlugins::Iggy::InspecHelper::RESOURCES.include?(cfn_res_type)
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} MATCHED"
+        if InspecPlugins::Iggy::InspecHelper.available_resources.include?(cfn_res_type)
+          Inspec::Log.debug "CloudFormation::Generate.parse_generate cfn_res_type = #{cfn_res_type} MATCHED"
 
           # insert new control based off the resource's ID
           ctrl = Inspec::Control.new
@@ -53,13 +53,13 @@ module InspecPlugins::Iggy::CloudFormation
           describe.add_test(nil, 'be_running', nil) if cfn_res_type.eql?('aws_ec2_instance')
 
           # if there's a match, see if there are matching InSpec properties
-          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(cfn_res_type)
+          inspec_properties = InspecPlugins::Iggy::InspecHelper.resource_properties(cfn_res_type, 'aws')
           cfn_resources[cfn_res]['Properties'].keys.each do |attr|
             # insert '_' on the CamelCase to get camel_case
             attr_split = attr.split(/(?=[A-Z])/)
             property = attr_split.join('_').downcase
             if inspec_properties.member?(property)
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} MATCHED"
+              Inspec::Log.debug "CloudFormation::Generate.parse_generate #{cfn_res_type} inspec_property = #{property} MATCHED"
               value = cfn_resources[cfn_res]['Properties'][attr]
               if (value.is_a? Hash) || (value.is_a? Array)
                 #  these get replaced at inspec exec
@@ -77,16 +77,16 @@ module InspecPlugins::Iggy::CloudFormation
                 describe.add_test(property, 'cmp', value)
               end
             else
-              Inspec::Log.debug "CloudFormation.parse_generate #{cfn_res_type} inspec_property = #{property} SKIPPED"
+              Inspec::Log.debug "CloudFormation::Generate.parse_generate #{cfn_res_type} inspec_property = #{property} SKIPPED"
             end
           end
           ctrl.add_test(describe)
           generated_controls.push(ctrl)
         else
-          Inspec::Log.debug "CloudFormation.parse_generate cfn_res_type = #{cfn_res_type} SKIPPED"
+          Inspec::Log.debug "CloudFormation::Generate.parse_generate cfn_res_type = #{cfn_res_type} SKIPPED"
         end
       end
-      Inspec::Log.debug "CloudFormation.parse_generate generated_controls = #{generated_controls}"
+      Inspec::Log.debug "CloudFormation::Generate.parse_generate generated_controls = #{generated_controls}"
       generated_controls
     end
   end

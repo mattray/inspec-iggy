@@ -42,22 +42,32 @@ This is the current, previous and future development milestones and contains the
 * enable minimal Azure support. This needs to be refactored.
 * add support for remote .tfstate and .cfn files via Iggy::FileHelper.fetch https://github.com/mattray/inspec-iggy/issues/3
 
-# BACKLOG #
+# 0.6.0
+* InSpec 4.0 support added
+* enable AWS, Azure, and GCP platform and resource pack support
+* `inspec terraform negative` was added, providing negative coverage testing
+* unit tests were broken by updates in InSpec and fixed. Functional and integration tests were disabled for now.
+* switch to Chefstyle like InSpec and Chefstyle the generated controls
+
+# NEXT
+* make platform and resourcepack required
+* re-test Azure support now that GCP works
+* AWS resource pack loading doesn't work
+* InSpec plugins seem to be broken except by path?
+* allow passing alternate source of depends profiles
+* upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
+* document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
-* how are we going to preemptively know what's in the various resource packs?
-  Perhaps load all Resources individually to map out their properties?
-  Big translation helper hash?
-* enable GCP support
-* Habitat packaging
-* Rubocop the generated profiles
-* enable negative testing to look for things not covered by Terraform
+
+# BACKLOG #
+* Terraform 0.12 support
 * ARM templates
-* translate properties from cfn/tf->inspec
+* CloudFormation can be JSON or YAML
+* allow disabling of individual negative tests from CLI?
+* Habitat packaging
 * Terraform
   * More Terraform back-ends https://www.terraform.io/docs/backends/types/index.html
   * do we want to generate inspec coverage for the tfplan?
-  * Terraform 0.12 support
 * restore extract functionality
   * create a Terraform Provisioner for attaching InSpec profiles to a resource
   * Tie tagged compliance profiles back to machines and non-machines where applicable (ie. AWS Hong Kong)
-* InSpec 4.0 will likely break stuff
