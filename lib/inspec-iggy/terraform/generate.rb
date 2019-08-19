@@ -32,12 +32,12 @@ module InspecPlugins::Iggy::Terraform
 
       resources = {}
 
-      tfstate.each_with_object({}) do |r|
-        tf_resources = tfstate['resources']
-        tf_resources.each_with_object({}) do |t|
-          resource_type = t['type']
-          resources_instances = t['instances']
-          resources_instances.each_with_object({}) do |i|
+      tf_resources = tfstate['resources']
+      tf_resources.each_with_object({}) do |t|
+        tf_module = t['module'] if defined?(t['module'])
+        resource_type = t['type']
+        resources_instances = t['instances']
+        resources_instances.each_with_object({}) do |i|
             
             next if resource_type.eql?('random_id') # this is a Terraform resource, not a provider resource
 
