@@ -28,10 +28,9 @@ module InspecPlugins::Iggy::Terraform
 
     # returns the list of all InSpec resources found in the tfstate file
     def self.parse_resources(tfstate, resource_path, _platform)
-      # iterate over the resources
-      resources = {}
+      # iterate over the resources - no modules wrapping 0.12 but havent tested thoroughly
 
-      # tfstate['modules'] = {} if resources[resource_type].nil?
+      resources = {}
 
       tfstate.each_with_object({}) do |r|
         tf_resources = tfstate['resources']
