@@ -17,7 +17,11 @@ module InspecPlugins::Iggy::Platforms
 
     # Terraform boilerplate controls/controls.rb content
     def self.tf_controls
+<<<<<<< HEAD
       "\n\naws_vpc_id = attribute('aws_vpc_id', value: '', description: 'Optional AWS VPC identifier.')\n\n"
+=======
+      "\n\naws_vpc_id = attribute('aws_vpc_id', default: '', description: 'Optional AWS VPC identifier.')\n\n"
+>>>>>>> 2b0b15d1c9eaf4d4ba689ee0135c7ce287a4b034
     end
 
     # readme content

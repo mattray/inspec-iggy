@@ -1,0 +1,8 @@
+*.gem
+*.html
+.bundle
+Gemfile.lock
+pkg/*
+.idea/
+iggy-test-profile
+.bundler/
