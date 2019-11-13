@@ -27,13 +27,19 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # returns the list of all InSpec resources found in the tfstate file
-    def self.parse_resources(tfstate, resource_path, _platform)
-      # iterate over the resources
+    def self.parse_resources(tfstate, resource_path, _platform) # # rubocop:disable Metrics/AbcSize
+      # iterate over the resources - no modules wrapping 0.12 but havent tested thoroughly
+
       resources = {}
-      tfstate['modules'].each do |m|
-        tf_resources = m['resources']
-        tf_resources.keys.each do |tf_res|
-          resource_type = tf_resources[tf_res]['type']
+
+      tf_resources = tfstate['resources']
+      tf_resources.each_with_object({}) do |t|
+        resource_type = t['type']
+        resources_instances = t['instances']
+        resources_instances.each_with_object({}) do |i|
+          lb_type = i['attributes']['load_balancer_type'] if resource_type.eql?('aws_lb')
+          resource_type = 'aws_alb' if lb_type.eql?('application')
+          resource_type = 'aws_nlb' if lb_type.eql?('network')
 
           next if resource_type.eql?('random_id') # this is a Terraform resource, not a provider resource
 
@@ -49,8 +55,9 @@ module InspecPlugins::Iggy::Terraform
           # does this match an InSpec resource?
           if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
             Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} MATCHED"
-            resource_id = tf_resources[tf_res]['primary']['id']
-            resource_attributes = tf_resources[tf_res]['primary']['attributes']
+            # resource_id = i['private']
+            resource_id = i['attributes']['id']
+            resource_attributes = i['attributes']
             resources[resource_type][resource_id] = resource_attributes
           else
             Inspec::Log.debug "Iggy::Terraform.Generate.parse_generate resource_type = #{resource_type} SKIPPED"
@@ -61,7 +68,7 @@ module InspecPlugins::Iggy::Terraform
     end
 
     # take the resources and map to describes
-    def self.parse_controls(resources, absolutename, platform) # rubocop:disable Metrics/AbcSize
+    def self.parse_controls(resources, absolutename, platform) # rubocop:disable Metrics/AbcSize Metrics/MethodLength
       controls = []
       # iterate over the resources types and their ids
       resources.keys.each do |resource_type|
@@ -75,7 +82,9 @@ module InspecPlugins::Iggy::Terraform
 
           describe = Inspec::Describe.new
           case platform
-          when 'aws' # rubocop:disable Lint/EmptyWhen
+          when 'aws'
+            qualifier = [resource_type, resource_id]
+            describe.qualifier.push(qualifier)
           when 'azure' # rubocop:disable Lint/EmptyWhen
             # this is a hack for azure, we need a better longterm solution
             # if resource.start_with?('azure_')

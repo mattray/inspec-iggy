@@ -19,6 +19,8 @@ module InspecPlugins
       # translate Terraform resource name to InSpec
       TRANSLATED_RESOURCES = {
         'aws_instance' => 'aws_ec2_instance',
+        'aws_dynamodb_table' => 'aws_dynamo_db_table',
+        'aws_autoscaling_group' => 'aws_auto_scaling_group',
         'aws_v_p_c' => 'aws_vpc', # CFN
         'azurerm_resource_group' => 'azure_resource_group',
         'azurerm_virtual_machine' => 'azure_virtual_machine'
@@ -72,6 +74,7 @@ module InspecPlugins
         :equal?,
         :extend,
         :fail_resource,
+        # :filter, # removed because of AWS
         :freeze,
         :frozen?,
         :hash,
@@ -79,6 +82,7 @@ module InspecPlugins
         :inspect,
         :instance_eval,
         :instance_exec,
+        :iam_instance_profile, # removed because of AWS
         :instance_of?,
         :instance_variable_defined?,
         :instance_variable_get,
@@ -114,8 +118,11 @@ module InspecPlugins
         :singleton_method,
         :singleton_methods,
         :skip_resource,
+        :spot_price, # removed because of AWS
         :taint,
         :tainted?,
+        :tag,  # removed because of AWS
+        :tags, # removed because of AWS
         :tap,
         :then,
         :to_enum,
@@ -126,6 +133,7 @@ module InspecPlugins
         :untaint,
         :untrust,
         :untrusted?,
+        :user_data,
         :yield_self
       ].freeze
 
@@ -144,7 +152,12 @@ module InspecPlugins
         :aggregation_alignment_period,
         :aggregation_cross_series_reducer,
         :aggregation_per_series_aligner,
+        :allow__check_criteria, # added for inspec-aws
         :allowed,
+        :allow_in, # added for inspec-aws
+        :allow_in_only, # added for inspec-aws
+        :allow_out, # added for inspec-aws
+        :allow_out_only, # added for inspec-aws
         :archive_size_bytes,
         :auto_create_subnetworks,
         :available_cpu_platforms,
@@ -152,6 +165,8 @@ module InspecPlugins
         :backend_service,
         :backup_pool,
         :base_instance_name,
+        :be_allow_in, # added for inspec-aws
+        :be_allow_out, # added for inspec-aws
         :can_ip_forward,
         :check_interval_sec,
         :cluster_ipv4_cidr,
@@ -199,12 +214,12 @@ module InspecPlugins
         :failover_ratio,
         :family,
         :filename,
-        :filter,
         :fingerprint,
         :friendly_name,
         :gateway_address,
         :guest_accelerators,
         :guest_os_features,
+        :group_name,
         :health_check,
         :healthy_threshold,
         :host,
@@ -256,7 +271,7 @@ module InspecPlugins
         :name_servers,
         :family,
         :filename,
-        :filter,
+        # :filter, - removed for AWS
         :fingerprint,
         :friendly_name,
         :gateway_address,
@@ -311,7 +326,6 @@ module InspecPlugins
         :monitoring_service,
         :mutation_record,
         :name_servers,
-        :name,
         :named_ports,
         :network_interfaces,
         :network,
@@ -392,7 +406,8 @@ module InspecPlugins
         :substitutions,
         :table_id,
         :table_reference,
-        :tags,
+        # :tag, - removed for AWS
+        # :tags,  - removed for AWS
         :target_pools,
         :target_size,
         :target_tags,

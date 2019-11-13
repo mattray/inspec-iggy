@@ -134,7 +134,7 @@ module InspecPlugins::Iggy::Platforms
       'google_logging_project_sink' => { 'iterator' => 'google_logging_project_sinks', 'index' => 'sink_names', 'qualifiers' => [:project] },
       'google_project_alert_policy' => { 'iterator' => 'google_project_alert_policies', 'index' => 'policy_names', 'qualifiers' => [:project] },
       'google_project_metric' => { 'iterator' => 'google_project_metrics', 'index' => 'metric_names', 'qualifiers' => [:project] },
-      'google_pubsub_subscription' => { 'iterator' => 'google_pubsub_subscriptions', 'index' => 'names', 'qualifiers' => [:project] },
+      'google_pubsub_subscription' => { 'iterator' => 'google_pubsub_subscriptions', 'index' => 'names', 'qualifiers' => [:project] }
     }.freeze
 
     GCP_REMOVED_PROPERTIES = {
