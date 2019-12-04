@@ -12,63 +12,58 @@ module InspecPlugins::Iggy
     class CliCommand < Inspec.plugin(2, :cli_command)
       subcommand_desc 'terraform SUBCOMMAND ...', 'Generate an InSpec profile from Terraform'
 
-      desc 'version', 'Display version information'
-      def version
-        say("Iggy v#{InspecPlugins::Iggy::VERSION}")
-      end
-
       class_option :debug,
                    desc: 'Verbose debugging messages',
                    type: :boolean,
                    default: false
 
-      option :copyright,
+      class_option :copyright,
                    desc: 'Name of the copyright holder',
                    default: 'The Authors'
 
-      option :email,
+      class_option :email,
                    desc: 'Email address of the author',
                    default: 'you@example.com'
 
-      option :license,
+      class_option :license,
                    desc: 'License for the profile',
                    default: 'Apache-2.0'
 
-      option :maintainer,
+      class_option :maintainer,
                    desc: 'Name of the copyright holder',
                    default: 'The Authors'
 
-      option :summary,
+      class_option :summary,
                    desc: 'One line summary for the profile',
                    default: 'An InSpec Compliance Profile'
 
-      option :title,
+      class_option :title,
                    desc: 'Human-readable name for the profile',
                    default: 'InSpec Profile'
 
-      option :version,
+      class_option :version,
                    desc: 'Specify the profile version',
                    default: '0.1.0'
 
-      option :overwrite,
+      class_option :overwrite,
                    desc: 'Overwrites existing profile directory',
                    type: :boolean,
                    default: false
 
-      option :name,
+      class_option :name,
                    aliases: '-n',
                    required: true,
                    desc: 'Name of profile to be generated'
 
-      option :tfstate,
+      class_option :tfstate,
                    aliases: '-t',
                    desc: 'Specify path to the input terraform.tfstate',
                    default: 'terraform.tfstate'
 
-      option :platform,
+      class_option :platform,
                    desc: 'The InSpec platform providing the necessary resources (aws, azure, or gcp)'
 
-      option :resourcepath,
+      class_option :resourcepath,
                    desc: 'Specify path to the InSpec Resource Pack providing the necessary resources'
 
       desc 'generate [options]', 'Generate InSpec compliance controls from terraform.tfstate'

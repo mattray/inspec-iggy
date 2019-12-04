@@ -20,7 +20,6 @@ module IggyUnitTests
         generate
         help
         negative
-        version
       }
     end
   end

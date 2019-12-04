@@ -19,7 +19,6 @@ module IggyUnitTests
       %w{
         generate
         help
-        version
       }
     end
   end

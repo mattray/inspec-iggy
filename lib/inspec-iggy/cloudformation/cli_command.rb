@@ -11,12 +11,7 @@ module InspecPlugins::Iggy
     class CliCommand < Inspec.plugin(2, :cli_command)
       subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate an InSpec profile from CloudFormation'
 
-      desc 'version', 'Display version information'
-      def version
-        say("Iggy v#{InspecPlugins::Iggy::VERSION}")
-      end
-
-      class_option :debug,
+      option :debug,
              desc: 'Verbose debugging messages',
              type: :boolean,
              default: false

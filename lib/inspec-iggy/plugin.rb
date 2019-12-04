@@ -25,6 +25,12 @@ module InspecPlugins
         require 'inspec-iggy/cloudformation/cli_command'
         InspecPlugins::Iggy::CloudFormation::CliCommand
       end
+
+      cli_command :iggy do
+        require 'inspec-iggy/iggy_cli_command'
+        InspecPlugins::Iggy::CliCommand
+      end
+
     end
   end
 end
