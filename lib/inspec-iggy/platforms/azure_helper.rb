@@ -1,6 +1,6 @@
 # helpers for working with InSpec-Azure profiles
 
-require 'yaml'
+require "yaml"
 
 module InspecPlugins::Iggy::Platforms
   class AzureHelper
@@ -24,13 +24,13 @@ module InspecPlugins::Iggy::Platforms
     # inspec/lib/plugins/inspec-init/templates/profiles/azure/inspec.yml
     def self.inspec_yml
       yml = {}
-      yml['inspec_version'] = '>= 2.2.7'
-      yml['depends'] = [{
-        'name' => 'inspec-azure',
-        'url' => 'https://github.com/inspec/inspec-azure/archive/master.tar.gz'
+      yml["inspec_version"] = ">= 2.2.7"
+      yml["depends"] = [{
+        "name" => "inspec-azure",
+        "url" => "https://github.com/inspec/inspec-azure/archive/master.tar.gz",
       }]
-      yml['supports'] = [{
-        'platform' => 'azure'
+      yml["supports"] = [{
+        "platform" => "azure",
       }]
       yml
     end

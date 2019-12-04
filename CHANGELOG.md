@@ -49,20 +49,22 @@ This is the current, previous and future development milestones and contains the
 * unit tests were broken by updates in InSpec and fixed. Functional and integration tests were disabled for now.
 * switch to Chefstyle like InSpec and Chefstyle the generated controls
 
-# NEXT
+# 0.7.0 (The SysAdvent Release)
+* added 'inspec iggy' subcommand for displaying help and version
+* Terraform 0.12 support
+* Re-test AWS, Azure, GCP
 * make platform and resourcepack required
-* re-test Azure support now that GCP works
-* AWS resource pack loading doesn't work
 * InSpec plugins seem to be broken except by path?
-* allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
-* document uploading profiles to Automate and creating scan jobs via API
-* document Windows Omnibus installer usage
+* document inspec with a reporter to push the reports into Automate
 
 # BACKLOG #
-* Terraform 0.12 support
 * ARM templates
 * CloudFormation can be JSON or YAML
+* add negative testing for CloudFormation
+* allow passing alternate source of depends profiles
+* document uploading profiles to Automate and creating scan jobs via API
+* document Windows Omnibus installer usage
 * allow disabling of individual negative tests from CLI?
 * Habitat packaging
 * Terraform

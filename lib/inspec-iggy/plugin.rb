@@ -1,4 +1,4 @@
-require 'inspec/plugin/v2'
+require "inspec/plugin/v2"
 
 # The InspecPlugins namespace is where all plugins should declare themselves.
 # The 'Inspec' capitalization is used throughout the InSpec source code; yes, it's
@@ -14,7 +14,7 @@ module InspecPlugins
         # should be ready to do so. So, load the file that defines the functionality.
         # For example, InSpec will activate this hook when `inspec help` is
         # executed, so that this plugin's usage message will be included in the help.
-        require 'inspec-iggy/terraform/cli_command'
+        require "inspec-iggy/terraform/cli_command"
 
         # Having loaded our functionality, return a class that will let the
         # CLI engine tap into it.
@@ -22,12 +22,12 @@ module InspecPlugins
       end
 
       cli_command :cloudformation do
-        require 'inspec-iggy/cloudformation/cli_command'
+        require "inspec-iggy/cloudformation/cli_command"
         InspecPlugins::Iggy::CloudFormation::CliCommand
       end
 
       cli_command :iggy do
-        require 'inspec-iggy/iggy_cli_command'
+        require "inspec-iggy/iggy_cli_command"
         InspecPlugins::Iggy::CliCommand
       end
 

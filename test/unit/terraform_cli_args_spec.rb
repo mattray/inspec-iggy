@@ -1,10 +1,10 @@
 # This unit test performs some tests to verify that the command line options for
 # inspec-iggy are correct.
 
-require 'minitest/autorun'
+require "minitest/autorun"
 
 # Load the class under test, the CliCommand definition.
-require 'inspec-iggy/terraform/cli_command'
+require "inspec-iggy/terraform/cli_command"
 
 # In general, plugin authors can choose many different test harnesses, such as RSpec or Minitest/Spec.
 # However, Iggy loads all of InSpec, which causes interference with both of those, so here we use
@@ -47,33 +47,33 @@ module IggyUnitTests
       include TfLets
 
       def all_options
-        [
-          :copyright,
-          :debug,
-          :email,
-          :license,
-          :log_level,
-          :log_location,
-          :maintainer,
-          :name,
-          :overwrite,
-          :platform,
-          :resourcepath,
-          :summary,
-          :tfstate,
-          :title,
-          :version
-        ]
+        %i{
+          copyright
+          debug
+          email
+          license
+          log_level
+          log_location
+          maintainer
+          name
+          overwrite
+          platform
+          resourcepath
+          summary
+          tfstate
+          title
+          version
+        }
       end
 
       def no_default_options
-        [
-          :log_level,
-          :log_location,
-          :name,
-          :platform,
-          :resourcepath
-        ]
+        %i{
+          log_level
+          log_location
+          name
+          platform
+          resourcepath
+        }
       end
 
       def not_required_options
@@ -81,22 +81,22 @@ module IggyUnitTests
           :log_level,
           :log_location,
           :platform,
-          :resourcepath # AWS is out-of-the-box?
+          :resourcepath, # AWS is out-of-the-box?
         ]
       end
 
       def short_options
         {
-          name: ['-n'],
-          tfstate: ['-t']
+          name: ["-n"],
+          tfstate: ["-t"],
         }
       end
 
       def boolean_options
-        [
-          :debug,
-          :overwrite
-        ]
+        %i{
+          debug
+          overwrite
+        }
       end
 
       # This is a Hash of Structs that tells us details of options for the 'core' subcommand.

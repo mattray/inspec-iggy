@@ -1,6 +1,6 @@
 # helpers for working with InSpec-AWS profiles
 
-require 'yaml'
+require "yaml"
 
 module InspecPlugins::Iggy::Platforms
   class AwsHelper
@@ -21,20 +21,19 @@ module InspecPlugins::Iggy::Platforms
     end
 
     # readme content
-    def self.readme
-    end
+    def self.readme; end
 
     # inspec.yml boilerplate content from
     # inspec/lib/plugins/inspec-init/templates/profiles/aws/inspec.yml
     def self.inspec_yml
       yml = {}
-      yml['inspec_version'] = '~> 4'
-      yml['depends'] = [{
-        'name' => 'inspec-aws',
-        'url' => 'https://github.com/inspec/inspec-aws/archive/master.tar.gz'
+      yml["inspec_version"] = "~> 4"
+      yml["depends"] = [{
+        "name" => "inspec-aws",
+        "url" => "https://github.com/inspec/inspec-aws/archive/master.tar.gz",
       }]
-      yml['supports'] = [{
-        'platform' => 'aws'
+      yml["supports"] = [{
+        "platform" => "aws",
       }]
       yml
     end

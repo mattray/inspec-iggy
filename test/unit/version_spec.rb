@@ -5,8 +5,8 @@
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
 
-require 'minitest/autorun'
-require 'inspec-iggy/version'
+require "minitest/autorun"
+require "inspec-iggy/version"
 
 module IggyUnitTests
   class Version < Minitest::Test

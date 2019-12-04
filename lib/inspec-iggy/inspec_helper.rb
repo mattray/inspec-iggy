@@ -1,10 +1,10 @@
 # constants and helpers for working with InSpec
 
-require 'inspec'
+require "inspec"
 
-require 'inspec-iggy/platforms/aws_helper'
-require 'inspec-iggy/platforms/azure_helper'
-require 'inspec-iggy/platforms/gcp_helper'
+require "inspec-iggy/platforms/aws_helper"
+require "inspec-iggy/platforms/azure_helper"
+require "inspec-iggy/platforms/gcp_helper"
 
 module InspecPlugins
   module Iggy
@@ -18,116 +18,116 @@ module InspecPlugins
 
       # translate Terraform resource name to InSpec
       TRANSLATED_RESOURCES = {
-        'aws_instance' => 'aws_ec2_instance',
-        'aws_v_p_c' => 'aws_vpc', # CFN
-        'azurerm_resource_group' => 'azure_resource_group',
-        'azurerm_virtual_machine' => 'azure_virtual_machine'
+        "aws_instance" => "aws_ec2_instance",
+        "aws_v_p_c" => "aws_vpc", # CFN
+        "azurerm_resource_group" => "azure_resource_group",
+        "azurerm_virtual_machine" => "azure_virtual_machine",
         # "azure_virtual_machine_data_disk",
         # 'aws_route' => 'aws_route_table' # needs route_table_id instead of id
       }.freeze
 
       def self.available_resource_qualifiers(platform)
         case platform
-        when 'aws'
+        when "aws"
           InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_QUALIFIERS
-        when 'azure'
+        when "azure"
           InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_QUALIFIERS
-        when 'gcp'
+        when "gcp"
           InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_QUALIFIERS
         end
       end
 
       def self.available_resource_iterators(platform)
         case platform
-        when 'aws'
+        when "aws"
           InspecPlugins::Iggy::Platforms::AwsHelper::AWS_RESOURCE_ITERATORS
-        when 'azure'
+        when "azure"
           InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_RESOURCE_ITERATORS
-        when 'gcp'
+        when "gcp"
           InspecPlugins::Iggy::Platforms::GcpHelper::GCP_RESOURCE_ITERATORS
         end
       end
 
       # manually maintained common methods we don't want to test InSpec properties
-      REMOVED_COMMON_PROPERTIES = [
-        :!,
-        :!=,
-        :!~,
-        :<=>,
-        :==,
-        :===,
-        :=~,
-        :__binding__,
-        :__id__,
-        :__send__,
-        :check_supports,
-        :class,
-        :clone,
-        :dclone,
-        :define_singleton_method,
-        :display,
-        :dup,
-        :enum_for,
-        :eql?,
-        :equal?,
-        :extend,
-        :fail_resource,
-        :freeze,
-        :frozen?,
-        :hash,
-        :inspec,
-        :inspect,
-        :instance_eval,
-        :instance_exec,
-        :instance_of?,
-        :instance_variable_defined?,
-        :instance_variable_get,
-        :instance_variable_set,
-        :instance_variables,
-        :is_a?,
-        :itself,
-        :kind_of?,
-        :method,
-        :methods,
-        :nil?,
-        :object_id,
-        :pretty_inspect,
-        :pretty_print,
-        :pretty_print_cycle,
-        :pretty_print_inspect,
-        :pretty_print_instance_variables,
-        :private_methods,
-        :protected_methods,
-        :pry,
-        :public_method,
-        :public_methods,
-        :public_send,
-        :remove_instance_variable,
-        :resource_exception_message,
-        :resource_failed?,
-        :resource_skipped?,
-        :respond_to?,
-        :send,
-        :should,
-        :should_not,
-        :singleton_class,
-        :singleton_method,
-        :singleton_methods,
-        :skip_resource,
-        :taint,
-        :tainted?,
-        :tap,
-        :then,
-        :to_enum,
-        :to_json,
-        :to_s,
-        :to_yaml,
-        :trust,
-        :untaint,
-        :untrust,
-        :untrusted?,
-        :yield_self
-      ].freeze
+      REMOVED_COMMON_PROPERTIES = %i{
+        !
+        !=
+        !~
+        <=>
+        ==
+        ===
+        =~
+        __binding__
+        __id__
+        __send__
+        check_supports
+        class
+        clone
+        dclone
+        define_singleton_method
+        display
+        dup
+        enum_for
+        eql?
+        equal?
+        extend
+        fail_resource
+        freeze
+        frozen?
+        hash
+        inspec
+        inspect
+        instance_eval
+        instance_exec
+        instance_of?
+        instance_variable_defined?
+        instance_variable_get
+        instance_variable_set
+        instance_variables
+        is_a?
+        itself
+        kind_of?
+        method
+        methods
+        nil?
+        object_id
+        pretty_inspect
+        pretty_print
+        pretty_print_cycle
+        pretty_print_inspect
+        pretty_print_instance_variables
+        private_methods
+        protected_methods
+        pry
+        public_method
+        public_methods
+        public_send
+        remove_instance_variable
+        resource_exception_message
+        resource_failed?
+        resource_skipped?
+        respond_to?
+        send
+        should
+        should_not
+        singleton_class
+        singleton_method
+        singleton_methods
+        skip_resource
+        taint
+        tainted?
+        tap
+        then
+        to_enum
+        to_json
+        to_s
+        to_yaml
+        trust
+        untaint
+        untrust
+        untrusted?
+        yield_self
+      }.freeze
 
       # properties are often dynamically generated, making it hard to determine
       # their existence without instantiating them. Because of this, we will
@@ -412,16 +412,16 @@ module InspecPlugins
         :writer_identity,
         :xpn_project_status,
         :zone_signing_key_algorithm,
-        :zone
+        :zone,
       ].freeze
 
       # load the resource pack into InSpec::Resource.registry
       def self.load_resource_pack(resource_path)
         # find the libraries path in the resource pack
-        if resource_path.end_with?('libraries')
+        if resource_path.end_with?("libraries")
           libpath = resource_path
         else
-          libpath = resource_path+'/libraries'
+          libpath = resource_path + "/libraries"
         end
         $LOAD_PATH.push(libpath)
         # find all the classes in the libpath and require them
@@ -429,7 +429,7 @@ module InspecPlugins
         Dir.glob("#{libpath}/*.rb").each do |x|
           begin
             require(x)
-          rescue Exception =>e # rubocop:disable Lint/RescueException AWS is blowing up for some reason
+          rescue Exception => e # rubocop:disable Lint/RescueException AWS is blowing up for some reason
             puts e
           end
         end
@@ -442,11 +442,11 @@ module InspecPlugins
         inspec_properties = Inspec::Resource.registry[resource].instance_methods + ADDITIONAL_COMMON_PROPERTIES
         inspec_properties -= REMOVED_COMMON_PROPERTIES
         case platform
-        when 'aws'
+        when "aws"
           inspec_properties -= InspecPlugins::Iggy::Platforms::AwsHelper::AWS_REMOVED_PROPERTIES[resource] unless InspecPlugins::Iggy::Platforms::AwsHelper::AWS_REMOVED_PROPERTIES[resource].nil?
-        when 'azure'
+        when "azure"
           inspec_properties -= InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_REMOVED_PROPERTIES[resource] unless InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_REMOVED_PROPERTIES[resource].nil?
-        when 'gcp'
+        when "gcp"
           inspec_properties -= InspecPlugins::Iggy::Platforms::GcpHelper::GCP_REMOVED_PROPERTIES[resource] unless InspecPlugins::Iggy::Platforms::GcpHelper::GCP_REMOVED_PROPERTIES[resource].nil?
         end
         # get InSpec properties by method names
@@ -459,7 +459,7 @@ module InspecPlugins
       def self.tf_controls(title, generated_controls, platform)
         content = "title \"#{title}: generated by Iggy v#{Iggy::VERSION}\"\n"
 
-        content += InspecPlugins::Iggy::Platforms::AwsHelper.tf_controls if platform.eql?('aws')
+        content += InspecPlugins::Iggy::Platforms::AwsHelper.tf_controls if platform.eql?("aws")
 
         # write all controls
         generated_controls.flatten.each do |control|

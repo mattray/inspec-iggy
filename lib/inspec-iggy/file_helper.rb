@@ -1,7 +1,7 @@
 # helper methods for retrieving and parsing files
 
-require 'json'
-require 'open-uri'
+require "json"
+require "open-uri"
 
 module InspecPlugins
   module Iggy

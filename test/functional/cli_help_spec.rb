@@ -1,19 +1,19 @@
 # Include our test harness
-require 'helper'
+require "helper"
 
 module IggyFunctionalTests
   class CliHelp < Minitest::Test
     include CorePluginFunctionalHelper
 
     def subcommands
-      [
-        'cloudformation',
-        'terraform',
-      ]
+      %w{
+        cloudformation
+        terraform
+      }
     end
 
     def test_iggy_commands_in_toplevel_help
-      run_result = run_inspec_process_with_this_plugin('help')
+      run_result = run_inspec_process_with_this_plugin("help")
       assert_empty(run_result.stderr)
       assert_equal(0, run_result.exit_status)
       lines = run_result.stdout.split("\n")
@@ -26,7 +26,7 @@ module IggyFunctionalTests
 
     def test_iggy_commands_should_have_secondary_help
       subcommands.each do |subcommand|
-        run_result = run_inspec_process_with_this_plugin('help ' + subcommand)
+        run_result = run_inspec_process_with_this_plugin("help " + subcommand)
         assert_empty(run_result.stderr, "should have no errors for #{subcommand}")
         assert_equal(0, run_result.exit_status, "should have 0-exit for #{subcommand}")
         lines = run_result.stdout.split("\n")
