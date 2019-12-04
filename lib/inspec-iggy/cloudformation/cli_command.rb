@@ -11,16 +11,12 @@ module InspecPlugins::Iggy
     class CliCommand < Inspec.plugin(2, :cli_command)
       subcommand_desc 'cloudformation SUBCOMMAND ...', 'Generate an InSpec profile from CloudFormation'
 
-      # Thor.map(Hash) allows you to make aliases for commands.
-      map('-v' => 'version')         # Treat `inspec terraform -v`` as `inspec terraform version`
-      map('--version' => 'version')  # Treat `inspec terraform -version`` as `inspec terraform version`
-
-      desc 'version', 'Display version information', hide: true
+      desc 'version', 'Display version information'
       def version
         say("Iggy v#{InspecPlugins::Iggy::VERSION}")
       end
 
-      option :debug,
+      class_option :debug,
              desc: 'Verbose debugging messages',
              type: :boolean,
              default: false
