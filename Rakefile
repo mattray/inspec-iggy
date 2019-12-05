@@ -40,30 +40,14 @@ namespace(:test) do
     task.warning = false
   end
 
-  desc "Run functional tests, to verify user experience"
-  Rake::TestTask.new(:functional) do |task|
+  require 'tmpdir'
+  desc "Run InSpec integration tests for check for interface changes"
+  Rake::TestTask.new(:inspec) do |task|
     task.libs << "test"
-    #    task.pattern = 'test/functional/*_spec.rb'
+    tmp_dir = Dir.mktmpdir
+    sh("bundle exec inspec exec test/inspec --reporter=progress --input tmp_dir='#{tmp_dir}'")
+    FileUtils.remove_dir(tmp_dir)
     task.warning = false
-  end
-
-  desc "Run integration tests for check for interface changes"
-  Rake::TestTask.new(:integration) do |task|
-    task.libs << "test"
-    #    task.pattern = 'test/integration/*_spec.rb'
-    task.warning = false
-  end
-
-  desc "Run all tests, and keep going if one set fails."
-  Rake::TestTask.new(:keep_going) do |task|
-    task.libs << "test"
-    task.pattern = [
-      "test/unit/*_spec.rb",
-      #     'test/functional/*_spec.rb',
-      #     'test/integration/*_spec.rb',
-    ]
-    task.warning = false
-    # task.verbose = true
   end
 end
 
@@ -71,4 +55,4 @@ end
 # You might think you'd want to depend on test:unit and test:functional,
 # but if you do that and either has a failure, the latter won't execute.
 desc "Run all tests"
-task test: %i{test:unit test:functional test:integration}
+task test: %i{test:unit test:inspec}

@@ -6,3 +6,4 @@ pkg/*
 .idea/
 iggy-test-profile
 .bundler/
+test/inspec/inspec.lock

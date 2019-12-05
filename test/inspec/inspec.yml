@@ -1,0 +1,10 @@
+name: inspec-iggy
+title: InSpec Profile for testing InSpec-Iggy
+maintainer: Matt Ray
+copyright: Matt Ray
+copyright_email: matt@chef.io
+license: Apache-2.0
+summary: An InSpec Compliance Profile for testing InSpec-Iggy
+version: 0.1.0
+supports:
+  platform: os
