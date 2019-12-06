@@ -45,7 +45,7 @@ namespace(:test) do
   Rake::TestTask.new(:inspec) do |task|
     task.libs << "test"
     tmp_dir = Dir.mktmpdir
-    sh("bundle exec inspec exec test/inspec --reporter=progress --input tmp_dir='#{tmp_dir}'")
+    sh("bundle exec inspec exec test/inspec --chef-license=accept-no-persist --reporter=progress --input tmp_dir='#{tmp_dir}'")
     FileUtils.remove_dir(tmp_dir)
     task.warning = false
   end
