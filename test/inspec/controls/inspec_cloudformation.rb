@@ -1,6 +1,6 @@
 control 'inspec cloudformation' do
   describe command("bundle exec inspec cloudformation") do
-    its('stdout') { should match (/inspec cloudformation generate \[options\] -n, --name=NAME -s, --stack=STACK -t, --template=/) }
+    its('stdout') { should match (/inspec cloudformation generate \[options\] -n, --name=NAME -s/) }
     its('stdout') { should match (/inspec cloudformation help \[COMMAND\]/) }
     its('stdout') { should match (/\[--log-level=LOG_LEVEL\]/) }
     its('stdout') { should match (/\[--log-location=LOG_LOCATION\]/) }
@@ -21,7 +21,7 @@ end
 
 control 'inspec cloudformation help generate' do
   describe command("bundle exec inspec cloudformation help generate") do
-    its('stdout') { should match (/inspec cloudformation generate \[options\] -n, --name=NAME -s, --stack=STACK -t, --template/) }
+    its('stdout') { should match (/inspec cloudformation generate \[options\] -n, --name=NAME -s/) }
     its('stdout') { should match (/\[--debug\], \[--no-debug\]/) }
     its('stdout') { should match (/\[--copyright=COPYRIGHT\]/) }
     its('stdout') { should match (/\[--email=EMAIL\]/) }
