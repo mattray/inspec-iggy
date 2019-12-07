@@ -40,7 +40,7 @@ namespace(:test) do
     task.warning = false
   end
 
-  require 'tmpdir'
+  require "tmpdir"
   desc "Run InSpec integration tests for check for interface changes"
   Rake::TestTask.new(:inspec) do |task|
     task.libs << "test"
