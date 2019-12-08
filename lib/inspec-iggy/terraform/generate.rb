@@ -30,31 +30,30 @@ module InspecPlugins::Iggy::Terraform
     def self.parse_resources(tfstate, resource_path, _platform)
       # iterate over the resources
       resources = {}
-      tfstate["modules"].each do |m|
-        tf_resources = m["resources"]
-        tf_resources.keys.each do |tf_res|
-          resource_type = tf_resources[tf_res]["type"]
+      tf_resources = tfstate['resources']
+      tf_resources.each do |tf_res|
+        resource_type = tf_res['type']
+        next if resource_type.eql?("random_id") # this is a Terraform resource, not a provider resource
 
-          next if resource_type.eql?("random_id") # this is a Terraform resource, not a provider resource
+        # load resource pack resources
+        InspecPlugins::Iggy::InspecHelper.load_resource_pack(resource_path) if resource_path
 
-          # load resource pack resources
-          InspecPlugins::Iggy::InspecHelper.load_resource_pack(resource_path) if resource_path
-
-          # add translation layer
-          if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
-            resource_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]
-          end
-          resources[resource_type] = {} if resources[resource_type].nil?
-          # does this match an InSpec resource?
-          if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
-            Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} MATCHED"
-            resource_id = tf_resources[tf_res]["primary"]["id"]
-            resource_attributes = tf_resources[tf_res]["primary"]["attributes"]
+        # add translation layer
+        if InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES.key?(resource_type)
+          Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} #{InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]} TRANSLATED"
+          resource_type = InspecPlugins::Iggy::InspecHelper::TRANSLATED_RESOURCES[resource_type]
+        end
+        resources[resource_type] = {} if resources[resource_type].nil?
+        # does this match an InSpec resource?
+        if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
+          Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} MATCHED"
+          tf_res['instances'].each do | instance |
+            resource_id = instance['attributes']['id']
+            resource_attributes = instance['attributes']
             resources[resource_type][resource_id] = resource_attributes
-          else
-            Inspec::Log.debug "Iggy::Terraform.Generate.parse_generate resource_type = #{resource_type} SKIPPED"
           end
+        else
+          Inspec::Log.debug "Iggy::Terraform.Generate.parse_generate resource_type = #{resource_type} SKIPPED"
         end
       end
       resources
