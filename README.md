@@ -26,13 +26,13 @@ InSpec-Iggy is a community-driven plugin that is not officially supported by Che
 
 # Requirements <a name="requirements"></a>
 
-Iggy generates compliance profiles for InSpec 2.3 and later, which includes the AWS and Azure resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as much resource coverage as possible. It has currently been tested primarily with AWS but other InSpec-supported platforms should work as well.
+Iggy generates compliance profiles for InSpec 3 and later, requiring external resource packs for the AWS, Azure, and GCP resources. Because resources are continuing to be added to InSpec, you may want the latest version to support as much resource coverage as possible.
 
-Written and tested with Ruby 2.6.
+Written and tested with Ruby 2.6 and InSpec 4.
 
 # Installation <a name="installation"></a>
 
-`inspec-iggy` is a plugin for InSpec.  InSpec 2.3 or later is required.  To install, use:
+`inspec-iggy` is a plugin for InSpec.  InSpec 3 or later is required.  To install, use:
 
     $ inspec plugin install inspec-iggy
 
@@ -61,7 +61,7 @@ Iggy dynamically pulls the available Cloud resources from InSpec and attempts to
      [--log-location=LOG_LOCATION]    Location to send diagnostic log messages to. (default: STDOUT or Inspec::Log.error)
      [--platform=gcp|aws|azure]       Cloud provider name
      [--resourcepath=INSPEC_CLOUD_RESOURCE_PATH] Location of inspec-gcp|inspec-aws|inspec-azure resources
-     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from Github.
+     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from GitHub.
 
 # InSpec Terraform Negative<a name="itn"></a>
 
@@ -88,7 +88,7 @@ Iggy dynamically pulls the available Cloud resources from InSpec and attempts to
      [--log-location=LOG_LOCATION]    Location to send diagnostic log messages to. (default: STDOUT or Inspec::Log.error)
      [--platform=gcp|aws|azure]       Cloud provider name
      [--resourcepath=INSPEC_CLOUD_RESOURCE_PATH] Location of inspec-gcp|inspec-aws|inspec-azure resources
-     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from Github.
+     Note: --resourcepath should point to the directory where inspec-<cloud_provider> resource pack is downloaded/cloned from GitHub.
 
 # InSpec CloudFormation Generate<a name="icg"></a>
 

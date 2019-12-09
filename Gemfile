@@ -5,7 +5,7 @@ gemspec
 
 # follows InSpec's versions
 group :test do
-  gem "inspec-bin", ">=2.3", "<5"
+  gem "inspec-bin", ">=3", "<5"
   gem "chefstyle", "~> 0.13.0"
   gem "minitest", "~> 5.5"
   gem "rake", ">= 10"

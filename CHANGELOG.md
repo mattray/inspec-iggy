@@ -52,7 +52,8 @@ This is the current, previous and future development milestones and contains the
 # 0.7.0 (The SysAdvent Release)
 * added 'inspec iggy' subcommand for displaying help and version
 * Terraform 0.12 support
-* Re-test AWS, Azure, GCP
+* Restore and re-test AWS, Azure, GCP from resource packs
+
 * make platform and resourcepack required
 * InSpec plugins seem to be broken except by path?
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
