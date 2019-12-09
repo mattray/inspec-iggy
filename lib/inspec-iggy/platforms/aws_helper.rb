@@ -21,7 +21,7 @@ module InspecPlugins::Iggy::Platforms
     }.freeze
 
     AWS_TRANSLATED_RESOURCE_PROPERTIES = {
-      "aws_security_group" => {'name' => 'group_name'},
+      "aws_security_group" => { "name" => "group_name" },
     }.freeze
 
     # Terraform boilerplate controls/controls.rb content

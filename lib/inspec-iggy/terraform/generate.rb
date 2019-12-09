@@ -30,9 +30,9 @@ module InspecPlugins::Iggy::Terraform
     def self.parse_resources(tfstate, resource_path, _platform)
       # iterate over the resources
       resources = {}
-      tf_resources = tfstate['resources']
+      tf_resources = tfstate["resources"]
       tf_resources.each do |tf_res|
-        resource_type = tf_res['type']
+        resource_type = tf_res["type"]
         next if resource_type.eql?("random_id") # this is a Terraform resource, not a provider resource
 
         # load resource pack resources
@@ -47,9 +47,9 @@ module InspecPlugins::Iggy::Terraform
         # does this match an InSpec resource?
         if InspecPlugins::Iggy::InspecHelper.available_resources.include?(resource_type)
           Inspec::Log.debug "Iggy::Terraform::Generate.parse_resources resource_type = #{resource_type} MATCHED"
-          tf_res['instances'].each do | instance |
-            resource_id = instance['attributes']['id']
-            resource_attributes = instance['attributes']
+          tf_res["instances"].each do |instance|
+            resource_id = instance["attributes"]["id"]
+            resource_attributes = instance["attributes"]
             resources[resource_type][resource_id] = resource_attributes
           end
         else
@@ -81,7 +81,7 @@ module InspecPlugins::Iggy::Terraform
               InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
                 Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} qualifier found = #{parameter} MATCHED"
                 if first # this is the id for the resource
-                  value = resources[resource_type][resource_id]['id'] # pull value out of the tf attributes
+                  value = resources[resource_type][resource_id]["id"] # pull value out of the tf attributes
                   first = false
                 else
                   value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
