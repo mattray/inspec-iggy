@@ -4,8 +4,13 @@ require "yaml"
 
 module InspecPlugins::Iggy::Platforms
   class AwsHelper
-    # find the additional parameters
+    # find the additional parameters for the 'describe'.
+    # NOTE: the first entry is going to map to the 'id' from the .tfstate file
     AWS_RESOURCE_QUALIFIERS = {
+      "aws_ec2_instance" => %i{instance_id},
+      "aws_security_group" => %i{group_id vpc_id},
+      "aws_subnet" => %i{subnet_id},
+      "aws_vpc" => %i{vpc_id},
     }.freeze
 
     # the iterators for the various resource types
@@ -13,6 +18,10 @@ module InspecPlugins::Iggy::Platforms
     }.freeze
 
     AWS_REMOVED_PROPERTIES = {
+    }.freeze
+
+    AWS_TRANSLATED_RESOURCE_PROPERTIES = {
+      "aws_security_group" => {'name' => 'group_name'},
     }.freeze
 
     # Terraform boilerplate controls/controls.rb content

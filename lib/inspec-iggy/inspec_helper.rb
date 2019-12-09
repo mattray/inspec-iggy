@@ -48,6 +48,24 @@ module InspecPlugins
         end
       end
 
+      def self.translated_resource_property(platform, resource, property)
+        case platform
+        when "aws"
+          translated_resource = InspecPlugins::Iggy::Platforms::AwsHelper::AWS_TRANSLATED_RESOURCE_PROPERTIES[resource]
+        when "azure"
+          translated_resource = InspecPlugins::Iggy::Platforms::AzureHelper::AZURE_TRANSLATED_RESOURCE_PROPERTIES[resource]
+        when "gcp"
+          translated_resource = InspecPlugins::Iggy::Platforms::GcpHelper::GCP_TRANSLATED_RESOURCE_PROPERTIES[resource]
+        end
+        translated_property = translated_resource[property] if translated_resource
+        if translated_property
+          Inspec::Log.debug "InspecHelper.translated_resource_property #{platform}:#{resource}:#{property} = #{translated_property} TRANSLATED"
+          translated_property
+        else
+          property
+        end
+      end
+
       # manually maintained common methods we don't want to test InSpec properties
       REMOVED_COMMON_PROPERTIES = %i{
         !

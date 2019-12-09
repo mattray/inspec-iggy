@@ -73,8 +73,23 @@ module InspecPlugins::Iggy::Terraform
           ctrl.impact = "1.0"
 
           describe = Inspec::Describe.new
-          case platform
-          when "aws" # rubocop:disable Lint/EmptyWhen
+          case platform # this may need to get refactored away once Azure is tested
+          when "aws"
+            qualifier = [resource_type, {}]
+            if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).key?(resource_type) # there are additional qualifiers
+              first = true
+              InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
+                Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} qualifier found = #{parameter} MATCHED"
+                if first # this is the id for the resource
+                  value = resources[resource_type][resource_id]['id'] # pull value out of the tf attributes
+                  first = false
+                else
+                  value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
+                end
+                qualifier[1][parameter] = value
+              end
+            end
+            describe.qualifier.push(qualifier)
           when "azure" # rubocop:disable Lint/EmptyWhen
             # this is a hack for azure, we need a better longterm solution
             # if resource.start_with?('azure_')
@@ -94,7 +109,7 @@ module InspecPlugins::Iggy::Terraform
             qualifier = [resource_type, {}]
             if InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform).key?(resource_type)
               InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource_type].each do |parameter|
-                Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type}  qualifier found = #{parameter} MATCHED"
+                Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} qualifier found = #{parameter} MATCHED"
                 value = resources[resource_type][resource_id][parameter.to_s] # pull value out of the tf attributes
                 qualifier[1][parameter] = value
               end
@@ -112,7 +127,13 @@ module InspecPlugins::Iggy::Terraform
             if inspec_properties.member?(attr)
               Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} inspec_property = #{attr} MATCHED"
               value = resources[resource_type][resource_id][attr]
-              describe.add_test(attr, "cmp", value)
+              if value
+                # check to see if there is a translate for this attr
+                property = InspecPlugins::Iggy::InspecHelper.translated_resource_property(platform, resource_type, attr)
+                describe.add_test(property, "cmp", value)
+              else
+                Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED FOR NIL"
+              end
             else
               Inspec::Log.debug "Iggy::Terraform::Generate.parse_controls #{resource_type} inspec_property = #{attr} SKIPPED"
             end

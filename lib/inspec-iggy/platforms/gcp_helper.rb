@@ -143,7 +143,9 @@ module InspecPlugins::Iggy::Platforms
       "google_compute_instance_group" => [:zone], # zone api incompatibility issue
       "google_compute_forwarding_rule" => %i{backend_service ip_version network region subnetwork}, # :backend_service, :ip_version, :network, :region, :subnetwork api incompatibility
       "google_compute_target_pool" => %i{backup_pool failover_ratio id region self_link}, # api incompatibility
+    }.freeze
 
+    GCP_TRANSLATED_RESOURCE_PROPERTIES = {
     }.freeze
 
     # readme content

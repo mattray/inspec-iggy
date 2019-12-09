@@ -15,6 +15,9 @@ module InspecPlugins::Iggy::Platforms
     AZURE_REMOVED_PROPERTIES = {
     }.freeze
 
+    AZURE_TRANSLATED_RESOURCE_PROPERTIES = {
+    }.freeze
+
     # readme content
     def self.readme
       "\n"
