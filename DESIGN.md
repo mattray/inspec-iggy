@@ -25,7 +25,7 @@ This document attempts to explain the organization of the InSpec-Iggy code and h
 
 ## [.rubocop.yml](.rubocop.yml)<a name="rubocop"/>
 
-Tracks against InSpec's settings for code style, currently using 0.49.1 with [Chefstyle](https://github.com/chef/chefstyle).
+Tracks against InSpec's settings for code style, currently using [Chefstyle 0.13.0](https://github.com/chef/chefstyle).
 
 ## [CHANGELOG.md](CHANGELOG.md)<a name="changelog"/>
 
@@ -71,6 +71,7 @@ Constants and helper methods for working with InSpec.
 * `load_resource_pack(resource_path)`: Adds a resource pack's Resources to the `available_resources`.
 * `available_resource_qualifiers(platform)`: The available qualifers for the Describe block within the Controls generated for a particular resource.
 * `available_resource_iterators(platform)`: The iterators available for resources, also provides the qualifiers for those iterators. Used for iterating over negative coverage.
+* `translated_resource_property(platform, resource, property)`: Resource properties that do not map cleanly are looked up from the associated platform, returning the property whether or not it is translated. This is currently used for mapping properties like `name` to `group_name` for example.
 * `tf_controls`: provides the content for the controls file for Terraform subcommand.
 * `cfn_controls`: provides the AWS API calls to dynamically check the passed CloudFormation stack and provide the content for the controls file.
 
@@ -88,7 +89,7 @@ Tracks the version of InSpec-Iggy.
 ## [lib/inspec-iggy/platforms/azure_helper.rb](lib/inspec-iggy/platforms/azure_helper.rb)<a name="azure_helper"/>
 ## [lib/inspec-iggy/platforms/gcp_helper.rb](lib/inspec-iggy/platforms/gcp_helper.rb)<a name="gcp_helper"/>
 
-The platform helpers provide constants used by the [inspec_helper.rb](#inspec_helper) for translating and filtering resources, their iterators and qualifiers. They also provide methods used by the [profile_helper.rb]((#profile_helper)) to render the platform-specific instructions for the generated InSpec profiles.
+The platform helpers provide constants used by the [inspec_helper.rb](#inspec_helper) for translating and filtering resources and their iterators, qualifiers, and properties. They also provide methods used by the [profile_helper.rb]((#profile_helper)) to render the platform-specific instructions for the generated InSpec profiles.
 
 # Terraform<a name="tf"/>
 

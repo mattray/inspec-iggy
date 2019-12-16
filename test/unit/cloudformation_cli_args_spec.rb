@@ -1,10 +1,10 @@
 # This unit test performs some tests to verify that the command line options for
 # inspec-iggy are correct.
 
-require 'minitest/autorun'
+require "minitest/autorun"
 
 # Load the class under test, the CliCommand definition.
-require 'inspec-iggy/cloudformation/cli_command'
+require "inspec-iggy/cloudformation/cli_command"
 
 # In general, plugin authors can choose many different test harnesses, such as RSpec or Minitest/Spec.
 # However, Iggy loads all of InSpec, which causes interference with both of those, so here we use
@@ -19,7 +19,6 @@ module IggyUnitTests
       %w{
         generate
         help
-        version
       }
     end
   end
@@ -43,48 +42,48 @@ module IggyUnitTests
       include CfLets
 
       def all_options
-        [
-          :copyright,
-          :debug,
-          :email,
-          :license,
-          :maintainer,
-          :name,
-          :overwrite,
-          :stack,
-          :summary,
-          :template,
-          :title,
-          :version
-        ]
+        %i{
+          copyright
+          debug
+          email
+          license
+          maintainer
+          name
+          overwrite
+          stack
+          summary
+          template
+          title
+          version
+        }
       end
 
       def no_default_options
-        [
-          :name,
-          :stack,
-          :template
-        ]
+        %i{
+          name
+          stack
+          template
+        }
       end
 
       def short_options
         {
-          name: ['-n'],
-          stack: ['-s'],
-          template: ['-t']
+          name: ["-n"],
+          stack: ["-s"],
+          template: ["-t"],
         }
       end
 
       def boolean_options
-        [
-          :debug,
-          :overwrite
-        ]
+        %i{
+          debug
+          overwrite
+        }
       end
 
       # This is a Hash of Structs that tells us details of options for the 'core' subcommand.
       def generate_options
-        cli_class.all_commands['generate'].options
+        cli_class.all_commands["generate"].options
       end
 
       def test_it_should_have_the_right_option_count

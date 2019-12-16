@@ -1,10 +1,10 @@
 # This unit test performs some tests to verify that
 # the inspec-iggy plugin is configured correctly.
 
-require 'minitest/autorun'
+require "minitest/autorun"
 
 # Load the class under test, the Plugin definition.
-require 'inspec-iggy/plugin'
+require "inspec-iggy/plugin"
 
 # In general, plugin authors can choose many different test harnesses, such as RSpec or Minitest/Spec.
 # However, Iggy loads all of InSpec, which causes interference with both of those, so here we use

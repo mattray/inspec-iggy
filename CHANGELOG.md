@@ -49,21 +49,29 @@ This is the current, previous and future development milestones and contains the
 * unit tests were broken by updates in InSpec and fixed. Functional and integration tests were disabled for now.
 * switch to Chefstyle like InSpec and Chefstyle the generated controls
 
-# NEXT
+# 0.7.0 (The SysAdvent demo Release)
+* added 'inspec iggy' subcommand for displaying help and version
+* Terraform 0.12 support
+* Restored AWS support, minimal testing
+
+# 0.7.1 (next release cleanup)
+* Restore and re-test AWS, Azure, GCP from resource packs
 * make platform and resourcepack required
-* re-test Azure support now that GCP works
-* AWS resource pack loading doesn't work
 * InSpec plugins seem to be broken except by path?
-* allow passing alternate source of depends profiles
 * upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
-* document uploading profiles to Automate and creating scan jobs via API
-* document Windows Omnibus installer usage
+* document inspec with a reporter to push the reports into Automate
+* [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Control class is deprecated. Use the Inspec::Object::Control class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0.
+* [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Describe class is deprecated. Use the Inspec::Object::Describe class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0
 
 # BACKLOG #
-* Terraform 0.12 support
+* additional attributes (ie. vpc_id) passed via inputs?
+* allow disabling of individual negative tests from CLI?
+* allow passing alternate source of depends profiles
 * ARM templates
 * CloudFormation can be JSON or YAML
-* allow disabling of individual negative tests from CLI?
+* add negative testing for CloudFormation
+* document uploading profiles to Automate and creating scan jobs via API
+* document Windows Omnibus installer usage
 * Habitat packaging
 * Terraform
   * More Terraform back-ends https://www.terraform.io/docs/backends/types/index.html

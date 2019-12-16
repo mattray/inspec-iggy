@@ -4,9 +4,9 @@
 #
 # Copyright:: 2018, Chef Software, Inc <legal@chef.io>
 #
-require 'helper'
+require "helper"
 
-require 'inspec-iggy/inspec_helper'
+require "inspec-iggy/inspec_helper"
 
 module IggyUnitTests
   class InSpecResources < Minitest::Test
@@ -15,9 +15,9 @@ module IggyUnitTests
       {
         # List some resources we expect to heve
         # name => an expected property
-        'aws_vpc' => 'cidr_block',
-        'directory' => 'owner',
-        'package' => 'version',
+        "aws_vpc" => "cidr_block",
+        "directory" => "owner",
+        "package" => "version",
       }
     end
 
