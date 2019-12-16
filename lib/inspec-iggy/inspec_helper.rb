@@ -159,6 +159,7 @@ module InspecPlugins
         # :id, #disabled for GCP
         # :ip_version, # documented but undefined
         # :network, # documented but undefined
+        # :tags, # returns emtpy hashes when null
         :addons_config,
         :address,
         :address_type,
@@ -167,6 +168,7 @@ module InspecPlugins
         :aggregation_per_series_aligner,
         :allowed,
         :archive_size_bytes,
+        :associations,
         :auto_create_subnetworks,
         :availability_zone,
         :availability_zones,
@@ -311,6 +313,7 @@ module InspecPlugins
         :outbound_rules,
         :outbound_rules_count,
         :output_version_format,
+        :owner_id,
         :parent,
         :peer_ip,
         :physical_block_size_bytes,
@@ -327,6 +330,7 @@ module InspecPlugins
         :profile,
         :project_id,
         :project_number,
+        :propagating_vgws,
         :protocol,
         :proxy_header,
         :purpose,
@@ -340,6 +344,7 @@ module InspecPlugins
         :request_path,
         :rotation_period,
         :router,
+        :routes,
         :routing_config,
         :runtime,
         :scheduling,
@@ -379,7 +384,6 @@ module InspecPlugins
         :substitutions,
         :table_id,
         :table_reference,
-        :tags,
         :target,
         :target_pools,
         :target_size,
