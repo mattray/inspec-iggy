@@ -16,11 +16,11 @@ module InspecPlugins::Iggy::Platforms
 
     # the iterators for the various resource types
     AWS_RESOURCE_ITERATORS = {
-      "aws_ec2_instance" => { "iterator" => "aws_ec2_instances", "index" => "instance_ids", "qualifiers" => [:vpc_id]},
-      "aws_elb" => { "iterator" => "aws_elbs", "index" => "load_balancer_names", "qualifiers" => [:vpc_id]},
-      "aws_security_group" => { "iterator" => "aws_security_groups", "index" => "group_ids", "qualifiers" => [:vpc_id]},
-      "aws_subnet" => { "iterator" => "aws_subnets", "index" => "subnet_ids", "qualifiers" => [:vpc_id]},
-      "aws_vpc" => { "iterator" => "aws_vpcs", "index" => "vpc_ids"},
+      "aws_ec2_instance" => { "iterator" => "aws_ec2_instances", "index" => "instance_ids", "qualifiers" => [:vpc_id] },
+      "aws_elb" => { "iterator" => "aws_elbs", "index" => "load_balancer_names", "qualifiers" => [:vpc_id] },
+      "aws_security_group" => { "iterator" => "aws_security_groups", "index" => "group_ids", "qualifiers" => [:vpc_id] },
+      "aws_subnet" => { "iterator" => "aws_subnets", "index" => "subnet_ids", "qualifiers" => [:vpc_id] },
+      "aws_vpc" => { "iterator" => "aws_vpcs", "index" => "vpc_ids" },
     }.freeze
 
     AWS_REMOVED_PROPERTIES = {

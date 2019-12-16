@@ -1,6 +1,6 @@
 # returns negative of Terraform tfstate file coverage
 
-require 'hashie'
+require "hashie"
 
 require "inspec/objects/control"
 require "inspec/objects/ruby_helper"
@@ -103,14 +103,14 @@ module InspecPlugins::Iggy::Terraform
         first = true
         InspecPlugins::Iggy::InspecHelper.available_resource_qualifiers(platform)[resource].each do |parameter|
           if first # index is first
-            ctrl += "#{parameter.to_s}: id, "
+            ctrl += "#{parameter}: id, "
             first = false
             next
           end
           property = parameter.to_s
           properties = InspecPlugins::Iggy::InspecHelper.available_translated_resource_properties(platform, resource)
-          if properties && properties.has_value?(parameter.to_s)
-            property = properties.key(parameter.to_s) #translate back if necessary
+          if properties && properties.value?(parameter.to_s)
+            property = properties.key(parameter.to_s) # translate back if necessary
           end
           # instead of looking up the key, find by value?
           Inspec::Log.debug "Iggy::Terraform::Negative.parse_matched_resources #{resource} qualifier found = #{property} MATCHED"
