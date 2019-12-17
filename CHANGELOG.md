@@ -52,13 +52,16 @@ This is the current, previous and future development milestones and contains the
 # 0.7.0 (The SysAdvent demo Release)
 * added 'inspec iggy' subcommand for displaying help and version
 * Terraform 0.12 support
-* Restored AWS support, minimal testing
+* Restored initial AWS support, minimal testing
+* aws_ec2_instance, aws_elb, aws_security_group, aws_subnet, aws_vpc
+* [Terraform AWS Provider Two Tier demo](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/two-tier)
 
-# 0.7.1 (next release cleanup)
-* Restore and re-test AWS, Azure, GCP from resource packs
+# 0.8.0 (Terraform AWS demos release)
 * make platform and resourcepack required
+* aws_route_table
+* [Terraform AWS Provider ELB demo](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/)
+* Restore and re-test AWS, Azure, GCP from resource packs
 * InSpec plugins seem to be broken except by path?
-* upload profile to Automate and see how to get it to work (AWS, Azure, GCP)
 * document inspec with a reporter to push the reports into Automate
 * [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Control class is deprecated. Use the Inspec::Object::Control class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0.
 * [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Describe class is deprecated. Use the Inspec::Object::Describe class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0
