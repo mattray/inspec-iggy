@@ -18,8 +18,8 @@ control "inspec terraform" do
     its("stdout") { should match(/\[--overwrite\], \[--no-overwrite\]/) }
     its("stdout") { should match(/-n, --name=NAME/) }
     its("stdout") { should match(/-t, \[--tfstate=TFSTATE\]/) }
-    its("stdout") { should match(/\[--platform=PLATFORM\]/) }
-    its("stdout") { should match(/\[--resourcepath=RESOURCEPATH\]/) }
+    its("stdout") { should match(/\--platform=PLATFORM/) }
+    its("stdout") { should match(/\--resourcepath=RESOURCEPATH/) }
   end
 end
 
