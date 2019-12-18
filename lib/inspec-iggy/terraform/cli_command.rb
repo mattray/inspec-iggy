@@ -61,9 +61,11 @@ module InspecPlugins::Iggy
                    default: "terraform.tfstate"
 
       class_option :platform,
+                   required: true,
                    desc: "The InSpec platform providing the necessary resources (aws, azure, or gcp)"
 
       class_option :resourcepath,
+                   required: true,
                    desc: "Specify path to the InSpec Resource Pack providing the necessary resources"
 
       desc "generate [options]", "Generate InSpec compliance controls from terraform.tfstate"
