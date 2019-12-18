@@ -58,22 +58,24 @@ This is the current, previous and future development milestones and contains the
 
 # 0.8.0 (Terraform AWS demos release)
 * make platform and resourcepack required
-* aws_route_table
+* aws_alb, aws_cloudformation_stack, aws_cloudtrail_trail, aws_route_table added without testing, expect issues
 * [Terraform AWS Provider ELB demo](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/)
+* create new InSpec tests to validate the generated reports to look for regressions as we change out the property mapping. It's too manual and fragile.
+
+# NEXT
 * Restore and re-test AWS, Azure, GCP from resource packs
-* InSpec plugins seem to be broken except by path?
 * document inspec with a reporter to push the reports into Automate
-* [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Control class is deprecated. Use the Inspec::Object::Control class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0.
-* [2019-12-13T17:17:52+11:00] WARN: DEPRECATION: The Inspec::Describe class is deprecated. Use the Inspec::Object::Describe class from the inspec-objects Ruby library. These classes will be removed in InSpec 5.0
+* document uploading profiles to Automate and creating scan jobs via API
+* document/specify inspec-aws https://github.com/inspec/inspec-aws/releases
+* clean up deprecation warnings
 
 # BACKLOG #
-* additional attributes (ie. vpc_id) passed via inputs?
 * allow disabling of individual negative tests from CLI?
+* additional attributes (ie. vpc_id) passed via inputs?
 * allow passing alternate source of depends profiles
 * ARM templates
 * CloudFormation can be JSON or YAML
 * add negative testing for CloudFormation
-* document uploading profiles to Automate and creating scan jobs via API
 * document Windows Omnibus installer usage
 * Habitat packaging
 * Terraform
