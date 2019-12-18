@@ -1,5 +1,3 @@
-# tmp_dir = input("tmp_dir", value: "FOO")
-
 control "inspec terraform" do
   describe command("bundle exec inspec terraform") do
     its("stdout") { should match(/inspec terraform generate \[options\]/) }
@@ -18,13 +16,15 @@ control "inspec terraform" do
     its("stdout") { should match(/\[--overwrite\], \[--no-overwrite\]/) }
     its("stdout") { should match(/-n, --name=NAME/) }
     its("stdout") { should match(/-t, \[--tfstate=TFSTATE\]/) }
-    its("stdout") { should match(/\--platform=PLATFORM/) }
-    its("stdout") { should match(/\--resourcepath=RESOURCEPATH/) }
+    its("stdout") { should match(/--platform=PLATFORM/) }
+    its("stdout") { should match(/--resourcepath=RESOURCEPATH/) }
   end
-end
 
-control "inspec terraform -t" do
-  # describe command("bundle exec inspec terraform #{tmp_dir}/terraform") do
-  #   its('stdout') { should match (/inspec terraform negative \[options\]/) }
-  # end
+  describe command("bundle exec inspec terraform generate") do
+    its("stderr") { should match(/No value provided for required options '--name', '--platform', '--resourcepath'/) }
+  end
+
+  describe command("bundle exec inspec terraform negative") do
+    its("stderr") { should match(/No value provided for required options '--name', '--platform', '--resourcepath'/) }
+  end
 end
