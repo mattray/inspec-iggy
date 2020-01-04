@@ -70,87 +70,6 @@ module InspecPlugins
         end
       end
 
-      # manually maintained common methods we don't want to test InSpec properties
-      REMOVED_COMMON_PROPERTIES = %i{
-        !
-        !=
-        !~
-        <=>
-        ==
-        ===
-        =~
-        __binding__
-        __id__
-        __send__
-        check_supports
-        class
-        clone
-        dclone
-        define_singleton_method
-        display
-        dup
-        enum_for
-        eql?
-        equal?
-        extend
-        fail_resource
-        freeze
-        frozen?
-        hash
-        inspec
-        inspect
-        instance_eval
-        instance_exec
-        instance_of?
-        instance_variable_defined?
-        instance_variable_get
-        instance_variable_set
-        instance_variables
-        is_a?
-        itself
-        kind_of?
-        method
-        methods
-        nil?
-        object_id
-        pretty_inspect
-        pretty_print
-        pretty_print_cycle
-        pretty_print_inspect
-        pretty_print_instance_variables
-        private_methods
-        protected_methods
-        pry
-        public_method
-        public_methods
-        public_send
-        remove_instance_variable
-        resource_exception_message
-        resource_failed?
-        resource_skipped?
-        respond_to?
-        send
-        should
-        should_not
-        singleton_class
-        singleton_method
-        singleton_methods
-        skip_resource
-        taint
-        tainted?
-        tap
-        then
-        to_enum
-        to_json
-        to_s
-        to_yaml
-        trust
-        untaint
-        untrust
-        untrusted?
-        yield_self
-      }.freeze
-
       # properties are often dynamically generated, making it hard to determine
       # their existence without instantiating them. Because of this, we will
       # maintain a manual list for now
@@ -474,8 +393,8 @@ module InspecPlugins
       # there really should be some way to get this directly from InSpec's resources
       def self.resource_properties(resource, platform)
         # remove the common methods, in theory only leaving only unique InSpec properties
-        inspec_properties = Inspec::Resource.registry[resource].instance_methods + ADDITIONAL_COMMON_PROPERTIES
-        inspec_properties -= REMOVED_COMMON_PROPERTIES
+        inspec_properties = Inspec::Resource.registry[resource].instance_methods - Inspec::Resource.registry[resource].methods
+        inspec_properties += ADDITIONAL_COMMON_PROPERTIES
         case platform
         when "aws"
           inspec_properties -= InspecPlugins::Iggy::Platforms::AwsHelper::AWS_REMOVED_PROPERTIES[resource] unless InspecPlugins::Iggy::Platforms::AwsHelper::AWS_REMOVED_PROPERTIES[resource].nil?
