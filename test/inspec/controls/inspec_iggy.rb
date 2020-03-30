@@ -7,6 +7,6 @@ end
 
 control "inspec iggy version" do
   describe command("bundle exec inspec iggy version") do
-    its("stdout") { should match(/Iggy v0.8.1/) }
+    its("stdout") { should match(/Iggy v0.9.0/) }
   end
 end

@@ -66,8 +66,10 @@ This is the current, previous and future development milestones and contains the
 * look into refactoring discovery of resources and properties instead of hard-coded technique
 * clean up deprecation warnings by using the Inspec::Object classes from the inspec-objects rubygem
 
-# NEXT
+# 0.9.0
 * Restore and re-test AWS, Azure, GCP from resource packs using their Terraform plans
+
+# NEXT
 * Verify CloudFormation support
 * Implement ARM templates
 * document inspec with a reporter to push the reports into Automate
