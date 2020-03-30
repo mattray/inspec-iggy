@@ -62,7 +62,6 @@ Constants and helper methods for working with InSpec.
 ### Constants
 
 * `TRANSLATED_RESOURCES`: Resources that do not map cleanly are provided by the `TRANSLATED_RESOURCES` hash. There are very few mismatches because both tools use the SDKs provided by the same vendors.
-* `REMOVED_COMMON_PROPERTIES`: The common methods for each Resource, properties will not be checked for these methods.
 * `ADDITIONAL_COMMON_PROPERTIES`: Because InSpec properties are often dynamically generated, it is hard to determine their existence without instantiating them. Because of this, we maintain a manual list of properties to check for.
 
 ### Helper Methods

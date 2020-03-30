@@ -62,20 +62,24 @@ This is the current, previous and future development milestones and contains the
 * [Terraform AWS Provider ELB demo](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/)
 * create new InSpec tests to validate the generated reports to look for regressions as we change out the property mapping. It's too manual and fragile.
 
+# 0.8.1
+* look into refactoring discovery of resources and properties instead of hard-coded technique
+* clean up deprecation warnings by using the Inspec::Object classes from the inspec-objects rubygem
+
 # NEXT
-* Restore and re-test AWS, Azure, GCP from resource packs
+* Restore and re-test AWS, Azure, GCP from resource packs using their Terraform plans
+* Verify CloudFormation support
+* Implement ARM templates
 * document inspec with a reporter to push the reports into Automate
 * document uploading profiles to Automate and creating scan jobs via API
 * document/specify inspec-aws https://github.com/inspec/inspec-aws/releases
-* clean up deprecation warnings
+* add negative testing for CloudFormation
 
 # BACKLOG #
+* CloudFormation can be JSON or YAML
 * allow disabling of individual negative tests from CLI?
 * additional attributes (ie. vpc_id) passed via inputs?
 * allow passing alternate source of depends profiles
-* ARM templates
-* CloudFormation can be JSON or YAML
-* add negative testing for CloudFormation
 * document Windows Omnibus installer usage
 * Habitat packaging
 * Terraform

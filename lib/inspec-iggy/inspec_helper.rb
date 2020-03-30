@@ -74,10 +74,7 @@ module InspecPlugins
       # their existence without instantiating them. Because of this, we will
       # maintain a manual list for now
       ADDITIONAL_COMMON_PROPERTIES = [
-        # :backend_service, # documented but undefined
         # :id, #disabled for GCP
-        # :ip_version, # documented but undefined
-        # :network, # documented but undefined
         # :tags, # returns emtpy hashes when null
         :addons_config,
         :address,
