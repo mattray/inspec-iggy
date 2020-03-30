@@ -29,6 +29,10 @@ module InspecPlugins
 
         begin
           URI.parse(url).open
+        rescue NoMethodError => e
+          STDERR.puts e.message
+          STDERR.puts "ERROR: Unable to open file #{url}"
+          exit(-1)
         rescue OpenURI::HTTPError => e
           STDERR.puts e.message
           STDERR.puts "ERROR: Parsing error from URL #{url}"

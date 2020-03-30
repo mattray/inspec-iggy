@@ -64,9 +64,10 @@ This is the current, previous and future development milestones and contains the
 
 # 0.8.1
 * look into refactoring discovery of resources and properties instead of hard-coded technique
-* clean up deprecation warnings by using the Inspec::Object classes from the inspec-objects rubygem
 
 # 0.9.0
+* Improve error message when terraform.tfstate not found https://github.com/mattray/inspec-iggy/issues/36
+* clean up deprecation warnings by using the Inspec::Object classes from the inspec-objects rubygem
 * Restore and re-test AWS, Azure, GCP from resource packs using their Terraform plans
 
 # NEXT
