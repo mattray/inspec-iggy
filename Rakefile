@@ -47,9 +47,9 @@ namespace(:test) do
     tmp_dir = Dir.mktmpdir
     sh("bundle exec gem build inspec-iggy.gemspec")
     sh("bundle exec inspec plugin install inspec-iggy-*.gem --chef-license=accept")
-    sh("wget -O #{tmp_dir}/inspec-aws.tar.gz -nc --tries=10 https://github.com/inspec/inspec-aws/archive/v1.5.1.tar.gz")
+    sh("wget -O #{tmp_dir}/inspec-aws.tar.gz -nc --tries=10 https://github.com/inspec/inspec-aws/archive/v1.8.1.tar.gz")
     sh("tar -C #{tmp_dir} -xzf #{tmp_dir}/inspec-aws.tar.gz")
-    sh("bundle exec inspec exec test/inspec --reporter=progress --input tmp_dir='#{tmp_dir}' resource_dir='#{tmp_dir}/inspec-aws-1.5.1'")
+    sh("bundle exec inspec exec test/inspec --reporter=progress --input tmp_dir='#{tmp_dir}' resource_dir='#{tmp_dir}/inspec-aws-1.8.1'")
     FileUtils.remove_dir(tmp_dir)
     task.warning = false
   end

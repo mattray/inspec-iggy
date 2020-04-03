@@ -414,7 +414,7 @@ module InspecPlugins
 
         # write all controls
         generated_controls.flatten.each do |control|
-          if control.class.eql?(Inspec::Control)
+          if control.class.eql?(Inspec::Object::Control)
             content += control.to_ruby
             content += "\n\n"
           else # this is for embedded iterators in negative tests
