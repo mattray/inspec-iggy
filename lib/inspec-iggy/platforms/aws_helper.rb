@@ -32,7 +32,7 @@ module InspecPlugins::Iggy::Platforms
 
     AWS_REMOVED_PROPERTIES = {
       "aws_ec2_instance" => %i{security_groups}, # not sure how to test this yet
-      "aws_elb" => %i{health_check security_groups}, # not sure how to test this yet
+      "aws_elb" => %i{health_check security_groups subnets}, # not sure how to test this yet
       "aws_security_group" => %i{owner_id tags}, # tags are {} instead of nil
     }.freeze
 
