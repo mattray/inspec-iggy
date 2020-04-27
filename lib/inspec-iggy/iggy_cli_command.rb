@@ -1,4 +1,4 @@
-# CloudFormation CLI command and options
+# Iggy CLI command and options
 
 require "inspec/plugin/v2"
 
