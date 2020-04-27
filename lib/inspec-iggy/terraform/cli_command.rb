@@ -73,13 +73,6 @@ module InspecPlugins::Iggy
         Inspec::Log.level = :debug if options[:debug]
         platform = options[:platform]
         resource_path = options[:resourcepath]
-        # require validation that if platform or resourcepath are passed, both are available
-        if platform || resource_path
-          unless platform && resource_path
-            error "You must pass both --platform and --resourcepath if using either"
-            exit(1)
-          end
-        end
         generated_controls = InspecPlugins::Iggy::Terraform::Generate.parse_generate(options[:tfstate], resource_path, platform)
         printable_controls = InspecPlugins::Iggy::InspecHelper.tf_controls(options[:title], generated_controls, platform)
         InspecPlugins::Iggy::ProfileHelper.render_profile(ui, options, options[:tfstate], printable_controls, platform)
