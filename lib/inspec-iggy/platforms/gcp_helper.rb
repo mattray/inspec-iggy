@@ -139,7 +139,7 @@ module InspecPlugins::Iggy::Platforms
 
     GCP_REMOVED_PROPERTIES = {
       "google_compute_http_health_check" => %i{self_link id creation_timestamp}, # id: terraform has name not id, self_link: undocumented but broken, creation_timestamp api incompatibility
-      "google_compute_instance" => %i{label_fingerprint machine_type min_cpu_platform zone}, # label_fingerprint, machine_type, zone api incompatibility | min_cpu_platform undefined
+      "google_compute_instance" => %i{label_fingerprint machine_type metadata min_cpu_platform zone}, # label_fingerprint, machine_type, zone api incompatibility | min_cpu_platform undefined
       "google_compute_instance_group" => [:zone], # zone api incompatibility issue
       "google_compute_forwarding_rule" => %i{backend_service ip_version network region subnetwork}, # :backend_service, :ip_version, :network, :region, :subnetwork api incompatibility
       "google_compute_target_pool" => %i{backup_pool failover_ratio id region self_link}, # api incompatibility
