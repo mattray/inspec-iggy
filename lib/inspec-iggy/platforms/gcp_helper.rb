@@ -138,6 +138,7 @@ module InspecPlugins::Iggy::Platforms
     }.freeze
 
     GCP_REMOVED_PROPERTIES = {
+      "google_compute_firewall" => %i{creation_timestamp destination_ranges id self_link source_service_accounts source_tags target_service_accounts}, # formatted differently
       "google_compute_http_health_check" => %i{self_link id creation_timestamp}, # id: terraform has name not id, self_link: undocumented but broken, creation_timestamp api incompatibility
       "google_compute_instance" => %i{label_fingerprint machine_type metadata min_cpu_platform zone}, # label_fingerprint, machine_type, zone api incompatibility | min_cpu_platform undefined
       "google_compute_instance_group" => [:zone], # zone api incompatibility issue
