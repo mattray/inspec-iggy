@@ -70,6 +70,8 @@ This is the current, previous and future development milestones and contains the
 * clean up deprecation warnings by using the Inspec::Object classes from the inspec-objects rubygem
 * Ruby 2.7 support
 * Restore and re-test AWS, Azure, GCP from resource packs using their Terraform plans
+* override properties (ie. replace 'id' from tfstate with 'instance_id' despite 'id' existing)
+  removes first, then translates
 
 # NEXT
 * Verify CloudFormation support
