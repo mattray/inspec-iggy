@@ -1,3 +1,7 @@
+# NO LONGER UNDER DEVELOPMENT
+
+InSpec-Iggy has not been under active development for awhile and I no longer work at Chef, so I'm archiving the project unless someone wants to continue development.
+
 # Description #
 
 [![Build Status Master](https://travis-ci.org/mattray/inspec-iggy.svg?branch=master)](https://travis-ci.org/mattray/inspec-iggy)
